@@ -2777,6 +2777,16 @@ def main() -> None:
                             st.warning(f"⚠️ {step_name.capitalize()} step failed: {err_msg}")
                         if not completed and not step_errors:
                             st.info("No steps were run.")
+
+                        # Land on Design once the pipeline has produced one: it is
+                        # the artifact a user actually wants to look at, and the
+                        # design step is what sets requirements_confirmed, which
+                        # gates that tab. If design failed, stay on Review so the
+                        # error stays visible rather than navigating to an empty tab.
+                        if "design" in completed:
+                            st.session_state.navigate_to_tab = 2
+                            st.session_state._nav_pending = True
+                            st.session_state._nav_target = 2
                         st.rerun()
 
                 full_zip = _build_full_export_zip()
