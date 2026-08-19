@@ -1,0 +1,119 @@
+
+========================================================================
+CONDITION B0
+========================================================================
+Completion rate     5/5 = 100.0%
+Fallback activations 0
+Tokens (total)      input_tokens=2,775, output_tokens=50,219
+Tokens (per run)    input_tokens=555, output_tokens=10,043
+
+Agent                         Mean      SD     Min     Max   Share
+------------------------------------------------------------------
+Single prompt                136.3    38.3    70.0   162.7  100.0%
+------------------------------------------------------------------
+TOTAL PIPELINE               136.3    38.3    70.0   162.7
+
+Project                       Complexity    Mean (s)   n
+--------------------------------------------------------
+E-commerce / logistics        Medium           162.2   1
+Productivity                  Low               70.0   1
+Healthcare                    High             143.6   1
+Education / social            Medium           143.1   1
+Retail / operations           High             162.7   1
+
+Scaffold Build Rate  5/5 = 100.0%
+
+========================================================================
+CONDITION B1
+========================================================================
+Completion rate     10/10 = 100.0%
+Fallback activations 0
+
+Agent                         Mean      SD     Min     Max   Share
+------------------------------------------------------------------
+Requirements Analyst          50.9    18.9    20.8    85.3   18.1%
+Database                      32.3    11.2    12.3    47.8   11.5%
+Design Generation            152.7    14.6   128.4   176.8   54.5%
+Planning Manager              19.6     1.5    16.5    21.4    7.0%
+Support Manager               24.9     2.8    21.2    31.3    8.9%
+------------------------------------------------------------------
+TOTAL PIPELINE               280.6    33.7   205.6   318.5
+
+Project                       Complexity    Mean (s)   n
+--------------------------------------------------------
+E-commerce / logistics        Medium           283.8   2
+Productivity                  Low              230.7   2
+Healthcare                    High             285.4   2
+Education / social            Medium           284.8   2
+Retail / operations           High             318.3   2
+
+Scaffold Build Rate  5/5 = 100.0%
+
+========================================================================
+CONDITION B2
+========================================================================
+Completion rate     10/10 = 100.0%
+Fallback activations 0
+
+Agent                         Mean      SD     Min     Max   Share
+------------------------------------------------------------------
+Requirements Analyst          47.0    15.7    19.2    71.5   13.9%
+Database                      38.2    14.6    15.7    59.5   11.3%
+Design Generation            158.1    23.6   116.4   197.5   46.9%
+Planning Manager              19.3     3.3    13.9    26.1    5.7%
+Quality/Process Manager       47.8    11.0    34.0    64.0   14.2%
+Support Manager               26.6     3.4    22.6    33.6    7.9%
+------------------------------------------------------------------
+TOTAL PIPELINE               337.3    55.6   224.0   396.9
+
+Project                       Complexity    Mean (s)   n
+--------------------------------------------------------
+E-commerce / logistics        Medium           368.8   2
+Productivity                  Low              246.9   2
+Healthcare                    High             382.2   2
+Education / social            Medium           332.9   2
+Retail / operations           High             355.9   2
+
+  note: 2 SBR reports found; showing run_1
+
+Scaffold Build Rate  5/5 = 100.0%
+
+========================================================================
+CONDITION B3
+========================================================================
+Completion rate     10/10 = 100.0%
+Fallback activations 0
+Tokens (total)      prompt_tokens=3,597,582, completion_tokens=1,082,934, total_tokens=4,680,516, cached_prompt_tokens=0
+Tokens (per run)    prompt_tokens=359,758, completion_tokens=108,293, total_tokens=468,051, cached_prompt_tokens=0
+
+Agent                         Mean      SD     Min     Max   Share
+------------------------------------------------------------------
+Requirements Analyst          16.0     2.0    12.4    17.9    5.7%
+Database                      56.0    22.3    17.5    83.5   20.0%
+Design Generation            136.2    17.9   106.2   156.5   48.6%
+Planning Manager              18.0     5.2    13.1    29.6    6.4%
+Quality/Process Manager       33.2    10.3    19.5    56.3   11.9%
+Support Manager               21.1     6.9    13.0    38.4    7.5%
+------------------------------------------------------------------
+TOTAL PIPELINE               280.5    44.4   195.8   358.6
+
+Project                       Complexity    Mean (s)   n
+--------------------------------------------------------
+E-commerce / logistics        Medium           297.6   2
+Productivity                  Low              218.3   2
+Healthcare                    High             280.1   2
+Education / social            Medium           284.2   2
+Retail / operations           High             322.5   2
+
+Scaffold Build Rate  5/5 = 100.0%
+
+========================================================================
+CROSS-CONDITION COMPARISON
+========================================================================
+Condition      n  Complete   Mean (s)      SD   vs B0
+--------------------------------------------------------
+B0             5       5/5      136.3    38.3   1.00x
+B1            10     10/10      280.6    33.7   2.06x
+B2            10     10/10      337.3    55.6   2.47x
+B3            10     10/10      280.5    44.4   2.06x
+

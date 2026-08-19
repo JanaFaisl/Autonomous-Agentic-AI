@@ -1,0 +1,215 @@
+{
+  "generated_from": "/Users/janafaisl/Desktop/Agentic_AI/evaluation/runs",
+  "conditions": {
+    "B0": {
+      "n_complete": 5,
+      "n_incomplete": 0,
+      "completion_rate_pct": 100.0,
+      "fallback_activations": 0,
+      "tokens_total": {
+        "input_tokens": 2775,
+        "output_tokens": 50219
+      },
+      "latency_s": {
+        "mean": 136.3,
+        "sd": 38.3,
+        "min": 70.0,
+        "max": 162.7
+      },
+      "per_agent_s": {
+        "baseline": {
+          "mean": 136.3,
+          "sd": 38.3,
+          "share_pct": 100.0
+        }
+      },
+      "per_project_mean_s": {
+        "1": 162.2,
+        "2": 70.0,
+        "3": 143.6,
+        "4": 143.1,
+        "5": 162.7
+      },
+      "scaffold_build_rate": {
+        "passed": 5,
+        "total": 5,
+        "percent": 100.0,
+        "partial": false
+      }
+    },
+    "B1": {
+      "n_complete": 10,
+      "n_incomplete": 0,
+      "completion_rate_pct": 100.0,
+      "fallback_activations": 0,
+      "tokens_total": null,
+      "latency_s": {
+        "mean": 280.6,
+        "sd": 33.7,
+        "min": 205.6,
+        "max": 318.5
+      },
+      "per_agent_s": {
+        "requirements": {
+          "mean": 50.9,
+          "sd": 18.9,
+          "share_pct": 18.1
+        },
+        "database": {
+          "mean": 32.3,
+          "sd": 11.2,
+          "share_pct": 11.5
+        },
+        "design": {
+          "mean": 152.7,
+          "sd": 14.6,
+          "share_pct": 54.5
+        },
+        "planning": {
+          "mean": 19.6,
+          "sd": 1.5,
+          "share_pct": 7.0
+        },
+        "support": {
+          "mean": 24.9,
+          "sd": 2.8,
+          "share_pct": 8.9
+        }
+      },
+      "per_project_mean_s": {
+        "1": 283.8,
+        "2": 230.7,
+        "3": 285.4,
+        "4": 284.8,
+        "5": 318.3
+      },
+      "scaffold_build_rate": {
+        "passed": 5,
+        "total": 5,
+        "percent": 100.0,
+        "partial": false
+      }
+    },
+    "B2": {
+      "n_complete": 10,
+      "n_incomplete": 0,
+      "completion_rate_pct": 100.0,
+      "fallback_activations": 0,
+      "tokens_total": null,
+      "latency_s": {
+        "mean": 337.3,
+        "sd": 55.6,
+        "min": 224.0,
+        "max": 396.9
+      },
+      "per_agent_s": {
+        "requirements": {
+          "mean": 47.0,
+          "sd": 15.7,
+          "share_pct": 13.9
+        },
+        "database": {
+          "mean": 38.2,
+          "sd": 14.6,
+          "share_pct": 11.3
+        },
+        "design": {
+          "mean": 158.1,
+          "sd": 23.6,
+          "share_pct": 46.9
+        },
+        "planning": {
+          "mean": 19.3,
+          "sd": 3.3,
+          "share_pct": 5.7
+        },
+        "quality": {
+          "mean": 47.8,
+          "sd": 11.0,
+          "share_pct": 14.2
+        },
+        "support": {
+          "mean": 26.6,
+          "sd": 3.4,
+          "share_pct": 7.9
+        }
+      },
+      "per_project_mean_s": {
+        "1": 368.8,
+        "2": 246.9,
+        "3": 382.2,
+        "4": 332.9,
+        "5": 355.9
+      },
+      "scaffold_build_rate": {
+        "passed": 5,
+        "total": 5,
+        "percent": 100.0,
+        "partial": false
+      }
+    },
+    "B3": {
+      "n_complete": 10,
+      "n_incomplete": 0,
+      "completion_rate_pct": 100.0,
+      "fallback_activations": 0,
+      "tokens_total": {
+        "prompt_tokens": 3597582,
+        "completion_tokens": 1082934,
+        "total_tokens": 4680516,
+        "cached_prompt_tokens": 0
+      },
+      "latency_s": {
+        "mean": 280.5,
+        "sd": 44.4,
+        "min": 195.8,
+        "max": 358.6
+      },
+      "per_agent_s": {
+        "requirements": {
+          "mean": 16.0,
+          "sd": 2.0,
+          "share_pct": 5.7
+        },
+        "database": {
+          "mean": 56.0,
+          "sd": 22.3,
+          "share_pct": 20.0
+        },
+        "design": {
+          "mean": 136.2,
+          "sd": 17.9,
+          "share_pct": 48.6
+        },
+        "planning": {
+          "mean": 18.0,
+          "sd": 5.2,
+          "share_pct": 6.4
+        },
+        "quality": {
+          "mean": 33.2,
+          "sd": 10.3,
+          "share_pct": 11.9
+        },
+        "support": {
+          "mean": 21.1,
+          "sd": 6.9,
+          "share_pct": 7.5
+        }
+      },
+      "per_project_mean_s": {
+        "1": 297.6,
+        "2": 218.3,
+        "3": 280.1,
+        "4": 284.2,
+        "5": 322.5
+      },
+      "scaffold_build_rate": {
+        "passed": 5,
+        "total": 5,
+        "percent": 100.0,
+        "partial": false
+      }
+    }
+  }
+}
