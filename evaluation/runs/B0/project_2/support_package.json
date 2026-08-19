@@ -1,0 +1,62 @@
+{
+  "documentation": [
+    "User Guide: How to create, edit, complete, and delete tasks",
+    "Technical Documentation: Architecture overview and component structure",
+    "API Documentation: Data access layer methods and interfaces",
+    "Deployment Guide: Steps to build and deploy the application",
+    "Browser Compatibility Matrix: Supported browsers and versions",
+    "Accessibility Compliance Report: WCAG 2.1 conformance details",
+    "Testing Strategy Document: Unit, integration, and E2E test approaches",
+    "Troubleshooting Guide: Common issues and solutions"
+  ],
+  "baselines": [
+    "Requirements Specification v1.0",
+    "Database Schema v1.0",
+    "UI Design Mockups v1.0",
+    "Source Code Repository (main branch at release tag)",
+    "Test Suite v1.0",
+    "Build Configuration v1.0"
+  ],
+  "glossary": [
+    {
+      "term": "Task",
+      "definition": "A single item representing an activity or action that a user needs to complete"
+    },
+    {
+      "term": "Complete",
+      "definition": "The state of a task when it has been finished; marked by setting is_completed to true"
+    },
+    {
+      "term": "CRUD",
+      "definition": "Create, Read, Update, Delete - the four basic operations for persistent storage"
+    },
+    {
+      "term": "Modal",
+      "definition": "A dialog box or popup window that appears on top of the main content and requires user interaction"
+    },
+    {
+      "term": "IndexedDB",
+      "definition": "A low-level API for client-side storage of significant amounts of structured data in the browser"
+    },
+    {
+      "term": "LocalStorage",
+      "definition": "A web storage API that allows websites to store key-value pairs in a web browser with no expiration time"
+    },
+    {
+      "term": "Responsive Design",
+      "definition": "An approach to web design that makes web pages render well on a variety of devices and screen sizes"
+    },
+    {
+      "term": "WCAG",
+      "definition": "Web Content Accessibility Guidelines - international standards for making web content accessible to people with disabilities"
+    },
+    {
+      "term": "SPA",
+      "definition": "Single Page Application - a web application that loads a single HTML page and dynamically updates content"
+    },
+    {
+      "term": "Persistence",
+      "definition": "The characteristic of data that outlives the execution of the program that created it"
+    }
+  ]
+}

@@ -1,0 +1,861 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Core user authentication and account information for all system users",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Unique email for login"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Hashed password for authentication"
+        },
+        {
+          "name": "role",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "User role: patient, doctor, or administrator"
+        },
+        {
+          "name": "first_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "last_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "phone",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Contact phone number for SMS notifications"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Account active status"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "email",
+        "role"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "patients",
+      "purpose": "Extended profile information for patient users including medical history",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Foreign key to users table"
+        },
+        {
+          "name": "date_of_birth",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "gender",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "emergency_contact_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "emergency_contact_phone",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "blood_type",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "allergies",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Comma-separated or JSON list of allergies"
+        },
+        {
+          "name": "medical_history",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "General medical history notes"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each patient profile belongs to one user"
+        }
+      ]
+    },
+    {
+      "name": "specialties",
+      "purpose": "Medical specialties that doctors can practice",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Specialty name (e.g., Cardiology, Pediatrics)"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "name"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "doctors",
+      "purpose": "Extended profile information for doctor users including professional details",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Foreign key to users table"
+        },
+        {
+          "name": "license_number",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": true,
+          "default": null,
+          "notes": "Medical license number"
+        },
+        {
+          "name": "qualification",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Educational qualifications"
+        },
+        {
+          "name": "experience_years",
+          "type": "int",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Years of medical practice"
+        },
+        {
+          "name": "consultation_fee",
+          "type": "int",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Fee per consultation in cents"
+        },
+        {
+          "name": "bio",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Doctor biography and profile description"
+        },
+        {
+          "name": "is_accepting_patients",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Whether doctor is currently accepting new patients"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "is_accepting_patients"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each doctor profile belongs to one user"
+        }
+      ]
+    },
+    {
+      "name": "doctor_specialties",
+      "purpose": "Junction table for many-to-many relationship between doctors and specialties",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "doctor_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to doctors table"
+        },
+        {
+          "name": "specialty_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to specialties table"
+        },
+        {
+          "name": "is_primary",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Indicates if this is the doctor's primary specialty"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "doctor_id",
+        "specialty_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "doctors",
+          "fk": "doctor_id",
+          "ref": "id",
+          "notes": "Links to doctor"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "specialties",
+          "fk": "specialty_id",
+          "ref": "id",
+          "notes": "Links to specialty"
+        }
+      ]
+    },
+    {
+      "name": "doctor_availability",
+      "purpose": "Defines recurring weekly availability schedules for doctors",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "doctor_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to doctors table"
+        },
+        {
+          "name": "day_of_week",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "0=Sunday, 1=Monday, ..., 6=Saturday"
+        },
+        {
+          "name": "start_time",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Start time in HH:MM format"
+        },
+        {
+          "name": "end_time",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "End time in HH:MM format"
+        },
+        {
+          "name": "slot_duration_minutes",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "30",
+          "notes": "Duration of each appointment slot in minutes"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Whether this availability is currently active"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "doctor_id",
+        "day_of_week",
+        "is_active"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "doctors",
+          "fk": "doctor_id",
+          "ref": "id",
+          "notes": "Each availability belongs to one doctor"
+        }
+      ]
+    },
+    {
+      "name": "appointments",
+      "purpose": "Stores all appointment bookings between patients and doctors",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "patient_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to patients table"
+        },
+        {
+          "name": "doctor_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to doctors table"
+        },
+        {
+          "name": "appointment_date",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Date of the appointment"
+        },
+        {
+          "name": "start_time",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Appointment start date and time"
+        },
+        {
+          "name": "end_time",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Appointment end date and time"
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "scheduled",
+          "notes": "Status: scheduled, confirmed, cancelled, completed, no_show"
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Reason for appointment or visit notes"
+        },
+        {
+          "name": "cancellation_reason",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Reason for cancellation if applicable"
+        },
+        {
+          "name": "cancelled_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "User ID who cancelled the appointment"
+        },
+        {
+          "name": "cancelled_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Timestamp of cancellation"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "patient_id",
+        "doctor_id",
+        "appointment_date",
+        "status",
+        "start_time"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "patients",
+          "fk": "patient_id",
+          "ref": "id",
+          "notes": "Each appointment belongs to one patient"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "doctors",
+          "fk": "doctor_id",
+          "ref": "id",
+          "notes": "Each appointment belongs to one doctor"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "cancelled_by",
+          "ref": "id",
+          "notes": "Tracks which user cancelled the appointment"
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "purpose": "Tracks all notifications sent to users for appointments and system events",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users table"
+        },
+        {
+          "name": "appointment_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to appointments table if notification is appointment-related"
+        },
+        {
+          "name": "type",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Type: confirmation, reminder, cancellation, reschedule, new_booking"
+        },
+        {
+          "name": "channel",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Delivery channel: email, sms, push"
+        },
+        {
+          "name": "subject",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Notification subject line"
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Notification message content"
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "pending",
+          "notes": "Status: pending, sent, failed, delivered"
+        },
+        {
+          "name": "sent_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Timestamp when notification was sent"
+        },
+        {
+          "name": "error_message",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Error details if notification failed"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "appointment_id",
+        "type",
+        "status",
+        "sent_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each notification is sent to one user"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "appointments",
+          "fk": "appointment_id",
+          "ref": "id",
+          "notes": "Links notification to related appointment if applicable"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "All primary keys use UUID type for better distribution and security",
+    "User roles are stored as varchar to allow flexibility (patient, doctor, administrator)",
+    "Timestamps are used for all date/time fields to include timezone information",
+    "Consultation fees are stored in cents (integer) to avoid floating-point precision issues",
+    "Doctor availability is defined as recurring weekly schedules with day_of_week (0-6)",
+    "Appointment slots are calculated based on doctor_availability slot_duration_minutes",
+    "Appointment status includes: scheduled, confirmed, cancelled, completed, no_show",
+    "Notification channels include: email, sms, push for multi-channel delivery",
+    "Notification types include: confirmation, reminder, cancellation, reschedule, new_booking",
+    "Soft delete is not implemented; cancelled appointments retain status='cancelled'",
+    "Medical history and allergies are stored as text fields for flexibility",
+    "Phone numbers are stored as varchar to accommodate international formats",
+    "Email confirmations are handled by the notification system",
+    "24-hour reminder notifications are triggered by scheduled jobs querying appointments",
+    "Doctor-patient relationship is established through appointments only",
+    "Junction table doctor_specialties allows doctors to have multiple specialties",
+    "Indexes are added on foreign keys and frequently queried columns for performance",
+    "All tables include created_at and updated_at timestamps for audit trails",
+    "Unique constraints on email ensure no duplicate accounts",
+    "is_active flags allow soft disabling of users and availability schedules"
+  ]
+}

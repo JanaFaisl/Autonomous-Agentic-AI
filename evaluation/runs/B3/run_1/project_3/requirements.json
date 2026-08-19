@@ -1,0 +1,95 @@
+{
+  "project_name": "Hospital Appointment Booking System",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Patient Registration",
+      "description": "Patients can create and manage their account profiles with personal and medical information.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can register an account so that I can book appointments with doctors.",
+        "As a patient, I can update my profile information so that my medical records are current."
+      ],
+      "acceptance_criteria": [
+        "Given a new patient, When they complete the registration form, Then an account is created and confirmation email is sent.",
+        "Given a registered patient, When they update their profile, Then the changes are saved and reflected immediately."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Appointment Scheduling",
+      "description": "Patients can search for available doctors and book appointments based on specialty and availability.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can view available appointment slots so that I can choose a convenient time.",
+        "As a patient, I can book an appointment with a specific doctor so that I can receive medical care."
+      ],
+      "acceptance_criteria": [
+        "Given available doctors, When a patient searches by specialty, Then a list of matching doctors with time slots is displayed.",
+        "Given an available time slot, When a patient confirms booking, Then the appointment is reserved and confirmation is sent."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Appointment Management",
+      "description": "Patients and doctors can view, reschedule, or cancel existing appointments.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can cancel my appointment so that I can free up the time slot if I cannot attend.",
+        "As a doctor, I can view my appointment schedule so that I can prepare for patient visits."
+      ],
+      "acceptance_criteria": [
+        "Given a booked appointment, When a patient cancels it, Then the slot becomes available and notification is sent.",
+        "Given a doctor login, When they access their dashboard, Then all scheduled appointments are displayed chronologically."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Doctor Profile Management",
+      "description": "Doctors can manage their profiles including specialties, availability, and consultation fees.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a doctor, I can set my available hours so that patients can book during my working times.",
+        "As a doctor, I can update my specialty information so that patients can find me for specific treatments."
+      ],
+      "acceptance_criteria": [
+        "Given a doctor account, When they set availability hours, Then only those time slots are shown to patients.",
+        "Given a doctor profile, When specialty is updated, Then the search results reflect the new information immediately."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Notification System",
+      "description": "Automated notifications for appointment confirmations, reminders, and cancellations via email and SMS.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a patient, I can receive appointment reminders so that I do not miss my scheduled visit.",
+        "As a doctor, I can receive notifications of new bookings so that I am aware of my schedule changes."
+      ],
+      "acceptance_criteria": [
+        "Given a confirmed appointment, When it is 24 hours before the time, Then a reminder is sent to the patient.",
+        "Given a new booking, When a patient schedules an appointment, Then the doctor receives an immediate notification."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "REST API",
+      "JWT Authentication"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "Patient",
+    "Doctor",
+    "Administrator"
+  ],
+  "database_schema": null
+}

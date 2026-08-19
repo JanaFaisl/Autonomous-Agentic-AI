@@ -1,0 +1,787 @@
+{
+  "screens": [
+    {
+      "name": "Login Screen",
+      "purpose": "Allow users to authenticate and access the system",
+      "key_components": [
+        {
+          "name": "Email Input",
+          "type": "Text Field",
+          "interaction": "User enters email address"
+        },
+        {
+          "name": "Password Input",
+          "type": "Password Field",
+          "interaction": "User enters password"
+        },
+        {
+          "name": "Login Button",
+          "type": "Button",
+          "interaction": "Submits credentials and authenticates user"
+        },
+        {
+          "name": "Register Link",
+          "type": "Link",
+          "interaction": "Navigates to patient registration screen"
+        },
+        {
+          "name": "Forgot Password Link",
+          "type": "Link",
+          "interaction": "Initiates password recovery process"
+        }
+      ]
+    },
+    {
+      "name": "Patient Registration Screen",
+      "purpose": "Enable new patients to create an account",
+      "key_components": [
+        {
+          "name": "First Name Input",
+          "type": "Text Field",
+          "interaction": "User enters first name"
+        },
+        {
+          "name": "Last Name Input",
+          "type": "Text Field",
+          "interaction": "User enters last name"
+        },
+        {
+          "name": "Email Input",
+          "type": "Text Field",
+          "interaction": "User enters email address"
+        },
+        {
+          "name": "Password Input",
+          "type": "Password Field",
+          "interaction": "User creates password"
+        },
+        {
+          "name": "Confirm Password Input",
+          "type": "Password Field",
+          "interaction": "User confirms password"
+        },
+        {
+          "name": "Date of Birth Picker",
+          "type": "Date Picker",
+          "interaction": "User selects date of birth"
+        },
+        {
+          "name": "Phone Input",
+          "type": "Text Field",
+          "interaction": "User enters phone number"
+        },
+        {
+          "name": "Register Button",
+          "type": "Button",
+          "interaction": "Creates patient account in patients table"
+        },
+        {
+          "name": "Back to Login Link",
+          "type": "Link",
+          "interaction": "Returns to login screen"
+        }
+      ]
+    },
+    {
+      "name": "Patient Dashboard",
+      "purpose": "Main landing page for patients showing overview and quick actions",
+      "key_components": [
+        {
+          "name": "Welcome Header",
+          "type": "Text Label",
+          "interaction": "Displays patient name from patients table"
+        },
+        {
+          "name": "Upcoming Appointments Card",
+          "type": "Card List",
+          "interaction": "Shows next 3 appointments from appointments table"
+        },
+        {
+          "name": "Book Appointment Button",
+          "type": "Button",
+          "interaction": "Navigates to doctor directory screen"
+        },
+        {
+          "name": "View All Appointments Link",
+          "type": "Link",
+          "interaction": "Navigates to appointments list screen"
+        },
+        {
+          "name": "Profile Link",
+          "type": "Link",
+          "interaction": "Navigates to patient profile screen"
+        },
+        {
+          "name": "Notifications Icon",
+          "type": "Icon Button",
+          "interaction": "Shows unread notifications from notifications table"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "interaction": "Logs out user and returns to login screen"
+        }
+      ]
+    },
+    {
+      "name": "Doctor Directory Screen",
+      "purpose": "Browse and search for doctors to book appointments",
+      "key_components": [
+        {
+          "name": "Search Bar",
+          "type": "Text Field",
+          "interaction": "Filters doctors by name from doctors table"
+        },
+        {
+          "name": "Specialty Filter Dropdown",
+          "type": "Dropdown",
+          "interaction": "Filters doctors by specialty from specialties table"
+        },
+        {
+          "name": "Doctor Cards List",
+          "type": "Card List",
+          "interaction": "Displays doctors with name, specialty, and photo from doctors table"
+        },
+        {
+          "name": "View Profile Button",
+          "type": "Button",
+          "interaction": "Opens doctor profile modal with details from doctors table"
+        },
+        {
+          "name": "Book Appointment Button",
+          "type": "Button",
+          "interaction": "Navigates to appointment booking screen for selected doctor"
+        }
+      ]
+    },
+    {
+      "name": "Doctor Profile Modal",
+      "purpose": "Display detailed information about a specific doctor",
+      "key_components": [
+        {
+          "name": "Doctor Photo",
+          "type": "Image",
+          "interaction": "Displays doctor profile picture"
+        },
+        {
+          "name": "Doctor Name",
+          "type": "Text Label",
+          "interaction": "Shows name from doctors table"
+        },
+        {
+          "name": "Specialty Badge",
+          "type": "Badge",
+          "interaction": "Shows specialty from specialties table"
+        },
+        {
+          "name": "Qualifications Section",
+          "type": "Text Block",
+          "interaction": "Displays qualifications from doctors table"
+        },
+        {
+          "name": "Experience Label",
+          "type": "Text Label",
+          "interaction": "Shows years_experience from doctors table"
+        },
+        {
+          "name": "Bio Section",
+          "type": "Text Block",
+          "interaction": "Displays bio from doctors table"
+        },
+        {
+          "name": "Book Appointment Button",
+          "type": "Button",
+          "interaction": "Navigates to appointment booking screen"
+        },
+        {
+          "name": "Close Button",
+          "type": "Button",
+          "interaction": "Closes modal"
+        }
+      ]
+    },
+    {
+      "name": "Appointment Booking Screen",
+      "purpose": "Select date and time to book an appointment with a doctor",
+      "key_components": [
+        {
+          "name": "Doctor Info Header",
+          "type": "Card",
+          "interaction": "Shows selected doctor details from doctors table"
+        },
+        {
+          "name": "Date Picker",
+          "type": "Calendar",
+          "interaction": "User selects appointment date"
+        },
+        {
+          "name": "Available Time Slots Grid",
+          "type": "Button Grid",
+          "interaction": "Shows available slots based on doctor_availability and blocked_slots tables"
+        },
+        {
+          "name": "Reason Input",
+          "type": "Text Area",
+          "interaction": "User enters reason for visit"
+        },
+        {
+          "name": "Confirm Booking Button",
+          "type": "Button",
+          "interaction": "Creates appointment in appointments table"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Returns to doctor directory"
+        }
+      ]
+    },
+    {
+      "name": "Appointments List Screen",
+      "purpose": "View all patient appointments (upcoming and past)",
+      "key_components": [
+        {
+          "name": "Tab Navigation",
+          "type": "Tabs",
+          "interaction": "Switch between Upcoming and Past appointments"
+        },
+        {
+          "name": "Appointments List",
+          "type": "Card List",
+          "interaction": "Displays appointments from appointments table with doctor info"
+        },
+        {
+          "name": "Appointment Card",
+          "type": "Card",
+          "interaction": "Shows date, time, doctor name, specialty, and status"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Cancels appointment if more than 24 hours away, updates appointments table"
+        },
+        {
+          "name": "View Details Button",
+          "type": "Button",
+          "interaction": "Opens appointment details modal"
+        },
+        {
+          "name": "Filter Dropdown",
+          "type": "Dropdown",
+          "interaction": "Filters appointments by status"
+        }
+      ]
+    },
+    {
+      "name": "Appointment Details Modal",
+      "purpose": "Show complete details of a specific appointment",
+      "key_components": [
+        {
+          "name": "Appointment Info Section",
+          "type": "Info Block",
+          "interaction": "Shows date, time, status from appointments table"
+        },
+        {
+          "name": "Doctor Info Section",
+          "type": "Info Block",
+          "interaction": "Shows doctor details from doctors table"
+        },
+        {
+          "name": "Reason Display",
+          "type": "Text Block",
+          "interaction": "Shows reason from appointments table"
+        },
+        {
+          "name": "Medical Record Section",
+          "type": "Expandable Panel",
+          "interaction": "Shows notes from medical_records table if appointment completed"
+        },
+        {
+          "name": "Cancel Appointment Button",
+          "type": "Button",
+          "interaction": "Cancels appointment if eligible"
+        },
+        {
+          "name": "Close Button",
+          "type": "Button",
+          "interaction": "Closes modal"
+        }
+      ]
+    },
+    {
+      "name": "Patient Profile Screen",
+      "purpose": "View and edit patient profile information",
+      "key_components": [
+        {
+          "name": "Profile Photo",
+          "type": "Image Upload",
+          "interaction": "Upload/change profile picture"
+        },
+        {
+          "name": "First Name Input",
+          "type": "Text Field",
+          "interaction": "Edit first name in patients table"
+        },
+        {
+          "name": "Last Name Input",
+          "type": "Text Field",
+          "interaction": "Edit last name in patients table"
+        },
+        {
+          "name": "Email Display",
+          "type": "Text Label",
+          "interaction": "Shows email from users table (read-only)"
+        },
+        {
+          "name": "Phone Input",
+          "type": "Text Field",
+          "interaction": "Edit phone in patients table"
+        },
+        {
+          "name": "Date of Birth Display",
+          "type": "Text Label",
+          "interaction": "Shows DOB from patients table (read-only)"
+        },
+        {
+          "name": "Address Input",
+          "type": "Text Area",
+          "interaction": "Edit address in patients table"
+        },
+        {
+          "name": "Emergency Contact Input",
+          "type": "Text Field",
+          "interaction": "Edit emergency contact in patients table"
+        },
+        {
+          "name": "Emergency Phone Input",
+          "type": "Text Field",
+          "interaction": "Edit emergency phone in patients table"
+        },
+        {
+          "name": "Notification Toggle",
+          "type": "Toggle Switch",
+          "interaction": "Enable/disable notifications in patients table"
+        },
+        {
+          "name": "Save Changes Button",
+          "type": "Button",
+          "interaction": "Updates patients table"
+        },
+        {
+          "name": "Change Password Link",
+          "type": "Link",
+          "interaction": "Opens password change modal"
+        }
+      ]
+    },
+    {
+      "name": "Doctor Dashboard",
+      "purpose": "Main landing page for doctors to manage their schedule and appointments",
+      "key_components": [
+        {
+          "name": "Welcome Header",
+          "type": "Text Label",
+          "interaction": "Displays doctor name from doctors table"
+        },
+        {
+          "name": "Today's Appointments Card",
+          "type": "Card List",
+          "interaction": "Shows today's appointments from appointments table"
+        },
+        {
+          "name": "Schedule Calendar",
+          "type": "Calendar View",
+          "interaction": "Displays weekly schedule from appointments and doctor_availability tables"
+        },
+        {
+          "name": "Manage Availability Button",
+          "type": "Button",
+          "interaction": "Opens availability management screen"
+        },
+        {
+          "name": "View All Appointments Link",
+          "type": "Link",
+          "interaction": "Navigates to doctor appointments list"
+        },
+        {
+          "name": "Profile Link",
+          "type": "Link",
+          "interaction": "Navigates to doctor profile screen"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "interaction": "Logs out user"
+        }
+      ]
+    },
+    {
+      "name": "Doctor Availability Management Screen",
+      "purpose": "Allow doctors to set and modify their availability schedule",
+      "key_components": [
+        {
+          "name": "Weekly Schedule Grid",
+          "type": "Grid",
+          "interaction": "Shows current availability from doctor_availability table"
+        },
+        {
+          "name": "Day Selector",
+          "type": "Checkbox Group",
+          "interaction": "Select days of week"
+        },
+        {
+          "name": "Start Time Picker",
+          "type": "Time Picker",
+          "interaction": "Set start time for availability"
+        },
+        {
+          "name": "End Time Picker",
+          "type": "Time Picker",
+          "interaction": "Set end time for availability"
+        },
+        {
+          "name": "Add Availability Button",
+          "type": "Button",
+          "interaction": "Adds new availability to doctor_availability table"
+        },
+        {
+          "name": "Delete Availability Button",
+          "type": "Icon Button",
+          "interaction": "Removes availability from doctor_availability table"
+        },
+        {
+          "name": "Block Specific Date Section",
+          "type": "Form Section",
+          "interaction": "Block specific dates/times"
+        },
+        {
+          "name": "Date Picker",
+          "type": "Date Picker",
+          "interaction": "Select date to block"
+        },
+        {
+          "name": "Block Time Range",
+          "type": "Time Range Picker",
+          "interaction": "Select time range to block"
+        },
+        {
+          "name": "Block Reason Input",
+          "type": "Text Field",
+          "interaction": "Enter reason for blocking"
+        },
+        {
+          "name": "Add Block Button",
+          "type": "Button",
+          "interaction": "Adds entry to blocked_slots table"
+        },
+        {
+          "name": "Blocked Slots List",
+          "type": "List",
+          "interaction": "Shows blocked slots from blocked_slots table"
+        },
+        {
+          "name": "Save Changes Button",
+          "type": "Button",
+          "interaction": "Commits all changes to database"
+        }
+      ]
+    },
+    {
+      "name": "Doctor Appointments List Screen",
+      "purpose": "View all appointments for the doctor",
+      "key_components": [
+        {
+          "name": "Date Filter",
+          "type": "Date Range Picker",
+          "interaction": "Filter appointments by date range"
+        },
+        {
+          "name": "Status Filter",
+          "type": "Dropdown",
+          "interaction": "Filter by appointment status"
+        },
+        {
+          "name": "Appointments List",
+          "type": "Table",
+          "interaction": "Displays appointments from appointments table with patient info"
+        },
+        {
+          "name": "Patient Name Column",
+          "type": "Table Column",
+          "interaction": "Shows patient name from patients table"
+        },
+        {
+          "name": "Date/Time Column",
+          "type": "Table Column",
+          "interaction": "Shows appointment date and time"
+        },
+        {
+          "name": "Status Column",
+          "type": "Table Column",
+          "interaction": "Shows appointment status"
+        },
+        {
+          "name": "View Details Button",
+          "type": "Button",
+          "interaction": "Opens appointment details for doctor"
+        },
+        {
+          "name": "Add Notes Button",
+          "type": "Button",
+          "interaction": "Opens medical record entry form"
+        }
+      ]
+    },
+    {
+      "name": "Medical Record Entry Screen",
+      "purpose": "Allow doctors to add medical notes for completed appointments",
+      "key_components": [
+        {
+          "name": "Appointment Info Header",
+          "type": "Info Block",
+          "interaction": "Shows appointment details from appointments table"
+        },
+        {
+          "name": "Patient Info Section",
+          "type": "Info Block",
+          "interaction": "Shows patient details from patients table"
+        },
+        {
+          "name": "Diagnosis Input",
+          "type": "Text Area",
+          "interaction": "Enter diagnosis for medical_records table"
+        },
+        {
+          "name": "Treatment Input",
+          "type": "Text Area",
+          "interaction": "Enter treatment for medical_records table"
+        },
+        {
+          "name": "Notes Input",
+          "type": "Text Area",
+          "interaction": "Enter notes for medical_records table"
+        },
+        {
+          "name": "Prescriptions Input",
+          "type": "Text Area",
+          "interaction": "Enter prescriptions for medical_records table"
+        },
+        {
+          "name": "Save Record Button",
+          "type": "Button",
+          "interaction": "Creates/updates record in medical_records table"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Discards changes and returns"
+        }
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "purpose": "Main interface for system administrators",
+      "key_components": [
+        {
+          "name": "Statistics Cards",
+          "type": "Card Grid",
+          "interaction": "Shows counts from users, patients, doctors, appointments tables"
+        },
+        {
+          "name": "Total Patients Card",
+          "type": "Stat Card",
+          "interaction": "Displays count from patients table"
+        },
+        {
+          "name": "Total Doctors Card",
+          "type": "Stat Card",
+          "interaction": "Displays count from doctors table"
+        },
+        {
+          "name": "Total Appointments Card",
+          "type": "Stat Card",
+          "interaction": "Displays count from appointments table"
+        },
+        {
+          "name": "Appointments Today Card",
+          "type": "Stat Card",
+          "interaction": "Displays today's appointment count"
+        },
+        {
+          "name": "Quick Actions Panel",
+          "type": "Button Group",
+          "interaction": "Navigate to management screens"
+        },
+        {
+          "name": "Manage Doctors Button",
+          "type": "Button",
+          "interaction": "Opens doctor management screen"
+        },
+        {
+          "name": "View Reports Button",
+          "type": "Button",
+          "interaction": "Opens reports screen"
+        },
+        {
+          "name": "Recent Activity Feed",
+          "type": "List",
+          "interaction": "Shows recent entries from audit_logs table"
+        }
+      ]
+    },
+    {
+      "name": "Doctor Management Screen",
+      "purpose": "Admin interface to manage doctor accounts",
+      "key_components": [
+        {
+          "name": "Doctors List Table",
+          "type": "Table",
+          "interaction": "Displays all doctors from doctors table"
+        },
+        {
+          "name": "Search Bar",
+          "type": "Text Field",
+          "interaction": "Search doctors by name"
+        },
+        {
+          "name": "Specialty Filter",
+          "type": "Dropdown",
+          "interaction": "Filter by specialty from specialties table"
+        },
+        {
+          "name": "Add Doctor Button",
+          "type": "Button",
+          "interaction": "Opens add doctor form"
+        },
+        {
+          "name": "Edit Button",
+          "type": "Icon Button",
+          "interaction": "Opens edit doctor form"
+        },
+        {
+          "name": "Deactivate Button",
+          "type": "Icon Button",
+          "interaction": "Deactivates doctor in users table"
+        },
+        {
+          "name": "View Details Button",
+          "type": "Button",
+          "interaction": "Shows full doctor information"
+        }
+      ]
+    },
+    {
+      "name": "Add/Edit Doctor Form",
+      "purpose": "Form to create or modify doctor accounts",
+      "key_components": [
+        {
+          "name": "First Name Input",
+          "type": "Text Field",
+          "interaction": "Enter/edit first name for doctors table"
+        },
+        {
+          "name": "Last Name Input",
+          "type": "Text Field",
+          "interaction": "Enter/edit last name for doctors table"
+        },
+        {
+          "name": "Email Input",
+          "type": "Text Field",
+          "interaction": "Enter/edit email for users table"
+        },
+        {
+          "name": "Phone Input",
+          "type": "Text Field",
+          "interaction": "Enter/edit phone for doctors table"
+        },
+        {
+          "name": "Specialty Dropdown",
+          "type": "Dropdown",
+          "interaction": "Select specialty from specialties table"
+        },
+        {
+          "name": "Qualifications Input",
+          "type": "Text Area",
+          "interaction": "Enter qualifications for doctors table"
+        },
+        {
+          "name": "Years Experience Input",
+          "type": "Number Field",
+          "interaction": "Enter years_experience for doctors table"
+        },
+        {
+          "name": "Bio Input",
+          "type": "Text Area",
+          "interaction": "Enter bio for doctors table"
+        },
+        {
+          "name": "Password Input",
+          "type": "Password Field",
+          "interaction": "Set password for users table (new doctors only)"
+        },
+        {
+          "name": "Save Button",
+          "type": "Button",
+          "interaction": "Creates/updates records in users and doctors tables"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Closes form without saving"
+        }
+      ]
+    },
+    {
+      "name": "Reports Screen",
+      "purpose": "Generate and view system reports and analytics",
+      "key_components": [
+        {
+          "name": "Report Type Selector",
+          "type": "Dropdown",
+          "interaction": "Select type of report to generate"
+        },
+        {
+          "name": "Date Range Picker",
+          "type": "Date Range Picker",
+          "interaction": "Select date range for report"
+        },
+        {
+          "name": "Generate Report Button",
+          "type": "Button",
+          "interaction": "Queries database and generates report"
+        },
+        {
+          "name": "Appointments Chart",
+          "type": "Chart",
+          "interaction": "Visualizes appointment data from appointments table"
+        },
+        {
+          "name": "Doctor Utilization Table",
+          "type": "Table",
+          "interaction": "Shows appointment counts per doctor"
+        },
+        {
+          "name": "Cancellation Rate Card",
+          "type": "Stat Card",
+          "interaction": "Calculates cancellation percentage from appointments table"
+        },
+        {
+          "name": "Export Button",
+          "type": "Button",
+          "interaction": "Exports report data to CSV/PDF"
+        }
+      ]
+    }
+  ],
+  "color_scheme": {
+    "primary": "#2563EB",
+    "secondary": "#10B981",
+    "background": "#F9FAFB",
+    "surface": "#FFFFFF",
+    "text": "#111827"
+  },
+  "typography": {
+    "heading_font": "Inter",
+    "body_font": "Inter"
+  }
+}

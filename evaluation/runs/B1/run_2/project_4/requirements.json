@@ -1,0 +1,596 @@
+{
+  "project_name": "UniStudy - University Student Study Platform",
+  "features": [
+    {
+      "id": "F1",
+      "name": "User Registration and Authentication",
+      "description": "Students can create accounts and securely log in to access the platform.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can register with my university email so that I can access the platform.",
+        "As a student, I can log in securely so that I can access my notes and groups."
+      ],
+      "acceptance_criteria": [
+        "Given a valid university email, When a student registers, Then an account is created and verification email is sent.",
+        "Given valid credentials, When a student logs in, Then they are authenticated and redirected to the dashboard."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Study Notes Sharing",
+      "description": "Students can upload, browse, and download study notes shared by other students.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can upload my study notes so that other students can benefit from them.",
+        "As a student, I can search and download notes by subject so that I can study more effectively."
+      ],
+      "acceptance_criteria": [
+        "Given a valid file, When a student uploads notes, Then the notes are stored and visible to other students.",
+        "Given a search query, When a student searches for notes, Then relevant notes are displayed with download options."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Study Group Formation",
+      "description": "Students can create, join, and manage study groups for collaborative learning.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can create a study group so that I can collaborate with peers on specific subjects.",
+        "As a student, I can join existing study groups so that I can participate in group discussions."
+      ],
+      "acceptance_criteria": [
+        "Given group details, When a student creates a group, Then the group is created and the student becomes the admin.",
+        "Given an available group, When a student requests to join, Then they are added to the group member list."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Group Communication",
+      "description": "Students can communicate within study groups through messaging and announcements.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a group member, I can post messages in the group chat so that I can discuss topics with peers.",
+        "As a group admin, I can post announcements so that all members receive important updates."
+      ],
+      "acceptance_criteria": [
+        "Given a message, When a member posts in the group, Then all members can view the message in real-time.",
+        "Given an announcement, When an admin posts it, Then all members receive a notification."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Rating and Review System",
+      "description": "Students can rate and review shared notes to help others identify quality content.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a student, I can rate study notes so that I can help others find high-quality materials.",
+        "As a student, I can read reviews of notes so that I can decide which notes to download."
+      ],
+      "acceptance_criteria": [
+        "Given downloaded notes, When a student submits a rating, Then the average rating is updated.",
+        "Given a note with reviews, When a student views it, Then all ratings and comments are displayed."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile-Responsive"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "JWT",
+      "AWS S3"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "Student",
+    "Group Admin",
+    "Platform Administrator"
+  ],
+  "database_schema": {
+    "tables": [
+      {
+        "name": "users",
+        "purpose": "Store student user account information",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "University email address"
+          },
+          {
+            "name": "password_hash",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Hashed password"
+          },
+          {
+            "name": "full_name",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Student full name"
+          },
+          {
+            "name": "university",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "University name"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Account creation timestamp"
+          },
+          {
+            "name": "is_verified",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "false",
+            "notes": "Email verification status"
+          }
+        ],
+        "indexes": [
+          "email",
+          "university"
+        ],
+        "relationships": []
+      },
+      {
+        "name": "notes",
+        "purpose": "Store study notes uploaded by students",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "user_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users"
+          },
+          {
+            "name": "title",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Note title"
+          },
+          {
+            "name": "subject",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Subject category"
+          },
+          {
+            "name": "description",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Note description"
+          },
+          {
+            "name": "file_url",
+            "type": "VARCHAR(500)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "S3 file URL"
+          },
+          {
+            "name": "file_type",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "File extension type"
+          },
+          {
+            "name": "upload_date",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Upload timestamp"
+          },
+          {
+            "name": "download_count",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "0",
+            "notes": "Number of downloads"
+          }
+        ],
+        "indexes": [
+          "user_id",
+          "subject",
+          "upload_date"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each note belongs to one user"
+          }
+        ]
+      },
+      {
+        "name": "study_groups",
+        "purpose": "Store study group information",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Group name"
+          },
+          {
+            "name": "description",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Group description"
+          },
+          {
+            "name": "subject",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Subject focus"
+          },
+          {
+            "name": "admin_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Group admin user ID"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Group creation timestamp"
+          },
+          {
+            "name": "max_members",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Maximum member limit"
+          }
+        ],
+        "indexes": [
+          "admin_id",
+          "subject"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "admin_id",
+            "ref": "id",
+            "notes": "Each group has one admin"
+          }
+        ]
+      },
+      {
+        "name": "group_members",
+        "purpose": "Store group membership relationships",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "group_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to study_groups"
+          },
+          {
+            "name": "user_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users"
+          },
+          {
+            "name": "joined_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Join timestamp"
+          },
+          {
+            "name": "role",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "member",
+            "notes": "Member role in group"
+          }
+        ],
+        "indexes": [
+          "group_id",
+          "user_id"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "study_groups",
+            "fk": "group_id",
+            "ref": "id",
+            "notes": "Links members to groups"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Links users to groups"
+          }
+        ]
+      },
+      {
+        "name": "group_messages",
+        "purpose": "Store messages posted in study groups",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "group_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to study_groups"
+          },
+          {
+            "name": "user_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users"
+          },
+          {
+            "name": "message",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Message content"
+          },
+          {
+            "name": "posted_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Message timestamp"
+          },
+          {
+            "name": "is_announcement",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "false",
+            "notes": "Whether message is announcement"
+          }
+        ],
+        "indexes": [
+          "group_id",
+          "posted_at"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "study_groups",
+            "fk": "group_id",
+            "ref": "id",
+            "notes": "Messages belong to groups"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Messages posted by users"
+          }
+        ]
+      },
+      {
+        "name": "note_reviews",
+        "purpose": "Store ratings and reviews for study notes",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "note_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to notes"
+          },
+          {
+            "name": "user_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users"
+          },
+          {
+            "name": "rating",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Rating from 1 to 5"
+          },
+          {
+            "name": "comment",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Review comment"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Review timestamp"
+          }
+        ],
+        "indexes": [
+          "note_id",
+          "user_id"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "notes",
+            "fk": "note_id",
+            "ref": "id",
+            "notes": "Reviews belong to notes"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Reviews written by users"
+          }
+        ]
+      }
+    ],
+    "assumptions": [
+      "University email verification is required for registration",
+      "File storage uses AWS S3 for scalability",
+      "Study groups have optional member limits",
+      "Rating system uses 1-5 scale",
+      "Group admins have special permissions for announcements",
+      "All timestamps use UTC timezone"
+    ]
+  },
+  "model_used": "CrewAI",
+  "timestamp": "2026-08-17 11:46:16"
+}

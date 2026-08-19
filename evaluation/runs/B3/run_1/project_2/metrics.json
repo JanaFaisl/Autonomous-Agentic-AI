@@ -1,0 +1,25 @@
+{
+  "condition": "B3/run_1",
+  "project_id": 2,
+  "domain": "Productivity",
+  "complexity": "Low",
+  "user_input": "A simple task manager app where users can create, complete, and delete tasks.",
+  "latency_s": {
+    "requirements": 12.61,
+    "database_schema": 17.46,
+    "design": 106.24,
+    "cycle_plan": 13.1,
+    "quality_report": 33.33,
+    "support_package": 13.02
+  },
+  "fallbacks": {
+    "prompt_tokens": 255762,
+    "completion_tokens": 70794,
+    "total_tokens": 326556,
+    "cached_prompt_tokens": 0,
+    "successful_requests": 36
+  },
+  "errors": {},
+  "total_latency_s": 195.78,
+  "completed": true
+}

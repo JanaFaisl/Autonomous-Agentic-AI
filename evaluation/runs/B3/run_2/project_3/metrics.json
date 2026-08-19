@@ -1,0 +1,25 @@
+{
+  "condition": "B3/run_2",
+  "project_id": 3,
+  "domain": "Healthcare",
+  "complexity": "High",
+  "user_input": "A hospital appointment booking system where patients can schedule visits with doctors.",
+  "latency_s": {
+    "requirements": 16.62,
+    "database_schema": 75.02,
+    "design": 120.34,
+    "cycle_plan": 14.8,
+    "quality_report": 21.49,
+    "support_package": 18.02
+  },
+  "fallbacks": {
+    "prompt_tokens": 357102,
+    "completion_tokens": 105834,
+    "total_tokens": 462936,
+    "cached_prompt_tokens": 0,
+    "successful_requests": 36
+  },
+  "errors": {},
+  "total_latency_s": 266.32,
+  "completed": true
+}

@@ -166,7 +166,7 @@ def call_chat_assistant(agent: "RequirementsAnalystAgent", messages: List[Dict[s
 
     client = _anthropic.Anthropic(api_key=agent.api_key)
 
-    with st.spinner("⚖️ Strategy in progress..."):
+    with st.spinner("💭 Thinking about your answer…"):
         try:
             resp = client.messages.create(
                 model=DEFAULT_MODEL,

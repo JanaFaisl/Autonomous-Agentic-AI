@@ -1,0 +1,76 @@
+{
+  "project_name": "Simple Task Manager",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Task Creation",
+      "description": "Users can create new tasks with title and description.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can create a new task so that I can track my work.",
+        "As a user, I can add a description to my task so that I remember details."
+      ],
+      "acceptance_criteria": [
+        "Given I am on the task page, When I click create and enter a title, Then a new task is saved.",
+        "Given I create a task, When I submit without a title, Then I see an error message."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Task Completion",
+      "description": "Users can mark tasks as complete to track progress.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can mark a task as complete so that I know it is done.",
+        "As a user, I can see completed tasks separately so that I can review my accomplishments."
+      ],
+      "acceptance_criteria": [
+        "Given I have an active task, When I click complete, Then the task is marked as completed.",
+        "Given a task is completed, When I view my tasks, Then it appears in the completed section."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Task Deletion",
+      "description": "Users can permanently delete tasks they no longer need.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a user, I can delete a task so that I can remove unnecessary items.",
+        "As a user, I can confirm deletion so that I do not accidentally remove tasks."
+      ],
+      "acceptance_criteria": [
+        "Given I select a task, When I click delete and confirm, Then the task is permanently removed.",
+        "Given I click delete, When I cancel the confirmation, Then the task remains in the list."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Task List View",
+      "description": "Users can view all their tasks in an organized list.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can view all my tasks so that I can see what needs to be done.",
+        "As a user, I can filter tasks by status so that I can focus on active or completed tasks."
+      ],
+      "acceptance_criteria": [
+        "Given I open the app, When the page loads, Then I see a list of all my tasks.",
+        "Given I have tasks, When I apply a filter, Then only tasks matching the filter are displayed."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "User"
+  ],
+  "database_schema": null
+}

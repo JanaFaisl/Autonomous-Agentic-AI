@@ -1,0 +1,144 @@
+{
+  "screens": [
+    {
+      "name": "Main Task List",
+      "purpose": "Display all tasks and provide access to all task management functions",
+      "key_components": [
+        {
+          "name": "App Header",
+          "type": "Header",
+          "interaction": "Displays app title and branding"
+        },
+        {
+          "name": "Add Task Button",
+          "type": "Button",
+          "interaction": "Opens task creation form when clicked"
+        },
+        {
+          "name": "Task List Container",
+          "type": "List",
+          "interaction": "Displays all tasks from the tasks table, scrollable if needed"
+        },
+        {
+          "name": "Task Item",
+          "type": "Card",
+          "interaction": "Shows task title, description, and completion status; contains action buttons"
+        },
+        {
+          "name": "Complete Checkbox",
+          "type": "Checkbox",
+          "interaction": "Toggles is_completed status in tasks table when clicked"
+        },
+        {
+          "name": "Edit Button",
+          "type": "Icon Button",
+          "interaction": "Opens edit form for the selected task"
+        },
+        {
+          "name": "Delete Button",
+          "type": "Icon Button",
+          "interaction": "Shows confirmation dialog, then deletes task from tasks table"
+        },
+        {
+          "name": "Empty State",
+          "type": "Placeholder",
+          "interaction": "Displays when no tasks exist, encourages user to create first task"
+        }
+      ]
+    },
+    {
+      "name": "Create Task Modal",
+      "purpose": "Allow users to input details for a new task",
+      "key_components": [
+        {
+          "name": "Modal Overlay",
+          "type": "Overlay",
+          "interaction": "Darkens background and focuses attention on form"
+        },
+        {
+          "name": "Task Title Input",
+          "type": "Text Input",
+          "interaction": "Accepts user input for task title (required field)"
+        },
+        {
+          "name": "Task Description Input",
+          "type": "Textarea",
+          "interaction": "Accepts user input for task description (optional field)"
+        },
+        {
+          "name": "Save Button",
+          "type": "Button",
+          "interaction": "Validates input and inserts new record into tasks table"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Closes modal without saving"
+        }
+      ]
+    },
+    {
+      "name": "Edit Task Modal",
+      "purpose": "Allow users to modify existing task details",
+      "key_components": [
+        {
+          "name": "Modal Overlay",
+          "type": "Overlay",
+          "interaction": "Darkens background and focuses attention on form"
+        },
+        {
+          "name": "Task Title Input",
+          "type": "Text Input",
+          "interaction": "Pre-filled with current title, accepts modifications"
+        },
+        {
+          "name": "Task Description Input",
+          "type": "Textarea",
+          "interaction": "Pre-filled with current description, accepts modifications"
+        },
+        {
+          "name": "Update Button",
+          "type": "Button",
+          "interaction": "Validates input and updates record in tasks table"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Closes modal without saving changes"
+        }
+      ]
+    },
+    {
+      "name": "Delete Confirmation Dialog",
+      "purpose": "Confirm user intent before permanently deleting a task",
+      "key_components": [
+        {
+          "name": "Dialog Box",
+          "type": "Modal Dialog",
+          "interaction": "Displays confirmation message with task title"
+        },
+        {
+          "name": "Confirm Delete Button",
+          "type": "Button",
+          "interaction": "Deletes task record from tasks table and closes dialog"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Closes dialog without deleting"
+        }
+      ]
+    }
+  ],
+  "color_scheme": {
+    "primary": "#4F46E5",
+    "secondary": "#10B981",
+    "background": "#F9FAFB",
+    "surface": "#FFFFFF",
+    "text": "#1F2937"
+  },
+  "typography": {
+    "heading_font": "Inter",
+    "body_font": "Inter"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Store user account information",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "User email address"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Hashed password"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Account creation timestamp"
+        }
+      ],
+      "indexes": [
+        "email"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "tasks",
+      "purpose": "Store task information for users",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users table"
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Task title"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Task description"
+        },
+        {
+          "name": "is_completed",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Task completion status"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Task creation timestamp"
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Task completion timestamp"
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "is_completed"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each task belongs to one user"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Users must be authenticated to manage tasks",
+    "Tasks are hard-deleted when user requests deletion",
+    "Task completion is a boolean flag that can be toggled",
+    "Timestamps use UTC timezone",
+    "Email addresses are unique across all users",
+    "Task title is required but description is optional",
+    "completed_at timestamp is set when is_completed changes to true"
+  ]
+}

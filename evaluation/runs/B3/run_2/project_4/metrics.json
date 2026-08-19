@@ -1,0 +1,25 @@
+{
+  "condition": "B3/run_2",
+  "project_id": 4,
+  "domain": "Education / social",
+  "complexity": "Medium",
+  "user_input": "A social platform where university students can share study notes and form groups.",
+  "latency_s": {
+    "requirements": 17.13,
+    "database_schema": 50.25,
+    "design": 145.16,
+    "cycle_plan": 23.19,
+    "quality_report": 39.74,
+    "support_package": 20.2
+  },
+  "fallbacks": {
+    "prompt_tokens": 371076,
+    "completion_tokens": 115356,
+    "total_tokens": 486432,
+    "cached_prompt_tokens": 0,
+    "successful_requests": 36
+  },
+  "errors": {},
+  "total_latency_s": 295.69,
+  "completed": true
+}

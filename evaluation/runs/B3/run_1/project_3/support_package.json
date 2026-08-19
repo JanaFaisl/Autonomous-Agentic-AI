@@ -1,0 +1,18 @@
+{
+  "app_documentation": "The Hospital Appointment Booking System is a comprehensive web and mobile application designed to streamline the process of scheduling medical appointments between patients and healthcare providers. The system serves as a digital bridge connecting patients seeking medical care with doctors across various specialties, enabling efficient appointment management and reducing administrative overhead in healthcare facilities. The application features patient registration and profile management with detailed medical history tracking, an intelligent doctor search and filtering system based on specialty and availability, real-time appointment scheduling with visual calendar interfaces, and automated notification systems for confirmations and reminders via email and SMS. Intended users include patients who need to book and manage their medical appointments, doctors who need to manage their schedules and patient consultations, and hospital administrators who oversee the overall system operations. The platform is built using modern technologies including React for the frontend, Node.js and Express for the backend API, PostgreSQL for data persistence, and JWT for secure authentication, ensuring a responsive and secure user experience across both web and mobile platforms.",
+  "baseline_artifacts": [
+    "Requirements_v1_Hospital_Appointment_Booking_System",
+    "Design_v1_UI_UX_Specifications",
+    "Database_Schema_v1_PostgreSQL",
+    "API_Endpoints_v1_REST_Specification",
+    "Cycle_Plan_v1_MVP_Development"
+  ],
+  "glossary": {
+    "Appointment Slot": "A specific time period during which a doctor is available to see patients, typically defined by the doctor's availability schedule and slot duration (e.g., 30-minute intervals). Slots can be in states of available, booked, or blocked.",
+    "Specialty": "A specific branch of medical practice that a doctor specializes in, such as Cardiology, Pediatrics, or Orthopedics. Doctors can have multiple specialties, with one designated as primary.",
+    "JWT Authentication": "JSON Web Token authentication mechanism used to securely verify user identity and maintain session state across API requests without server-side session storage. Tokens are issued upon successful login and must be included in subsequent requests.",
+    "Notification Channel": "The medium through which system notifications are delivered to users, including email, SMS, or push notifications. Users can configure preferences for each channel type for different notification categories.",
+    "Patient Profile": "Extended user account information specific to patients, including personal details (date of birth, gender, address), emergency contact information, and medical history (blood type, allergies, previous conditions). This information is used to provide personalized care and maintain medical records.",
+    "Doctor Availability": "Recurring weekly schedule defining when a doctor is available to accept appointments, specified by day of week, start time, end time, and slot duration. Availability can be marked as active or inactive to accommodate schedule changes."
+  }
+}

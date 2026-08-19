@@ -1,0 +1,554 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Store user accounts for store staff with roles and authentication",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "username",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Unique username for login"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "User email address"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Hashed password"
+        },
+        {
+          "name": "role",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "Store Clerk",
+          "notes": "User role: Store Owner, Store Manager, Store Clerk"
+        },
+        {
+          "name": "full_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "User full name"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Account active status"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Account creation timestamp"
+        },
+        {
+          "name": "last_login",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Last login timestamp"
+        }
+      ],
+      "indexes": [
+        "idx_users_username",
+        "idx_users_email",
+        "idx_users_role"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "suppliers",
+      "purpose": "Store supplier contact and business information",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Supplier company name"
+        },
+        {
+          "name": "contact_person",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Contact person name"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Supplier email address"
+        },
+        {
+          "name": "phone",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Supplier phone number"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Supplier address"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Record creation timestamp"
+        }
+      ],
+      "indexes": [
+        "idx_suppliers_name"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "products",
+      "purpose": "Store product information including SKU, name, price, and supplier details",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "sku",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Stock keeping unit identifier"
+        },
+        {
+          "name": "barcode",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Product barcode for scanning"
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Product name"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Product description"
+        },
+        {
+          "name": "price",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Current selling price in cents"
+        },
+        {
+          "name": "cost",
+          "type": "bigint",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Cost price from supplier in cents"
+        },
+        {
+          "name": "supplier_id",
+          "type": "int",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to suppliers table"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Record creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Record update timestamp"
+        }
+      ],
+      "indexes": [
+        "idx_products_barcode",
+        "idx_products_sku",
+        "idx_products_supplier_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "suppliers",
+          "fk": "supplier_id",
+          "ref": "id",
+          "notes": "Each product has one supplier"
+        }
+      ]
+    },
+    {
+      "name": "inventory",
+      "purpose": "Track current stock levels and minimum thresholds for each product",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Foreign key to products table"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "Current stock quantity"
+        },
+        {
+          "name": "min_threshold",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "10",
+          "notes": "Minimum stock level before alert"
+        },
+        {
+          "name": "location",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Storage location in store"
+        },
+        {
+          "name": "last_restocked",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Last restock date"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Record update timestamp"
+        }
+      ],
+      "indexes": [
+        "idx_inventory_product_id",
+        "idx_inventory_quantity"
+      ],
+      "relationships": [
+        {
+          "type": "one-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": "Each inventory record links to one product"
+        }
+      ]
+    },
+    {
+      "name": "transactions",
+      "purpose": "Record all inventory transactions including sales, restocks, and adjustments",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to products table"
+        },
+        {
+          "name": "transaction_type",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Type: sale, restock, adjustment, return"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Quantity changed (positive or negative)"
+        },
+        {
+          "name": "user_id",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users table"
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Additional transaction notes"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Transaction timestamp"
+        }
+      ],
+      "indexes": [
+        "idx_transactions_product_id",
+        "idx_transactions_user_id",
+        "idx_transactions_created_at",
+        "idx_transactions_type"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": "Each transaction relates to one product"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each transaction is performed by one user"
+        }
+      ]
+    },
+    {
+      "name": "alerts",
+      "purpose": "Store low stock alerts and notifications for management",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "product_id",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to products table"
+        },
+        {
+          "name": "alert_type",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Type: low_stock, out_of_stock"
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Alert message content"
+        },
+        {
+          "name": "is_read",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Whether alert has been read"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Alert creation timestamp"
+        },
+        {
+          "name": "read_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Alert read timestamp"
+        }
+      ],
+      "indexes": [
+        "idx_alerts_product_id",
+        "idx_alerts_is_read",
+        "idx_alerts_created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": "Each alert relates to one product"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Single store location assumed; multi-location support can be added later",
+    "Barcode scanner integration via standard USB or Bluetooth devices",
+    "Real-time updates implemented using WebSocket connections",
+    "User authentication required for all operations",
+    "Price changes do not affect historical transaction records",
+    "Inventory adjustments require manager or owner role permissions",
+    "Alerts are generated automatically when inventory falls below minimum threshold",
+    "Transaction history is maintained indefinitely for audit purposes",
+    "Monetary values stored as bigint in cents to avoid floating point precision issues",
+    "Each product has exactly one inventory record (one-to-one relationship)",
+    "Transaction types are limited to: sale, restock, adjustment, return",
+    "Alert types are limited to: low_stock, out_of_stock",
+    "User roles are limited to: Store Owner, Store Manager, Store Clerk",
+    "All timestamps use server timezone and are stored in UTC",
+    "Soft deletes are not implemented; records are permanently deleted",
+    "Barcode and SKU must be unique across all products"
+  ]
+}

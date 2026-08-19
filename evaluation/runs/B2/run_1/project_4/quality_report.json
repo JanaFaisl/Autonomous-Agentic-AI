@@ -1,0 +1,100 @@
+{
+  "gate_decision": "FAIL",
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database Schema"
+  ],
+  "checklist": {
+    "requirements_complete": false,
+    "design_consistent": true,
+    "db_matches_requirements": false,
+    "nfr_defined": false
+  },
+  "issues": [
+    {
+      "severity": "High",
+      "item": "Database Schema - note_ratings table",
+      "message": "Missing unique constraint on (note_id, user_id) to enforce the requirement that 'one user can rate each note only once'. This is critical for data integrity."
+    },
+    {
+      "severity": "High",
+      "item": "Database Schema - group_members table",
+      "message": "Missing unique constraint on (group_id, user_id) to prevent duplicate group memberships. This could lead to data inconsistencies."
+    },
+    {
+      "severity": "High",
+      "item": "Database Schema - Missing table",
+      "message": "No bookmarks/saved_notes table exists, but the design shows a 'Saved' tab in the user profile (F2 acceptance criteria mentions download but not explicit save/bookmark feature)."
+    },
+    {
+      "severity": "High",
+      "item": "Requirements - Non-Functional Requirements",
+      "message": "NFRs are completely missing. No specifications for performance (response times, concurrent users), security standards (encryption, authentication details), scalability targets, or availability SLAs."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database Schema - note_ratings table",
+      "message": "Missing check constraint on rating field to enforce 1-5 range validation. Currently only documented in notes, not enforced at database level."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database Schema - users table",
+      "message": "Missing avatar_url field, but design extensively shows user avatars throughout the application (profile header, message bubbles, author info, etc.)."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database Schema - notes table",
+      "message": "Missing file_size and file_type fields for proper file management and validation. Only file_url is stored."
+    },
+    {
+      "severity": "Medium",
+      "item": "Cross-Artifact Consistency",
+      "message": "Design shows notification bell icon in header, but no notification feature is defined in requirements (F1-F5)."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database Schema - All tables",
+      "message": "Missing updated_at timestamp fields for audit trails and tracking record modifications. Only created_at exists."
+    },
+    {
+      "severity": "Low",
+      "item": "Cross-Artifact Consistency",
+      "message": "Platform Administrator role is defined in requirements but no admin-specific features or screens are documented in requirements or design."
+    },
+    {
+      "severity": "Low",
+      "item": "Database Schema - group_messages table",
+      "message": "Design shows attachment button in message input, but no attachment_url or attachment_type fields exist in group_messages table."
+    },
+    {
+      "severity": "Low",
+      "item": "Requirements - F5",
+      "message": "Acceptance criteria states 'Given a downloaded note, When a student submits a rating' - this implies rating is only possible after download, but this business rule is not reflected in database constraints."
+    }
+  ],
+  "required_fixes": [
+    "Add unique constraint on note_ratings(note_id, user_id) to enforce one rating per user per note",
+    "Add unique constraint on group_members(group_id, user_id) to prevent duplicate memberships",
+    "Create bookmarks/saved_notes table with columns: id (UUID PK), user_id (FK to users), note_id (FK to notes), saved_at (timestamp), and unique constraint on (user_id, note_id)",
+    "Add comprehensive Non-Functional Requirements section covering: performance metrics (response time <2s, support 10k concurrent users), security standards (JWT expiration, password complexity, HTTPS), scalability (horizontal scaling capability), availability (99.9% uptime), and data retention policies",
+    "Add check constraint on note_ratings.rating field: CHECK (rating >= 1 AND rating <= 5)",
+    "Add avatar_url VARCHAR(500) nullable field to users table for profile pictures",
+    "Add file_size BIGINT and file_type VARCHAR(50) fields to notes table",
+    "Add updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP to all tables for audit trails",
+    "Either add notifications feature to requirements or remove notification bell from design, or document as future enhancement",
+    "Add attachment_url TEXT and attachment_type VARCHAR(50) nullable fields to group_messages table to support file attachments shown in design"
+  ],
+  "recommendations": [
+    "Consider adding soft delete functionality with is_deleted boolean and deleted_at timestamp fields to all tables instead of hard deletes, enabling data recovery and audit compliance",
+    "Add email_verification_token and token_expiry fields to users table to support the email verification flow mentioned in F1 acceptance criteria",
+    "Create a subjects reference table to standardize subject categories across notes and study_groups, ensuring data consistency and enabling better filtering",
+    "Add rate limiting and API throttling specifications to NFRs to prevent abuse of upload and messaging features",
+    "Consider adding a group_join_requests table to handle the 'approval' process mentioned in F3 acceptance criteria ('added to group upon approval')",
+    "Add indexes on frequently queried fields like note_ratings.rating for sorting by rating, and group_messages.created_at for chronological message retrieval",
+    "Document data retention and GDPR compliance requirements, especially for user data deletion and right to be forgotten",
+    "Add version control or edit history for notes to track changes and maintain academic integrity",
+    "Consider adding a reports/moderation table to handle inappropriate content flagging mentioned implicitly by Platform Administrator role",
+    "Specify backup and disaster recovery procedures in NFRs, including RTO (Recovery Time Objective) and RPO (Recovery Point Objective) targets"
+  ]
+}

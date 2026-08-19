@@ -1,0 +1,19 @@
+{
+  "app_documentation": "The Real-Time Inventory Management System is a modern, mobile-first application designed to help retail businesses efficiently track and manage their product inventory. Built with React for the frontend and Node.js/Express with PostgreSQL for the backend, the system provides real-time visibility into stock levels, automated alerts, and streamlined inventory operations. The application leverages WebSocket technology to ensure that inventory changes are immediately reflected across all connected devices, enabling store staff to make informed decisions based on current data.\n\nThe system's core features include barcode scanning for quick product lookups and inventory updates, real-time inventory tracking that automatically adjusts stock levels as products are sold or restocked, and intelligent low stock alerts that notify users when quantities fall below predefined thresholds. Additional capabilities include comprehensive product management with support for SKUs, barcodes, pricing, and descriptions, as well as sales reporting functionality that provides insights into business performance, top-selling products, and inventory turnover trends.\n\nDesigned for three primary user roles\u2014Store Owners, Store Managers, and Store Clerks\u2014the application provides role-appropriate access to features and data. Store Clerks can scan barcodes, update inventory quantities, and manage product information. Store Managers have additional capabilities to view reports, set alert thresholds, and analyze stock levels for ordering decisions. Store Owners gain full access to all features including sales analytics, business performance reports, and system configuration.\n\nThe mobile-first interface prioritizes ease of use with intuitive navigation, clear visual hierarchy, and quick access to critical functions. The bottom navigation bar provides one-tap access to the Dashboard, Barcode Scanner, Inventory List, Alerts, and Settings. The design uses a clean, professional aesthetic with a primary blue color scheme, card-based layouts, and contextual actions that guide users through common workflows efficiently. All features are optimized for touch interaction on mobile devices while maintaining full functionality on tablets and desktop browsers.",
+  "baseline_artifacts": [
+    "Requirements_Specification_v1.0",
+    "UI_UX_Design_Specification_v1.0",
+    "Database_Schema_v1.0",
+    "Development_Cycle_Plan_v1.0",
+    "Feature_Requirements_Document_v1.0",
+    "Technical_Architecture_Specification_v1.0"
+  ],
+  "glossary": {
+    "SKU": "Stock Keeping Unit - A unique alphanumeric identifier assigned to each distinct product in the inventory system for tracking and management purposes. Example: PROD-001",
+    "Barcode": "A machine-readable optical label containing product identification information in standard UPC/EAN format, used for quick product scanning and lookup via camera or barcode scanner device",
+    "Low Stock Threshold": "A predefined minimum quantity level for each product that triggers automatic alert notifications when inventory falls below this value, enabling proactive reordering to prevent stockouts. Default value is 10 units",
+    "Inventory Transaction": "An immutable audit log record documenting any change to product stock levels, including the transaction type (sale, restock, adjustment, return), quantity change, previous and new quantities, timestamp, and the user who performed the action",
+    "WebSocket": "A real-time communication protocol that maintains persistent bidirectional connections between clients and server, enabling instant inventory updates to be pushed to all connected devices without requiring page refreshes or polling",
+    "Real-Time Tracking": "The system capability to immediately reflect inventory changes across all connected devices as transactions occur, ensuring all users see current stock levels without delay or manual refresh actions"
+  }
+}

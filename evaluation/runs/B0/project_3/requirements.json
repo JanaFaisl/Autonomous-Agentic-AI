@@ -1,0 +1,153 @@
+{
+  "project_name": "Hospital Appointment Booking System",
+  "features": [
+    {
+      "id": "F001",
+      "name": "Patient Registration",
+      "description": "Allow patients to create and manage their accounts in the system",
+      "priority": "High",
+      "user_stories": [
+        "As a new patient, I want to register an account so that I can book appointments",
+        "As a registered patient, I want to update my profile information so that my records are current"
+      ],
+      "acceptance_criteria": [
+        "Patient can register with email, password, name, phone, and date of birth",
+        "System validates email uniqueness",
+        "Patient can log in with credentials",
+        "Patient can update profile information except email"
+      ]
+    },
+    {
+      "id": "F002",
+      "name": "Doctor Directory",
+      "description": "Browse and search available doctors by specialty, name, or department",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I want to browse doctors by specialty so that I can find the right healthcare provider",
+        "As a patient, I want to view doctor profiles so that I can learn about their qualifications"
+      ],
+      "acceptance_criteria": [
+        "System displays list of all active doctors",
+        "Patients can filter doctors by specialty",
+        "Patients can search doctors by name",
+        "Doctor profile shows name, specialty, qualifications, and available time slots"
+      ]
+    },
+    {
+      "id": "F003",
+      "name": "Appointment Scheduling",
+      "description": "Enable patients to book, reschedule, and cancel appointments with doctors",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I want to book an appointment with a doctor so that I can receive medical care",
+        "As a patient, I want to see available time slots so that I can choose a convenient time",
+        "As a patient, I want to cancel my appointment so that I can free up the slot if I cannot attend"
+      ],
+      "acceptance_criteria": [
+        "Patient can view available time slots for selected doctor",
+        "Patient can book an appointment for an available slot",
+        "System prevents double-booking of time slots",
+        "Patient can cancel appointment at least 24 hours in advance",
+        "Patient receives confirmation after booking"
+      ]
+    },
+    {
+      "id": "F004",
+      "name": "Appointment Management",
+      "description": "View and manage upcoming and past appointments",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I want to view my upcoming appointments so that I know when to visit",
+        "As a patient, I want to view my appointment history so that I can track my medical visits"
+      ],
+      "acceptance_criteria": [
+        "Patient can view list of upcoming appointments",
+        "Patient can view past appointment history",
+        "Appointments display doctor name, date, time, and status",
+        "Patient can filter appointments by status"
+      ]
+    },
+    {
+      "id": "F005",
+      "name": "Doctor Schedule Management",
+      "description": "Allow doctors to set and manage their availability schedules",
+      "priority": "High",
+      "user_stories": [
+        "As a doctor, I want to set my available hours so that patients can book appointments during those times",
+        "As a doctor, I want to block time slots so that I can manage my schedule"
+      ],
+      "acceptance_criteria": [
+        "Doctor can define weekly recurring availability",
+        "Doctor can block specific time slots",
+        "Doctor can view their appointment schedule",
+        "Changes to availability do not affect already booked appointments"
+      ]
+    },
+    {
+      "id": "F006",
+      "name": "Notification System",
+      "description": "Send reminders and notifications to patients about appointments",
+      "priority": "Medium",
+      "user_stories": [
+        "As a patient, I want to receive appointment reminders so that I don't forget my scheduled visit",
+        "As a patient, I want to receive booking confirmations so that I know my appointment is confirmed"
+      ],
+      "acceptance_criteria": [
+        "System sends email confirmation upon booking",
+        "System sends reminder 24 hours before appointment",
+        "System sends notification when appointment is cancelled",
+        "Patients can opt-in/out of notifications"
+      ]
+    },
+    {
+      "id": "F007",
+      "name": "Admin Dashboard",
+      "description": "Administrative interface to manage doctors, patients, and system settings",
+      "priority": "Medium",
+      "user_stories": [
+        "As an admin, I want to add new doctors to the system so that patients can book with them",
+        "As an admin, I want to view system statistics so that I can monitor usage"
+      ],
+      "acceptance_criteria": [
+        "Admin can create, update, and deactivate doctor accounts",
+        "Admin can view all appointments in the system",
+        "Admin can view patient and doctor counts",
+        "Admin can generate reports on appointment statistics"
+      ]
+    },
+    {
+      "id": "F008",
+      "name": "Medical Records Access",
+      "description": "Allow patients to view their basic medical visit records",
+      "priority": "Low",
+      "user_stories": [
+        "As a patient, I want to view notes from my past appointments so that I can reference my medical history"
+      ],
+      "acceptance_criteria": [
+        "Patient can view visit notes for completed appointments",
+        "Only the patient and their doctor can view medical records",
+        "Records display date, doctor, and visit notes"
+      ]
+    }
+  ],
+  "constraints": [
+    "System must comply with HIPAA regulations for patient data protection",
+    "Must support concurrent booking requests without conflicts",
+    "System must be accessible via web browsers (Chrome, Firefox, Safari, Edge)",
+    "Initial deployment supports single hospital location",
+    "Appointment slots are fixed at 30-minute intervals",
+    "Cancellations must be made at least 24 hours in advance"
+  ],
+  "non_functional_requirements": [
+    "System must respond to user requests within 2 seconds under normal load",
+    "System must support at least 1000 concurrent users",
+    "Patient data must be encrypted at rest and in transit",
+    "System must maintain 99.5% uptime during business hours",
+    "User interface must be responsive and mobile-friendly",
+    "System must maintain audit logs of all data modifications",
+    "Password must meet complexity requirements (8+ characters, mixed case, numbers)",
+    "Session timeout after 30 minutes of inactivity",
+    "System must perform daily automated backups",
+    "All user inputs must be validated and sanitized to prevent injection attacks"
+  ]
+}

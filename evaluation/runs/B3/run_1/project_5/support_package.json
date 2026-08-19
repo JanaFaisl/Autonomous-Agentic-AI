@@ -1,0 +1,18 @@
+{
+  "app_documentation": "The Real-Time Inventory Management System is a comprehensive mobile application designed to streamline inventory operations for retail businesses. Built for store owners, managers, and clerks, the application provides instant visibility into stock levels, automated alerts, and powerful analytics to optimize inventory management. The system features barcode scanning capabilities for rapid product lookups and inventory updates, real-time synchronization across multiple users via WebSocket technology, and intelligent low stock alerts that notify designated users when inventory falls below customizable thresholds. Additional capabilities include complete product lifecycle management with supplier and category organization, detailed sales reporting with trend analysis and top-selling product insights, and role-based access control to ensure appropriate permissions for different user types. The mobile-first design prioritizes quick access to critical functions through an intuitive bottom navigation interface, with support for both iOS and Android platforms using React for the frontend and Node.js/Express with PostgreSQL for the backend infrastructure.",
+  "baseline_artifacts": [
+    "Requirements_v1_RealTimeInventoryManagement",
+    "Design_v1_MobileUI_Specifications",
+    "Database_Schema_v1_PostgreSQL",
+    "Architecture_v1_WebSocket_API",
+    "MVP_Cycle_Plan_v1"
+  ],
+  "glossary": {
+    "Barcode Scanning": "The process of using a mobile device camera and Barcode Scanner API to read product barcodes for instant product identification and inventory updates, with results displayed within 2 seconds of successful scan",
+    "Real-Time Inventory Tracking": "A WebSocket-based synchronization system that updates product stock levels immediately across all connected users when inventory changes occur through sales, additions, or adjustments, ensuring data consistency within 3 seconds",
+    "Low Stock Threshold": "A configurable numeric value set per product (default 10 units) that triggers automated alert notifications to designated users when inventory quantity falls below this level, enabling proactive reordering",
+    "Inventory Transaction": "A logged record of any inventory change including type (add, remove, sale, adjustment), quantity change, resulting quantity, responsible user, and timestamp, maintained for audit trail and reporting purposes",
+    "Role-Based Access Control": "A security mechanism that assigns permissions based on user roles (Store Owner, Store Manager, Store Clerk), where owners have full system access including user management, managers can configure alerts and view reports, and clerks can perform inventory updates and sales transactions",
+    "WebSocket Connection": "A persistent bidirectional communication channel between the mobile client and Node.js server that enables real-time data synchronization for inventory updates, ensuring all users see current stock levels without manual refresh"
+  }
+}

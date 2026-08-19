@@ -1,0 +1,947 @@
+{
+  "design_overview": "UniStudy is designed as a modern, student-focused mobile application with clean card-based layouts, intuitive navigation, and clear visual hierarchy. The design prioritizes discoverability of notes, easy group collaboration, and seamless content sharing. The interface uses a fresh academic color palette with purple as primary to convey trust and creativity, complemented by warm accents for engagement. All screens are designed for touch interaction with generous tap targets, readable typography, and logical user flows that mirror real student workflows.",
+  "color_scheme": {
+    "primary": "#6C63FF",
+    "secondary": "#4A47A3",
+    "accent": "#FF6584",
+    "surface": "#FFFFFF",
+    "background": "#F7F8FC",
+    "text_primary": "#2D3748",
+    "error": "#E53E3E",
+    "success": "#38A169",
+    "warning": "#DD6B20"
+  },
+  "typography": {
+    "font_family": "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "sizes": {
+      "small": "14px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "600"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Home",
+      "Search",
+      "Groups",
+      "Notifications",
+      "Profile"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Home Dashboard",
+      "purpose": "Primary landing screen showing recent notes, trending content, and quick actions for students to access key features",
+      "key_components": [
+        {
+          "name": "Top App Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with subtle shadow, contains app logo 'UniStudy' on left, notification bell icon on right with red badge indicator",
+          "interaction": "Bell icon navigates to Notifications screen",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Welcome Banner",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "Gradient background from primary to secondary color, rounded corners 12px, white text, padding 20px",
+          "interaction": "Static display showing 'Welcome back, Sarah!' with current semester info",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Actions Row",
+          "type": "Button Group",
+          "position": "top",
+          "size": "medium",
+          "styling": "Horizontal scroll of 4 rounded square buttons with icons, white background, subtle shadow, 16px spacing",
+          "interaction": "Upload Note navigates to upload screen, Browse Notes to search, Create Group to group creation, My Downloads to saved notes",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Recent Notes Section Header",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold text 'Recent Notes', dark gray color, 18px size, with 'View All' link in primary color on right",
+          "interaction": "View All navigates to full notes list",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Note Card 1",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with 12px rounded corners, shadow, contains PDF icon, title 'Data Structures Final Review', course tag 'CS201', rating stars, download count, uploader avatar",
+          "interaction": "Tap card to view note details and download options",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Note Card 2",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with 12px rounded corners, shadow, contains PDF icon, title 'Calculus II Cheat Sheet', course tag 'MATH202', rating stars, download count, uploader avatar",
+          "interaction": "Tap card to view note details and download options",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Trending Groups Section Header",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold text 'Trending Study Groups', dark gray color, 18px size, with 'Explore' link in primary color on right",
+          "interaction": "Explore navigates to groups browse screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Group Card 1",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, horizontal layout, group icon on left, group name 'Algorithms Study Circle', member count '12/15', subject tag 'Computer Science'",
+          "interaction": "Tap to view group details and join",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Group Card 2",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, horizontal layout, group icon on left, group name 'Physics Exam Prep', member count '8/10', subject tag 'Physics'",
+          "interaction": "Tap to view group details and join",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Upload FAB",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Circular floating action button, primary color background, white plus icon, positioned bottom-right with 16px margin, elevated shadow",
+          "interaction": "Opens upload note screen",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Navigation",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background, 5 icons with labels: Home (active - primary color), Search, Groups, Notifications, Profile (all gray when inactive)",
+          "interaction": "Tap icons to navigate between main sections",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Entry point after login. Users can browse recent notes, see trending groups, access quick actions, or navigate to other sections via bottom nav. Tapping note cards leads to Note Details screen. Tapping group cards leads to Group Details screen."
+    },
+    {
+      "name": "Search & Browse Notes",
+      "purpose": "Comprehensive search interface for finding study notes by course, keyword, rating, or university with advanced filtering",
+      "key_components": [
+        {
+          "name": "Search Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with back arrow on left, title 'Browse Notes' centered, filter icon on right",
+          "interaction": "Back arrow returns to Home, filter icon opens filter modal",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Rounded rectangle with light gray background, search icon on left, placeholder 'Search by course or keyword...', clear button on right when typing",
+          "interaction": "Typing filters results in real-time, clear button removes text",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Active Filters Row",
+          "type": "Chip Group",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal scrollable row of filter chips: 'Computer Science', '4+ Stars', 'PDF Only' with X icons, primary color background, white text",
+          "interaction": "Tap X to remove filter, updates results immediately",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Sort Dropdown",
+          "type": "Dropdown",
+          "position": "top",
+          "size": "small",
+          "styling": "Light gray background, text 'Sort by: Most Recent', down arrow icon, positioned below search",
+          "interaction": "Opens dropdown with options: Most Recent, Highest Rated, Most Downloaded, Alphabetical",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Results Count",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Gray text '248 notes found', left-aligned, 14px size",
+          "interaction": "Static display of result count",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Note Result Card 1",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card, left-aligned PDF thumbnail, title 'Operating Systems Midterm Notes', course 'CS301', uploader name, 4.5 star rating, 156 downloads, bookmark icon top-right",
+          "interaction": "Tap card to view details, tap bookmark to save for later",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Note Result Card 2",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card, left-aligned PDF thumbnail, title 'Database Design Complete Guide', course 'CS305', uploader name, 4.8 star rating, 203 downloads, bookmark icon top-right",
+          "interaction": "Tap card to view details, tap bookmark to save for later",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Note Result Card 3",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card, left-aligned PDF thumbnail, title 'Machine Learning Basics', course 'CS401', uploader name, 4.2 star rating, 89 downloads, bookmark icon top-right",
+          "interaction": "Tap card to view details, tap bookmark to save for later",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Load More Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Outlined button with primary color border, text 'Load More Results', centered, 48px height",
+          "interaction": "Loads next page of results",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Modal Trigger",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Fixed bottom button, primary color background, white text 'Apply Filters', full width with 16px margins",
+          "interaction": "Opens advanced filter modal with course, rating, file type, university options",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Navigation",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background, 5 icons: Home, Search (active - primary color), Groups, Notifications, Profile",
+          "interaction": "Navigate between main sections",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home via bottom nav or search quick action. Users search/filter notes, tap results to view Note Details screen. Can bookmark notes for later. Filter modal allows refinement. Back button returns to Home."
+    },
+    {
+      "name": "Note Details",
+      "purpose": "Detailed view of a specific note with preview, ratings, reviews, and download options",
+      "key_components": [
+        {
+          "name": "Detail Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background, back arrow left, share icon right, title 'Note Details' centered",
+          "interaction": "Back returns to previous screen, share opens share sheet",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Note Preview Image",
+          "type": "Image",
+          "position": "top",
+          "size": "large",
+          "styling": "Full-width preview of first page of PDF, 240px height, rounded corners bottom only, subtle shadow",
+          "interaction": "Tap to open full preview modal",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Note Title",
+          "type": "Text",
+          "position": "center",
+          "size": "large",
+          "styling": "Bold text 'Data Structures Final Review', 24px size, dark gray, 16px top margin",
+          "interaction": "Static display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Course Tag",
+          "type": "Chip",
+          "position": "center",
+          "size": "small",
+          "styling": "Rounded pill shape, light purple background, primary color text 'CS201', 8px vertical margin",
+          "interaction": "Tap to view all notes for this course",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Uploader Info Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Horizontal layout, user avatar left, name 'Sarah Johnson', university 'MIT', upload date '2 days ago', follow button right",
+          "interaction": "Tap avatar/name to view uploader profile, tap follow to follow user",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Stats Row",
+          "type": "Info Group",
+          "position": "center",
+          "size": "medium",
+          "styling": "Three columns: 4.5 stars with star icons, 156 downloads with download icon, 12 reviews with chat icon, evenly spaced",
+          "interaction": "Tap reviews to scroll to reviews section",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Section",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Gray text, 16px, 'Comprehensive review notes covering all topics from the final exam including trees, graphs, sorting algorithms, and complexity analysis.'",
+          "interaction": "Static display, expandable if text is long",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Download Button",
+          "type": "Button",
+          "position": "center",
+          "size": "large",
+          "styling": "Primary color background, white text 'Download PDF', full width, 56px height, rounded corners, elevated shadow",
+          "interaction": "Downloads PDF file, shows progress indicator, then success message",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reviews Section Header",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold text 'Reviews (12)', 18px, with 'Write Review' link in primary color on right",
+          "interaction": "Write Review opens review modal",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Review Card 1",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, user avatar, name 'Mike Chen', 5 stars, review text 'Excellent notes! Very detailed and well organized.', timestamp '1 week ago'",
+          "interaction": "Static display, may include helpful button",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Review Card 2",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, user avatar, name 'Emma Davis', 4 stars, review text 'Great resource for exam prep. Covers most topics.', timestamp '3 days ago'",
+          "interaction": "Static display, may include helpful button",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Navigation",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background, 5 icons: Home, Search, Groups, Notifications, Profile",
+          "interaction": "Navigate between main sections",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Reached from Home or Search by tapping note card. Users can preview, download, review, or share the note. Download button triggers file download. Write Review opens rating modal. Back button returns to previous screen. Tapping uploader navigates to their profile."
+    },
+    {
+      "name": "Study Groups",
+      "purpose": "Browse and manage study groups, view group details, and join collaborative learning communities",
+      "key_components": [
+        {
+          "name": "Groups Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background, title 'Study Groups' left-aligned, search icon and plus icon on right",
+          "interaction": "Search icon opens group search, plus icon navigates to create group screen",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Tab Selector",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Two tabs: 'My Groups' (active with primary underline) and 'Discover', white background, centered",
+          "interaction": "Switch between user's joined groups and browsable groups",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "My Groups Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Centered card with illustration, text 'You haven't joined any groups yet', secondary text 'Discover groups to start collaborating', primary button 'Browse Groups'",
+          "interaction": "Browse Groups button switches to Discover tab",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Subject Filter Chips",
+          "type": "Chip Group",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal scroll of subject chips: 'All', 'Computer Science', 'Mathematics', 'Physics', 'Chemistry', selected chip has primary background",
+          "interaction": "Tap chip to filter groups by subject",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Group Card 1",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card, group icon/image top, title 'Algorithms Study Circle', subject tag 'Computer Science', member avatars row, '12/15 members', description snippet, 'Join Group' button",
+          "interaction": "Tap card to view group details, tap Join to request membership",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Group Card 2",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card, group icon/image top, title 'Physics Exam Prep', subject tag 'Physics', member avatars row, '8/10 members', description snippet, 'Join Group' button",
+          "interaction": "Tap card to view group details, tap Join to request membership",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Group Card 3",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card, group icon/image top, title 'Calculus II Warriors', subject tag 'Mathematics', member avatars row, '15/20 members', description snippet, 'Join Group' button",
+          "interaction": "Tap card to view group details, tap Join to request membership",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Group Card 4",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card, group icon/image top, title 'Organic Chemistry Help', subject tag 'Chemistry', member avatars row, '6/12 members', description snippet, 'Join Group' button",
+          "interaction": "Tap card to view group details, tap Join to request membership",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Create Group FAB",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Circular floating action button, accent color background, white plus icon, bottom-right with 16px margin, elevated shadow",
+          "interaction": "Opens create group screen",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Navigation",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background, 5 icons: Home, Search, Groups (active - primary color), Notifications, Profile",
+          "interaction": "Navigate between main sections",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home via bottom nav. Users can switch between My Groups and Discover tabs. Tapping group cards navigates to Group Details screen. Join button requests membership. Create FAB opens group creation form. Subject filters refine visible groups."
+    },
+    {
+      "name": "User Profile",
+      "purpose": "Display user information, uploaded notes, joined groups, statistics, and account settings",
+      "key_components": [
+        {
+          "name": "Profile Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background, back arrow left (if viewing another user), settings icon right, title 'Profile' centered",
+          "interaction": "Settings icon navigates to settings screen, back returns to previous screen",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Profile Info Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Gradient background (primary to secondary), centered user avatar 80px, name 'Sarah Johnson', university 'MIT', member since 'Jan 2024', white text",
+          "interaction": "Tap avatar to change profile picture (own profile only)",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Stats Row",
+          "type": "Info Group",
+          "position": "top",
+          "size": "medium",
+          "styling": "Three columns with white background: '24 Notes Uploaded', '8 Groups Joined', '156 Total Downloads', centered, bold numbers, gray labels",
+          "interaction": "Static display of user statistics",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Edit Profile Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Outlined button, primary color border and text, 'Edit Profile', centered, 48px height, rounded corners",
+          "interaction": "Opens edit profile screen with editable fields",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Content Tabs",
+          "type": "Tabs",
+          "position": "center",
+          "size": "medium",
+          "styling": "Three tabs: 'Uploaded Notes' (active), 'Saved Notes', 'Groups', primary underline on active, white background",
+          "interaction": "Switch between different content views",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Uploaded Note Card 1",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, horizontal layout, PDF thumbnail left, title 'Data Structures Final Review', course 'CS201', 4.5 stars, 156 downloads, edit icon right",
+          "interaction": "Tap card to view note details, tap edit to modify note",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Uploaded Note Card 2",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, horizontal layout, PDF thumbnail left, title 'Algorithm Analysis Notes', course 'CS301', 4.2 stars, 89 downloads, edit icon right",
+          "interaction": "Tap card to view note details, tap edit to modify note",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Uploaded Note Card 3",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, horizontal layout, PDF thumbnail left, title 'Database Design Guide', course 'CS305', 4.8 stars, 203 downloads, edit icon right",
+          "interaction": "Tap card to view note details, tap edit to modify note",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Account Section Header",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold text 'Account', 18px, gray color, left-aligned, 24px top margin",
+          "interaction": "Static section label",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings List Item",
+          "type": "List Item",
+          "position": "center",
+          "size": "medium",
+          "styling": "White background, settings icon left, text 'Settings', chevron right, 56px height, border bottom",
+          "interaction": "Navigate to settings screen",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Text button, error color text 'Log Out', centered, 48px height, no background",
+          "interaction": "Logs out user and returns to login screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Navigation",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background, 5 icons: Home, Search, Groups, Notifications, Profile (active - primary color)",
+          "interaction": "Navigate between main sections",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home via bottom nav or by tapping user avatar. Users view their stats, uploaded notes, saved content, and groups. Edit Profile opens editable form. Content tabs switch between different views. Settings navigates to settings screen. Logout returns to authentication."
+    },
+    {
+      "name": "Notifications",
+      "purpose": "Display real-time notifications for new notes, group activities, ratings, and system updates",
+      "key_components": [
+        {
+          "name": "Notifications Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background, title 'Notifications' left-aligned, 'Mark all read' text button right in primary color",
+          "interaction": "Mark all read clears unread indicators",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "small",
+          "styling": "Two tabs: 'All' (active) and 'Unread', primary underline on active, white background",
+          "interaction": "Switch between all notifications and unread only",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Today Section Header",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Gray text 'Today', 14px, left-aligned, 16px top margin",
+          "interaction": "Static section label",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Card 1",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with light blue left border (unread), bell icon left, text 'New note uploaded in CS201: Advanced Algorithms', timestamp '2 hours ago', tap area",
+          "interaction": "Tap to navigate to the referenced note details",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Card 2",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with light blue left border (unread), user icon left, text 'Mike Chen rated your note 5 stars', timestamp '4 hours ago', tap area",
+          "interaction": "Tap to view the note and rating details",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Card 3",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, user icon left, text 'You were added to Physics Exam Prep group', timestamp '5 hours ago', tap area",
+          "interaction": "Tap to navigate to group details",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Yesterday Section Header",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Gray text 'Yesterday', 14px, left-aligned, 16px top margin",
+          "interaction": "Static section label",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Card 4",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, bell icon left, text 'New message in Algorithms Study Circle', timestamp '1 day ago', tap area",
+          "interaction": "Tap to open group chat",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Card 5",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, heart icon left, text 'Your note reached 100 downloads!', timestamp '1 day ago', tap area",
+          "interaction": "Tap to view note statistics",
+          "icon": "heart",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Card 6",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card, user icon left, text 'Sarah Johnson started following you', timestamp '1 day ago', tap area",
+          "interaction": "Tap to view user profile",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Centered illustration, text 'No new notifications', secondary text 'You're all caught up!', displayed when no notifications exist",
+          "interaction": "Static display",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Navigation",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background, 5 icons: Home, Search, Groups, Notifications (active - primary color with badge), Profile",
+          "interaction": "Navigate between main sections",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home via bottom nav or notification bell. Users view chronological notifications grouped by time. Tapping notifications navigates to relevant content (note details, group, profile). Mark all read clears unread status. Filter tabs show all or unread only."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": "center",
+      "size": "large",
+      "styling": "Primary color background, white text, 56px height, 16px horizontal padding, 12px border radius, elevated shadow, bold font weight",
+      "interaction": "Tap to trigger primary action, shows ripple effect, may show loading state",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": "center",
+      "size": "medium",
+      "styling": "Transparent background, primary color border 2px, primary color text, 48px height, 16px horizontal padding, 12px border radius",
+      "interaction": "Tap to trigger secondary action, shows ripple effect",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input Field",
+      "type": "Input",
+      "position": "center",
+      "size": "large",
+      "styling": "Light gray background, 56px height, 16px horizontal padding, 12px border radius, placeholder text gray, active border primary color 2px",
+      "interaction": "Tap to focus and show keyboard, typing updates value, clear button appears when text exists",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Note Card Component",
+      "type": "Card",
+      "position": "center",
+      "size": "large",
+      "styling": "White background, 12px border radius, subtle shadow, 16px padding, contains thumbnail, title, course tag, rating, download count, uploader info",
+      "interaction": "Tap to navigate to note details, swipe for quick actions (bookmark, share)",
+      "icon": null,
+      "has_image": true,
+      "image_type": "content"
+    },
+    {
+      "name": "Group Card Component",
+      "type": "Card",
+      "position": "center",
+      "size": "large",
+      "styling": "White background, 12px border radius, subtle shadow, 16px padding, group image/icon, title, subject tag, member count, description, join button",
+      "interaction": "Tap to view group details, tap join button to request membership",
+      "icon": "user",
+      "has_image": true,
+      "image_type": "content"
+    },
+    {
+      "name": "Rating Stars",
+      "type": "Rating",
+      "position": "center",
+      "size": "small",
+      "styling": "5 star icons, filled stars in warning color, empty stars in light gray, 16px size, horizontal layout",
+      "interaction": "Display only in lists, tappable in review modal to select rating",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Avatar Component",
+      "type": "Image",
+      "position": "center",
+      "size": "small",
+      "styling": "Circular image, 40px diameter (small), 80px (large), border 2px white, shadow, fallback shows initials on primary background",
+      "interaction": "Tap to view user profile",
+      "icon": null,
+      "has_image": true,
+      "image_type": "user"
+    },
+    {
+      "name": "Chip Component",
+      "type": "Chip",
+      "position": "center",
+      "size": "small",
+      "styling": "Rounded pill shape, 32px height, 12px horizontal padding, light background, primary text, optional X icon for removable chips",
+      "interaction": "Tap to filter or select, tap X to remove",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Sheet Modal",
+      "type": "Modal",
+      "position": "bottom",
+      "size": "large",
+      "styling": "White background, rounded top corners 24px, slides up from bottom, drag handle at top, shadow overlay on background",
+      "interaction": "Swipe down or tap outside to dismiss, contains form fields or options",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toast Notification",
+      "type": "Toast",
+      "position": "bottom",
+      "size": "small",
+      "styling": "Dark gray background, white text, 48px height, 16px padding, 8px border radius, appears above bottom nav, auto-dismisses after 3s",
+      "interaction": "Displays success/error messages, may include action button",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "The application uses a mobile-first approach with flexible layouts that adapt to different screen sizes. Components use relative sizing (percentages and viewport units) with maximum widths to prevent over-stretching on tablets. Bottom navigation collapses to a hamburger menu on very small screens. Cards stack vertically on mobile and may display in 2-column grid on tablets. Typography scales proportionally. Touch targets maintain minimum 48px height across all devices. Horizontal scrolling is used for chip groups and quick actions to preserve vertical space.",
+  "accessibility": "All interactive elements have minimum 48px touch targets. Color contrast ratios meet WCAG AA standards (4.5:1 for text, 3:1 for UI components). Icons are paired with text labels. Form inputs include visible labels and placeholders. Focus states are clearly indicated with primary color outlines. Screen reader support includes semantic HTML and ARIA labels. Error messages are descriptive and associated with form fields. Keyboard navigation is supported for web version. Animations can be disabled via system preferences.",
+  "animations": "Subtle micro-interactions enhance usability: button press shows ripple effect with 200ms duration, card taps scale down to 0.98 for 150ms, page transitions slide horizontally with 300ms ease-out, bottom sheets slide up with 250ms ease-in-out, loading states use skeleton screens with shimmer effect, pull-to-refresh shows circular progress indicator, toast notifications fade in/out over 200ms, tab switches include sliding underline animation, modals fade background overlay to 40% opacity over 200ms. All animations respect reduced motion preferences.",
+  "icons": "Icons use a consistent outline style from a single icon family (Feather or Lucide). Standard icons include: home (house outline), search (magnifying glass), user (person outline), settings (gear), bell (notification bell), bookmark (bookmark outline), heart (heart outline), filter (funnel), plus (plus sign), edit (pencil), trash (trash bin), share (share arrow). Icons are 24px by default, 20px in compact contexts, always paired with labels in navigation. Icon color matches text color in inactive state, primary color when active."
+}

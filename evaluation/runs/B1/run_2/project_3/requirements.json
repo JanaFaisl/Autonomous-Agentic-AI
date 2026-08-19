@@ -1,0 +1,609 @@
+{
+  "project_name": "Hospital Appointment Booking System",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Patient Registration",
+      "description": "Allow patients to create and manage their accounts in the system.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can register with my personal details so that I can book appointments.",
+        "As a patient, I can update my profile information so that my records remain current."
+      ],
+      "acceptance_criteria": [
+        "Given a new patient, When they submit valid registration details, Then an account is created and confirmation is sent.",
+        "Given a registered patient, When they update their profile, Then changes are saved and reflected immediately."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Appointment Scheduling",
+      "description": "Enable patients to book appointments with available doctors.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can view available time slots for doctors so that I can schedule an appointment.",
+        "As a patient, I can select a doctor and time slot so that I can confirm my appointment."
+      ],
+      "acceptance_criteria": [
+        "Given available doctors, When a patient searches by specialty or date, Then matching time slots are displayed.",
+        "Given a selected time slot, When a patient confirms booking, Then the appointment is reserved and confirmation is sent."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Doctor Availability Management",
+      "description": "Allow doctors to set and update their available time slots.",
+      "priority": "High",
+      "user_stories": [
+        "As a doctor, I can set my available hours so that patients can book appointments during those times.",
+        "As a doctor, I can block time slots so that I can manage my schedule effectively."
+      ],
+      "acceptance_criteria": [
+        "Given a doctor login, When they set availability, Then time slots are created and visible to patients.",
+        "Given existing availability, When a doctor blocks a slot, Then it becomes unavailable for booking."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Appointment Management",
+      "description": "Allow patients and doctors to view, reschedule, or cancel appointments.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a patient, I can view my upcoming appointments so that I can track my scheduled visits.",
+        "As a patient, I can cancel or reschedule an appointment so that I can adjust to my changing schedule."
+      ],
+      "acceptance_criteria": [
+        "Given a logged-in patient, When they access their dashboard, Then all upcoming appointments are displayed.",
+        "Given an existing appointment, When a patient cancels it, Then the slot becomes available and notification is sent."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Notification System",
+      "description": "Send automated reminders and confirmations to patients and doctors.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a patient, I can receive appointment reminders so that I don't miss my scheduled visits.",
+        "As a doctor, I can receive notifications about new bookings so that I stay informed of my schedule."
+      ],
+      "acceptance_criteria": [
+        "Given a confirmed appointment, When it is 24 hours before the time, Then a reminder is sent to the patient.",
+        "Given a new booking, When a patient confirms an appointment, Then the doctor receives an immediate notification."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "TypeScript",
+      "REST API"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "Patient",
+    "Doctor",
+    "Administrator"
+  ],
+  "database_schema": {
+    "tables": [
+      {
+        "name": "users",
+        "purpose": "Store all system users including patients, doctors, and administrators",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "User email for login"
+          },
+          {
+            "name": "password_hash",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Hashed password"
+          },
+          {
+            "name": "role",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "User role: patient, doctor, administrator"
+          },
+          {
+            "name": "first_name",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "User first name"
+          },
+          {
+            "name": "last_name",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "User last name"
+          },
+          {
+            "name": "phone",
+            "type": "VARCHAR(20)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Contact phone number"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Account creation timestamp"
+          },
+          {
+            "name": "updated_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Last update timestamp"
+          }
+        ],
+        "indexes": [
+          "email",
+          "role"
+        ],
+        "relationships": []
+      },
+      {
+        "name": "patients",
+        "purpose": "Store patient-specific information",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "user_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Foreign key to users table"
+          },
+          {
+            "name": "date_of_birth",
+            "type": "DATE",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Patient date of birth"
+          },
+          {
+            "name": "address",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Patient address"
+          },
+          {
+            "name": "medical_history",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Patient medical history notes"
+          }
+        ],
+        "indexes": [
+          "user_id"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each patient is linked to one user account"
+          }
+        ]
+      },
+      {
+        "name": "doctors",
+        "purpose": "Store doctor-specific information",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "user_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Foreign key to users table"
+          },
+          {
+            "name": "specialty",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Doctor medical specialty"
+          },
+          {
+            "name": "license_number",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Medical license number"
+          },
+          {
+            "name": "department",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Hospital department"
+          }
+        ],
+        "indexes": [
+          "user_id",
+          "specialty"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each doctor is linked to one user account"
+          }
+        ]
+      },
+      {
+        "name": "appointments",
+        "purpose": "Store appointment bookings between patients and doctors",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "patient_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to patients table"
+          },
+          {
+            "name": "doctor_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to doctors table"
+          },
+          {
+            "name": "appointment_date",
+            "type": "DATE",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Date of appointment"
+          },
+          {
+            "name": "appointment_time",
+            "type": "TIME",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Time of appointment"
+          },
+          {
+            "name": "status",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "scheduled",
+            "notes": "Status: scheduled, completed, cancelled, no-show"
+          },
+          {
+            "name": "reason",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Reason for visit"
+          },
+          {
+            "name": "notes",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Additional notes"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Booking creation timestamp"
+          },
+          {
+            "name": "updated_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Last update timestamp"
+          }
+        ],
+        "indexes": [
+          "patient_id",
+          "doctor_id",
+          "appointment_date",
+          "status"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "patients",
+            "fk": "patient_id",
+            "ref": "id",
+            "notes": "Each appointment belongs to one patient"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "doctors",
+            "fk": "doctor_id",
+            "ref": "id",
+            "notes": "Each appointment is with one doctor"
+          }
+        ]
+      },
+      {
+        "name": "availability",
+        "purpose": "Store doctor availability time slots",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "doctor_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to doctors table"
+          },
+          {
+            "name": "day_of_week",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Day of week: 0=Sunday, 6=Saturday"
+          },
+          {
+            "name": "start_time",
+            "type": "TIME",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Start time of availability"
+          },
+          {
+            "name": "end_time",
+            "type": "TIME",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "End time of availability"
+          },
+          {
+            "name": "is_available",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "true",
+            "notes": "Whether the slot is available"
+          }
+        ],
+        "indexes": [
+          "doctor_id",
+          "day_of_week"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "doctors",
+            "fk": "doctor_id",
+            "ref": "id",
+            "notes": "Each availability slot belongs to one doctor"
+          }
+        ]
+      },
+      {
+        "name": "notifications",
+        "purpose": "Store notification records sent to users",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": "gen_random_uuid()",
+            "notes": "Primary key"
+          },
+          {
+            "name": "user_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users table"
+          },
+          {
+            "name": "appointment_id",
+            "type": "UUID",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to appointments table"
+          },
+          {
+            "name": "type",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Notification type: reminder, confirmation, cancellation"
+          },
+          {
+            "name": "message",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Notification message content"
+          },
+          {
+            "name": "sent_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "When notification was sent"
+          },
+          {
+            "name": "is_read",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "false",
+            "notes": "Whether notification has been read"
+          }
+        ],
+        "indexes": [
+          "user_id",
+          "appointment_id",
+          "sent_at"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each notification is sent to one user"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "appointments",
+            "fk": "appointment_id",
+            "ref": "id",
+            "notes": "Notification may be related to an appointment"
+          }
+        ]
+      }
+    ],
+    "assumptions": [
+      "Each appointment slot is 30 minutes by default",
+      "Doctors can set recurring weekly availability patterns",
+      "Patients can only book appointments with available doctors",
+      "Email and SMS notifications will be sent for reminders",
+      "Administrators have full access to manage users and appointments",
+      "Appointment cancellations must be made at least 24 hours in advance",
+      "The system supports multiple time zones based on hospital location"
+    ]
+  },
+  "model_used": "CrewAI",
+  "timestamp": "2026-08-17 11:41:37"
+}

@@ -1,0 +1,726 @@
+{
+  "design_overview": "UniStudy is designed as a modern, student-focused mobile application with clean navigation, intuitive information architecture, and collaborative features. The design prioritizes ease of use for browsing notes, joining study groups, and real-time communication. Visual hierarchy guides users through primary actions like uploading notes, searching content, and joining groups. The interface uses cards, lists, and clear CTAs to create a native mobile experience suitable for both iOS and Android.",
+  "color_scheme": {
+    "primary": "#4A90E2",
+    "secondary": "#7B68EE",
+    "accent": "#FF6B6B",
+    "surface": "#FFFFFF",
+    "background": "#F5F7FA",
+    "text_primary": "#2C3E50",
+    "error": "#E74C3C",
+    "success": "#27AE60",
+    "warning": "#F39C12"
+  },
+  "typography": {
+    "font_family": "Inter, SF Pro Display, Roboto",
+    "heading_font": "Inter Bold",
+    "body_font": "Inter Regular",
+    "sizes": {
+      "small": "12px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "700"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Home",
+      "Notes",
+      "Groups",
+      "Profile"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Home Dashboard",
+      "purpose": "Primary landing screen showing personalized overview of recent notes, active groups, and quick actions",
+      "key_components": [
+        {
+          "name": "Top Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with subtle shadow, contains greeting text 'Welcome back, [Name]' in bold heading font, and notification bell icon on right",
+          "interaction": "Static greeting, bell icon navigates to notifications",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Bar",
+          "type": "Input",
+          "position": "top",
+          "size": "medium",
+          "styling": "Rounded rectangle with light gray background, search icon on left, placeholder 'Search notes, groups...' in gray text",
+          "interaction": "Tapping opens search screen with filters",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Stats Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners and soft shadow, displays three columns: Notes Uploaded (number), Groups Joined (number), Downloads (number) with icons above each",
+          "interaction": "Non-interactive informational display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Recent Notes Section",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Section header 'Recent Notes' in bold, followed by horizontal scrollable list of note cards with thumbnail, title, subject tag, and rating stars",
+          "interaction": "Horizontal scroll, tapping card navigates to note detail screen",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Active Groups Section",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Section header 'My Study Groups' in bold, vertical list of group cards showing group name, subject, member count, and last activity time",
+          "interaction": "Tapping card navigates to group chat screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Upload Notes Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Primary blue button with white text 'Upload Notes', rounded corners, plus icon on left, positioned above bottom navigation",
+          "interaction": "Opens upload notes screen",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background with four icons: Home (filled), Notes, Groups, Profile, with labels below each icon",
+          "interaction": "Tapping icons navigates to respective screens, active icon highlighted in primary blue",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Entry point after login. Users can navigate to Notes, Groups, Profile via bottom nav, or use quick actions like Upload Notes or Search. Tapping recent notes or groups navigates to detail screens."
+    },
+    {
+      "name": "Browse Notes",
+      "purpose": "Searchable and filterable library of all shared study notes with sorting and category options",
+      "key_components": [
+        {
+          "name": "Screen Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with title 'Study Notes' in bold heading font, back arrow on left, filter icon on right",
+          "interaction": "Back arrow returns to Home, filter icon opens filter modal",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "medium",
+          "styling": "Rounded input field with search icon, placeholder 'Search by title or subject...', light gray background",
+          "interaction": "Typing filters notes in real-time",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Subject Filter Chips",
+          "type": "List",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal scrollable row of pill-shaped chips: All, Mathematics, Physics, Computer Science, etc. Active chip has primary blue background",
+          "interaction": "Tapping chip filters notes by subject",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Sort Dropdown",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Small button with text 'Sort: Most Recent' and down arrow icon, light border",
+          "interaction": "Opens dropdown with sort options: Most Recent, Highest Rated, Most Downloaded",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notes List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Vertical scrollable list of note cards. Each card shows thumbnail image, title, subject tag, uploader name, rating stars, download count, and download button",
+          "interaction": "Tapping card navigates to note detail screen, tapping download button initiates download",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Note Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners, left side has document thumbnail, right side has title in bold, subject tag in small pill, uploader info, star rating, and download icon button",
+          "interaction": "Tap card for details, tap download icon to download file",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered card with illustration, heading 'No notes found', subtext 'Try adjusting your filters or search terms'",
+          "interaction": "Non-interactive placeholder when no results",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background with four icons: Home, Notes (filled), Groups, Profile",
+          "interaction": "Navigation between main sections",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home via bottom nav or search. Users can filter by subject, sort by criteria, search by keywords, and tap notes to view details or download directly. Back button returns to Home."
+    },
+    {
+      "name": "Note Detail",
+      "purpose": "Detailed view of a single study note with preview, metadata, ratings, and download/share actions",
+      "key_components": [
+        {
+          "name": "Top Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with back arrow on left, share icon on right, title 'Note Details' centered",
+          "interaction": "Back arrow returns to Browse Notes, share icon opens share sheet",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Note Preview Image",
+          "type": "Image",
+          "position": "top",
+          "size": "large",
+          "styling": "Full-width preview image of the note document with rounded corners, aspect ratio 16:9",
+          "interaction": "Tapping opens full-screen preview",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Note Title",
+          "type": "Header",
+          "position": "center",
+          "size": "large",
+          "styling": "Bold heading text displaying note title, dark text color, left-aligned",
+          "interaction": "Non-interactive text display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Metadata Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners showing subject tag, uploader name with small avatar, upload date, file type, and download count in organized rows",
+          "interaction": "Non-interactive informational display",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Description Section",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with heading 'Description' and body text showing note description, expandable if long",
+          "interaction": "Tap 'Read more' to expand full description",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Rating Summary",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Card showing average rating with large star icons, total number of ratings, and 'Rate this note' button",
+          "interaction": "Tapping 'Rate this note' opens rating modal",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reviews List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Section header 'Reviews' followed by list of review cards showing user avatar, name, star rating, review text, and date",
+          "interaction": "Scrollable list, non-interactive review cards",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Download Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Primary blue button with white text 'Download Note', full width, rounded corners, positioned above bottom nav",
+          "interaction": "Initiates file download and increments download count",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bookmark Icon",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Floating bookmark icon in top right corner of preview image, toggles between outlined and filled",
+          "interaction": "Tap to bookmark/unbookmark note for later",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed by tapping note card from Browse Notes or Home. Users can view details, read reviews, rate the note, download, share, or bookmark. Back button returns to previous screen."
+    },
+    {
+      "name": "Study Groups",
+      "purpose": "Browse and join study groups, view active groups, and create new groups for collaborative learning",
+      "key_components": [
+        {
+          "name": "Screen Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with title 'Study Groups' in bold, search icon on right",
+          "interaction": "Search icon opens group search modal",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Tab Selector",
+          "type": "Button",
+          "position": "top",
+          "size": "medium",
+          "styling": "Two tabs: 'My Groups' and 'Discover', active tab has primary blue underline and text color",
+          "interaction": "Tapping switches between user's groups and all available groups",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Subject Filter Chips",
+          "type": "List",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal scrollable chips for filtering by subject: All, Math, Physics, CS, etc.",
+          "interaction": "Tap to filter groups by subject",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Group Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners showing group name in bold, subject tag, description snippet, member count with user icon, admin name, and 'Join' or 'Open' button",
+          "interaction": "Tapping card or button navigates to group chat if member, or shows join confirmation if not",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Groups List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Vertical scrollable list of group cards, each showing group info and action button",
+          "interaction": "Scroll to browse, tap cards to view or join groups",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Group Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Primary blue floating action button with plus icon, positioned bottom right above navigation",
+          "interaction": "Opens create group modal with form fields",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered illustration with heading 'No groups yet' and subtext 'Create or join a study group to get started'",
+          "interaction": "Non-interactive placeholder when user has no groups",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background with four icons: Home, Notes, Groups (filled), Profile",
+          "interaction": "Navigation between main sections",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home via bottom nav. Users can switch between My Groups and Discover tabs, filter by subject, create new groups, or tap groups to join or open chat. Joining a group adds it to My Groups."
+    },
+    {
+      "name": "Group Chat",
+      "purpose": "Real-time messaging interface for study group members to discuss topics and collaborate",
+      "key_components": [
+        {
+          "name": "Chat Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with back arrow on left, group name in center bold text, member count below in smaller gray text, settings icon on right",
+          "interaction": "Back arrow returns to Study Groups, settings icon opens group settings modal",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Message List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Scrollable chat interface with messages aligned left (others) and right (user). Each message shows small avatar, sender name, message text in bubble, and timestamp",
+          "interaction": "Scroll to view history, long-press message for options (if user's message)",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "User Message Bubble",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Right-aligned bubble with primary blue background, white text, rounded corners, timestamp below in small gray text",
+          "interaction": "Long-press to edit or delete own messages",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Other Message Bubble",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Left-aligned bubble with light gray background, dark text, small avatar on left, sender name above, rounded corners, timestamp below",
+          "interaction": "Non-interactive display of other members' messages",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Date Separator",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "Centered small pill with light gray background showing date like 'Today' or 'Yesterday'",
+          "interaction": "Non-interactive date marker",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Message Input",
+          "type": "Input",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background input field with rounded corners, placeholder 'Type a message...', plus icon on left for attachments",
+          "interaction": "Tap to type message, plus icon opens attachment options",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Send Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Circular primary blue button with white send icon, positioned right of message input",
+          "interaction": "Tap to send typed message to group chat",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Typing Indicator",
+          "type": "Card",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Small gray text above input showing '[Name] is typing...' with animated dots",
+          "interaction": "Non-interactive real-time indicator",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed by tapping group card from Study Groups screen. Users can view message history, send new messages, attach files, and access group settings. Back button returns to Study Groups list."
+    },
+    {
+      "name": "User Profile",
+      "purpose": "Personal profile showing user information, uploaded notes, joined groups, and account settings",
+      "key_components": [
+        {
+          "name": "Profile Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Gradient background (subtle primary to secondary) with user avatar centered, full name below in white bold text, university name in smaller white text, edit icon on top right",
+          "interaction": "Edit icon opens profile edit screen",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Stats Row",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "White card below header with three columns: Notes Uploaded, Groups Joined, Total Downloads, each with number in bold and label below",
+          "interaction": "Non-interactive stats display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Tab Selector",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Two tabs: 'My Notes' and 'Settings', active tab has primary blue underline",
+          "interaction": "Switch between viewing uploaded notes and account settings",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "My Notes List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Vertical list of note cards showing thumbnail, title, subject, upload date, downloads, and rating. Each card has edit and delete icons",
+          "interaction": "Tap card to view note details, tap edit to modify, tap delete to remove",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Settings List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "List of settings options: Account Info, Notifications, Privacy, Help & Support, Logout. Each row has icon on left, label, and chevron on right",
+          "interaction": "Tap row to navigate to respective settings screen",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Account Info Row",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card row with user icon, 'Account Info' label, and right chevron",
+          "interaction": "Navigate to account details screen",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Secondary outlined button with red text 'Logout', centered, rounded corners",
+          "interaction": "Tap to logout and return to login screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White background with four icons: Home, Notes, Groups, Profile (filled)",
+          "interaction": "Navigation between main sections",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home via bottom nav. Users can view their stats, browse uploaded notes, edit or delete notes, access settings, and logout. Edit icon navigates to profile edit screen."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": null,
+      "size": "large",
+      "styling": "Primary blue background (#4A90E2), white text, rounded corners (8px), subtle shadow, min-height 48px for touch-friendly interaction",
+      "interaction": "Tap to trigger primary action, shows pressed state with darker blue",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": null,
+      "size": "medium",
+      "styling": "White background with primary blue border (2px), primary blue text, rounded corners (8px), min-height 44px",
+      "interaction": "Tap to trigger secondary action, shows pressed state with light blue background",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input Field",
+      "type": "Input",
+      "position": null,
+      "size": "medium",
+      "styling": "Light gray background (#F5F7FA), dark text, rounded corners (8px), padding 12px, placeholder in gray (#95A5A6), border appears on focus",
+      "interaction": "Tap to activate keyboard, shows blue border when focused",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Content Card",
+      "type": "Card",
+      "position": null,
+      "size": "medium",
+      "styling": "White background, rounded corners (12px), soft shadow (0 2px 8px rgba(0,0,0,0.08)), padding 16px, clear visual hierarchy",
+      "interaction": "Tap to navigate or expand, shows subtle scale animation on press",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Icon Button",
+      "type": "Button",
+      "position": null,
+      "size": "small",
+      "styling": "Circular or square with rounded corners, 40x40px touch target, icon centered, transparent or light background",
+      "interaction": "Tap to trigger action, shows ripple effect",
+      "icon": "settings",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Subject Tag",
+      "type": "Card",
+      "position": null,
+      "size": "small",
+      "styling": "Small pill-shaped badge with secondary color background (#7B68EE), white text, padding 4px 12px, rounded corners (16px)",
+      "interaction": "Non-interactive label or tappable filter",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Avatar",
+      "type": "Image",
+      "position": null,
+      "size": "small",
+      "styling": "Circular image (32px or 48px), border with surface color, placeholder shows user initials on colored background",
+      "interaction": "Non-interactive or tappable to view profile",
+      "icon": null,
+      "has_image": true,
+      "image_type": "user"
+    },
+    {
+      "name": "Rating Stars",
+      "type": "Card",
+      "position": null,
+      "size": "small",
+      "styling": "Row of 5 star icons, filled stars in warning color (#F39C12), empty stars in light gray, size 16px each",
+      "interaction": "Display-only or tappable to rate",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Floating Action Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "Circular button (56px), primary blue background, white icon, elevated shadow, positioned bottom right with 16px margin",
+      "interaction": "Tap to trigger primary creation action, shows scale animation",
+      "icon": "plus",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Navigation Item",
+      "type": "Button",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "Icon (24px) with label below (12px), inactive state in gray, active state in primary blue with filled icon",
+      "interaction": "Tap to navigate to section, shows active state immediately",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "The design uses a mobile-first approach optimized for screens 375px-428px width. Components scale proportionally on larger devices. Cards and lists use flexible layouts with max-width constraints. Bottom navigation remains fixed on mobile, adapts to side navigation on tablets. Typography scales using relative units. Touch targets maintain minimum 44x44px size across all breakpoints. Horizontal scrolling lists are touch-optimized with momentum scrolling.",
+  "accessibility": "All interactive elements meet WCAG 2.1 AA standards with minimum 44x44px touch targets. Color contrast ratios exceed 4.5:1 for text. Icons are paired with text labels. Form inputs include clear labels and placeholders. Error states use both color and text. Screen reader support with semantic HTML and ARIA labels. Keyboard navigation supported for web version. Focus indicators visible on all interactive elements. Alternative text provided for all images.",
+  "animations": "Subtle micro-interactions enhance usability: button press shows 95% scale with 150ms ease-out, card tap shows subtle lift with shadow increase, page transitions use 300ms slide animation, bottom nav icons scale 110% on tap, loading states use skeleton screens with shimmer effect, message send shows slide-up animation, pull-to-refresh uses native elastic animation, modal appears with fade and slide-up (250ms), toast notifications slide from top with auto-dismiss.",
+  "icons": "Consistent icon set using outlined style for inactive states, filled style for active states. Icons include: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share. All icons 24x24px default size, scalable to 20px (small) or 32px (large). Icons use currentColor to inherit text color for easy theming. Positioned with 8px padding for comfortable touch targets."
+}

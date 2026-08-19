@@ -1,0 +1,848 @@
+{
+  "design_overview": "A modern, professional inventory management system designed for retail environments with emphasis on speed, clarity, and real-time data visibility. The interface prioritizes quick barcode scanning workflows, instant stock level monitoring, and proactive alert management. The design uses a clean card-based layout with strong visual hierarchy, making critical information immediately scannable. Navigation follows native mobile patterns with a bottom tab bar for primary features and contextual top navigation for secondary actions. The color scheme balances professionalism with approachability, using blue as the primary color to convey trust and reliability, while accent colors provide clear status indicators for stock levels and alerts.",
+  "color_scheme": {
+    "primary": "#2563EB",
+    "secondary": "#64748B",
+    "accent": "#F59E0B",
+    "surface": "#FFFFFF",
+    "background": "#F8FAFC",
+    "text_primary": "#1E293B",
+    "error": "#DC2626",
+    "success": "#10B981",
+    "warning": "#F59E0B"
+  },
+  "typography": {
+    "font_family": "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "sizes": {
+      "small": "14px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "600"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Dashboard",
+      "Scan",
+      "Inventory",
+      "Alerts",
+      "Settings"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Dashboard",
+      "purpose": "Provide at-a-glance overview of inventory health, recent activity, and critical alerts for store managers and owners",
+      "key_components": [
+        {
+          "name": "Top Header Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with subtle bottom border, contains app logo on left and user profile icon on right, height 64px with padding",
+          "interaction": "Profile icon navigates to user settings and account management",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Welcome Section",
+          "type": "Text",
+          "position": "top",
+          "size": "medium",
+          "styling": "Large bold heading 'Good Morning, Sarah' with subtitle showing current date, dark text on light background, 24px top margin",
+          "interaction": "Static display, no interaction",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Stats Grid",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Three horizontal cards in a row showing Total Products (1,247), Low Stock Items (23), and Today's Sales ($3,456). Each card has white background, rounded corners (12px), subtle shadow, icon on left, number in large bold text, label below in gray",
+          "interaction": "Each card is tappable and navigates to detailed view of that metric",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Critical Alerts Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with red accent border on left, contains warning icon, heading 'Critical Stock Alerts', shows 5 products below threshold with product names and current quantities in red text, rounded corners, shadow",
+          "interaction": "Tapping card navigates to full Alerts screen, individual items can be tapped for product details",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Recent Activity List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "White card container with heading 'Recent Activity', contains 5 list items showing recent transactions with product name, transaction type badge (Sale/Restock), quantity change, and timestamp. Each item has subtle divider, left-aligned text, right-aligned time in gray",
+          "interaction": "Scrollable list, each item tappable to view transaction details",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Scan Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Large circular floating action button in primary blue color with white barcode scan icon, positioned bottom-right with 24px margin, prominent shadow, 64px diameter",
+          "interaction": "Opens barcode scanner interface immediately",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Top Products Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with heading 'Top Selling Products', horizontal scrollable list of 4 product cards, each showing product image placeholder, name, units sold this week, small trend indicator",
+          "interaction": "Horizontal scroll to view more products, tap individual product for details",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Inventory Health Indicator",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Horizontal card with circular progress indicator showing 87% inventory health score, green color, label 'Inventory Health' with subtitle 'Good standing', white background, rounded corners",
+          "interaction": "Tappable to view detailed inventory health breakdown",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Actions Row",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Row of 4 icon buttons with labels: Add Product, Restock, Reports, Suppliers. Each button has light gray background, rounded square shape, icon above text, evenly spaced",
+          "interaction": "Each button navigates to respective feature screen",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Navigation",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Fixed bottom bar with white background, 5 navigation items with icons and labels: Dashboard (home icon, active state in primary blue), Scan (search icon), Inventory (filter icon), Alerts (bell icon with red badge showing 5), Settings (settings icon). Height 72px, subtle top border",
+          "interaction": "Tapping each icon navigates to respective main screen, active state highlighted",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Entry point after login. Users can quickly assess inventory status, view critical alerts, access recent activity, and navigate to any major feature via bottom navigation or quick action buttons. Quick scan button provides immediate access to barcode scanning from any screen."
+    },
+    {
+      "name": "Barcode Scanner",
+      "purpose": "Enable rapid product identification and inventory updates through barcode scanning with immediate visual feedback",
+      "key_components": [
+        {
+          "name": "Scanner Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Semi-transparent dark overlay header with white text 'Scan Product Barcode', back button on left, flashlight toggle on right, height 56px",
+          "interaction": "Back button returns to previous screen, flashlight toggle controls device flash",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Camera Viewfinder",
+          "type": "Image",
+          "position": "center",
+          "size": "large",
+          "styling": "Full-screen camera feed with animated scanning reticle overlay, white rectangular frame in center with corner markers, subtle pulsing animation on frame",
+          "interaction": "Live camera feed, automatically detects and scans barcodes when in frame",
+          "icon": null,
+          "has_image": true,
+          "image_type": "background"
+        },
+        {
+          "name": "Scan Instructions",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "White text on semi-transparent dark background overlay, centered below scanning frame, reads 'Position barcode within frame', 16px font size",
+          "interaction": "Static instructional text",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Manual Entry Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Secondary button with white background, primary blue text 'Enter Barcode Manually', rounded corners, positioned above bottom nav with 16px margin, full width minus 32px padding",
+          "interaction": "Opens modal with numeric keypad for manual barcode entry",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Recent Scans List",
+          "type": "List",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Collapsible bottom sheet with white background, rounded top corners, shows last 3 scanned products with small product image, name, and timestamp, swipe up to expand",
+          "interaction": "Swipe up to expand full recent scans history, tap item to view product details",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Scan Success Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "large",
+          "styling": "White card modal with rounded corners, appears after successful scan, shows product image, name, current stock (45 units), price ($24.99), green checkmark icon at top, two action buttons below",
+          "interaction": "Auto-appears on successful scan, dismisses after 3 seconds or user action",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Quick Update Stock Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Primary blue button within success modal, text 'Update Stock', full width of modal minus padding, rounded corners, bold text",
+          "interaction": "Opens stock adjustment interface with plus/minus controls",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "View Details Link",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Text button in success modal, secondary gray text 'View Full Details', positioned below primary button, no background",
+          "interaction": "Navigates to full product detail screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Error State Message",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Red-tinted card that appears when barcode not recognized, contains error icon, heading 'Barcode Not Found', message text, and 'Try Again' button, rounded corners, centered on screen",
+          "interaction": "Appears on scan failure, dismisses when user taps Try Again or scans new code",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Scan Counter Badge",
+          "type": "Text",
+          "position": "top",
+          "size": "small",
+          "styling": "Small badge in top-right corner showing number of successful scans this session, white text on primary blue background, circular shape, 32px diameter",
+          "interaction": "Updates in real-time as products are scanned, purely informational",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed via bottom navigation Scan tab or floating action button on Dashboard. User points camera at barcode, system auto-detects and displays product info in modal. User can quickly update stock or view details. Can also manually enter barcode if scanner fails. Returns to previous screen via back button or after completing action."
+    },
+    {
+      "name": "Inventory List",
+      "purpose": "Display comprehensive searchable and filterable list of all products with real-time stock levels and quick access to product management",
+      "key_components": [
+        {
+          "name": "Inventory Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background header with large bold title 'Inventory', subtitle showing total count '1,247 Products', height 80px with bottom border",
+          "interaction": "Static header providing context",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Bar",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Light gray background search input with rounded corners (24px), search icon on left, placeholder 'Search products, SKU, or barcode', clear button on right when text entered, height 48px, full width minus 32px margin",
+          "interaction": "Typing filters product list in real-time, clear button removes search text",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Chips Row",
+          "type": "Button",
+          "position": "top",
+          "size": "medium",
+          "styling": "Horizontal scrollable row of filter chips: All Products (active, primary blue), Low Stock (red badge with count 23), Out of Stock (gray), Recently Added. Each chip has rounded pill shape, padding, tap to toggle active state",
+          "interaction": "Tapping chip filters product list by category, active chip highlighted in primary color",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Sort Dropdown",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Small button on right side showing 'Sort: A-Z' with down arrow icon, light gray background, rounded corners, positioned next to filter chips",
+          "interaction": "Opens bottom sheet with sort options: Name A-Z, Name Z-A, Stock Low-High, Stock High-Low, Price Low-High, Price High-Low",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Product List Items",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Scrollable list of product cards, each card white background with subtle shadow, contains: left-aligned product image (64x64px rounded), product name in bold, SKU below in gray, stock quantity with color coding (green >50, yellow 10-50, red <10), price on right, chevron right icon. Cards have 12px margin between, 16px padding inside",
+          "interaction": "Scroll to view all products, tap any card to navigate to product detail screen, long press for quick actions menu",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Stock Level Indicator",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Within each product card, stock quantity displayed with colored dot indicator: green dot for healthy stock, yellow for low stock, red for critical. Text shows 'Stock: 45 units' with appropriate color",
+          "interaction": "Visual indicator only, part of list item interaction",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Centered card shown when no products match filters, contains illustration placeholder, heading 'No Products Found', subtitle 'Try adjusting your filters or search', and 'Clear Filters' button in primary blue",
+          "interaction": "Clear Filters button resets all active filters and search",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Add Product FAB",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Floating action button in bottom-right corner, primary blue background, white plus icon, 56px diameter, prominent shadow, positioned 24px from bottom and right edges",
+          "interaction": "Opens Add New Product screen with form",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bulk Actions Bar",
+          "type": "Card",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Appears at bottom when products are selected (long press to select), white background with shadow, shows count of selected items, three action buttons: Export, Update Stock, Delete, slides up from bottom with animation",
+          "interaction": "Appears on selection, buttons perform bulk operations on selected products, dismiss by tapping outside or completing action",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Pull to Refresh",
+          "type": "Animation",
+          "position": "top",
+          "size": "small",
+          "styling": "Standard pull-to-refresh indicator at top of list, circular spinner in primary blue color, appears when user pulls down list",
+          "interaction": "Pull down on list to trigger refresh of inventory data from server",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed via bottom navigation Inventory tab. Users can search, filter, and sort products. Tapping a product navigates to detail view. Long press enables multi-select for bulk actions. Add button creates new product. Pull to refresh updates data. Returns to Dashboard via bottom nav."
+    },
+    {
+      "name": "Product Detail",
+      "purpose": "Display comprehensive product information with stock management controls and transaction history",
+      "key_components": [
+        {
+          "name": "Detail Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White header with back button on left, product name as title, edit icon button on right, height 56px with bottom border",
+          "interaction": "Back button returns to inventory list, edit button opens product edit form",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Product Image Section",
+          "type": "Image",
+          "position": "top",
+          "size": "large",
+          "styling": "Large product image at top, 300px height, full width, white background, centered product photo, subtle shadow at bottom edge",
+          "interaction": "Tappable to view full-screen image gallery",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Product Info Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with rounded top corners overlapping image slightly, contains product name in large bold text, SKU and barcode in gray below, price in large text on right, supplier name with small icon, description text in regular weight",
+          "interaction": "Static display of product information",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Stock Status Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Prominent card with stock quantity in extra-large bold text (45), label 'Units in Stock' below, color-coded background (green tint for healthy stock), shows minimum threshold '10 units minimum' in smaller text, rounded corners, padding",
+          "interaction": "Tappable to open stock adjustment interface",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Stock Actions",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Row of three buttons below stock card: Add Stock (primary blue), Remove Stock (secondary gray), Set Threshold (secondary gray). Equal width, rounded corners, icons with text labels",
+          "interaction": "Add/Remove open numeric input modal, Set Threshold opens threshold configuration",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Product Details Grid",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 2-column grid showing: Category, Location, Last Restocked date, Cost Price. Each row has label in gray on left, value in dark text on right, subtle dividers between rows",
+          "interaction": "Static information display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Transaction History Section",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Card with heading 'Recent Transactions', list of last 10 transactions showing date, type badge (Sale/Restock/Adjustment), quantity change with +/- indicator, user who performed action, timestamp. Each item has subtle divider, scrollable if more than 5 items",
+          "interaction": "Scroll to view more transactions, tap 'View All' link at bottom to see complete history",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Sales Performance Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Card showing simple bar chart of sales over last 7 days, heading 'Sales This Week', total units sold in large text, small trend indicator (up/down arrow with percentage)",
+          "interaction": "Tappable to view detailed sales analytics for this product",
+          "icon": null,
+          "has_image": false,
+          "image_type": "content"
+        },
+        {
+          "name": "Delete Product Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Text button in red color, 'Delete Product' label, positioned at bottom of scrollable content, requires confirmation dialog",
+          "interaction": "Opens confirmation modal before deletion, only visible to managers and owners",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Share Button",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Icon button in header next to edit button, share icon, opens native share sheet",
+          "interaction": "Opens system share dialog to export product details",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed by tapping product from Inventory List or after successful barcode scan. Users can view all product details, adjust stock levels, view transaction history, and edit product information. Back button returns to previous screen. Edit navigates to product form."
+    },
+    {
+      "name": "Alerts Center",
+      "purpose": "Centralized view of all inventory alerts with filtering, prioritization, and quick resolution actions",
+      "key_components": [
+        {
+          "name": "Alerts Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background header with large bold title 'Alerts', subtitle showing unread count '5 unread alerts', settings icon on right for alert preferences, height 80px",
+          "interaction": "Settings icon opens alert configuration screen",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Alert Filter Tabs",
+          "type": "Button",
+          "position": "top",
+          "size": "medium",
+          "styling": "Three tabs: All (badge showing 12), Critical (badge showing 5 in red), Resolved. Active tab has primary blue underline and text, inactive tabs in gray, full width, height 48px",
+          "interaction": "Tapping tab filters alert list by status",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Critical Alert Banner",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Red-tinted banner card at top of list, contains warning icon, bold text '5 products critically low', 'Take Action' button on right, rounded corners, prominent shadow",
+          "interaction": "Tapping banner or button shows only critical alerts, Take Action opens bulk reorder interface",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Alert List Items",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Scrollable list of alert cards, each card has: left colored border (red for critical, yellow for warning), product image thumbnail, product name in bold, alert message 'Stock below minimum (8 units remaining)', timestamp, unread indicator dot. White background, rounded corners, 8px margin between cards",
+          "interaction": "Tap alert to view product details, swipe left to mark as read or resolve, swipe right to dismiss",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Alert Priority Indicator",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Small badge on each alert card showing priority level: Critical (red), Warning (yellow), Info (blue). Pill-shaped, white text, positioned top-right of card",
+          "interaction": "Visual indicator only, part of card interaction",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Action Buttons",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Two small buttons within each alert card: 'Reorder' (primary blue) and 'View Product' (secondary gray), positioned at bottom of card, equal width, rounded corners",
+          "interaction": "Reorder opens reorder form pre-filled with product, View Product navigates to product detail",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Centered card shown when no alerts exist, contains success checkmark icon in green, heading 'All Clear!', message 'No active alerts at this time', illustration of healthy inventory",
+          "interaction": "Static display, no interaction",
+          "icon": null,
+          "has_image": false,
+          "image_type": "content"
+        },
+        {
+          "name": "Mark All Read Button",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Text button in header area, 'Mark All Read' in primary blue, appears only when unread alerts exist",
+          "interaction": "Marks all current alerts as read, updates unread count",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Alert Settings FAB",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Floating action button in bottom-right, secondary gray background, settings gear icon in white, 48px diameter, subtle shadow",
+          "interaction": "Opens alert preferences screen to configure thresholds and notification settings",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bulk Resolve Bar",
+          "type": "Card",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Appears when alerts are selected (long press to select), white card at bottom with shadow, shows selected count, 'Resolve Selected' button in primary blue, 'Cancel' text button",
+          "interaction": "Resolve button marks selected alerts as resolved, Cancel deselects all",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed via bottom navigation Alerts tab or notification badge. Users can view all alerts, filter by priority, take quick actions like reordering or viewing products. Swipe gestures allow quick management. Settings configure alert thresholds. Returns to Dashboard via bottom nav."
+    },
+    {
+      "name": "Settings",
+      "purpose": "Provide access to account management, app preferences, user management, and system configuration",
+      "key_components": [
+        {
+          "name": "Settings Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background header with large bold title 'Settings', height 80px with bottom border",
+          "interaction": "Static header",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "User Profile Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "White card with user avatar (circular, 80px), name 'Sarah Johnson' in large bold text, role badge 'Store Manager' in primary blue, email below in gray, 'Edit Profile' link on right. Rounded corners, padding, subtle shadow",
+          "interaction": "Tapping card or Edit Profile link navigates to profile edit screen",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Settings Section: Account",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Section with gray heading 'Account', white card below containing list items: Change Password, Notification Preferences, Language (English selected), Theme (Light selected). Each item has icon on left, label, value/status on right, chevron right, dividers between items",
+          "interaction": "Each item navigates to respective configuration screen",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings Section: Inventory",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Section with gray heading 'Inventory Settings', white card with items: Default Low Stock Threshold (10 units), Auto-Reorder (toggle switch ON), Barcode Scanner Settings, Product Categories. Icons, labels, values, chevrons",
+          "interaction": "Items navigate to configuration screens, toggle switches change settings immediately",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings Section: Users",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Section with gray heading 'User Management' (only visible to managers/owners), white card with items: Manage Users (shows count '8 active users'), Roles & Permissions, Activity Log. Icons, labels, chevrons",
+          "interaction": "Items navigate to user management screens, restricted by role",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings Section: Data",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Section with gray heading 'Data & Reports', white card with items: Export Inventory Data, Sales Reports, Backup & Sync (last sync timestamp shown), Clear Cache. Icons, labels, status text, chevrons",
+          "interaction": "Items navigate to data management screens or trigger immediate actions",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings Section: Support",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Section with gray heading 'Support & About', white card with items: Help Center, Contact Support, Terms of Service, Privacy Policy, App Version (v2.1.0). Icons, labels, chevrons",
+          "interaction": "Items navigate to support resources or open external links",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width button with red text 'Log Out', white background, red border, rounded corners, positioned at bottom of scrollable content with 24px margin",
+          "interaction": "Opens confirmation dialog, then logs user out and returns to login screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "App Version Footer",
+          "type": "Text",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Centered gray text at very bottom showing 'Version 2.1.0 \u2022 Build 245', small font size, 16px bottom padding",
+          "interaction": "Static display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed via bottom navigation Settings tab. Users can manage account, configure app preferences, manage users (if authorized), export data, and access support. Each setting item navigates to detailed configuration screen. Logout returns to login. Back to Dashboard via bottom nav."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": "center",
+      "size": "large",
+      "styling": "Solid primary blue background (#2563EB), white text, bold weight, rounded corners (8px), height 48px, full width or auto width with 24px horizontal padding, subtle shadow on press",
+      "interaction": "Tappable, shows pressed state with slight scale down and darker background",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": "center",
+      "size": "medium",
+      "styling": "White background, primary blue border (2px), primary blue text, bold weight, rounded corners (8px), height 48px, padding",
+      "interaction": "Tappable, shows pressed state with light blue background tint",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input Field",
+      "type": "Input",
+      "position": "center",
+      "size": "large",
+      "styling": "Light gray background (#F1F5F9), dark text, rounded corners (8px), height 48px, 16px horizontal padding, placeholder in medium gray, focus state shows primary blue border",
+      "interaction": "Tappable to focus and show keyboard, clear button appears when text entered",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Product Card",
+      "type": "Card",
+      "position": "center",
+      "size": "medium",
+      "styling": "White background, rounded corners (12px), subtle shadow (0 2px 8px rgba(0,0,0,0.08)), 16px padding, contains product image, name, stock indicator, price, arranged in structured layout",
+      "interaction": "Tappable entire card navigates to product detail, shows pressed state with slight scale",
+      "icon": null,
+      "has_image": true,
+      "image_type": "product"
+    },
+    {
+      "name": "Alert Card",
+      "type": "Card",
+      "position": "center",
+      "size": "medium",
+      "styling": "White background with colored left border (4px, red/yellow based on priority), rounded corners (8px), shadow, 16px padding, contains alert icon, message, timestamp, action buttons",
+      "interaction": "Tappable to view details, swipeable for quick actions",
+      "icon": "bell",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Navigation Item",
+      "type": "Navigation",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "Icon above label, active state in primary blue with filled icon, inactive in gray with outline icon, 24px icon size, 12px label text, vertical layout",
+      "interaction": "Tappable to navigate to main screen, shows active state immediately",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Floating Action Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "Circular button, 56px diameter, primary blue background, white icon, prominent shadow (0 4px 12px rgba(37,99,235,0.4)), positioned fixed bottom-right with 24px margin",
+      "interaction": "Tappable, shows scale animation on press, triggers primary action",
+      "icon": "plus",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Status Badge",
+      "type": "Text",
+      "position": "center",
+      "size": "small",
+      "styling": "Pill-shaped badge with colored background (green/yellow/red based on status), white text, 6px vertical padding, 12px horizontal padding, small font (12px), bold weight",
+      "interaction": "Static display, no interaction",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Modal Dialog",
+      "type": "Modal",
+      "position": "center",
+      "size": "large",
+      "styling": "White card centered on semi-transparent dark overlay (rgba(0,0,0,0.5)), rounded corners (16px), max width 90% of screen, padding 24px, shadow, slide-up animation on appear",
+      "interaction": "Appears over content, dismissible by tapping overlay or close button, contains heading, content, action buttons",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "List Item",
+      "type": "List",
+      "position": "center",
+      "size": "medium",
+      "styling": "White background, height 64px, 16px horizontal padding, contains left icon/image, primary text, secondary text below, right chevron or value, subtle bottom border (1px, light gray)",
+      "interaction": "Tappable, shows pressed state with light gray background, navigates or triggers action",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "The design follows a mobile-first approach optimized for iOS and Android devices with screen sizes from 375px to 428px width. All components use relative sizing and flexible layouts to adapt to different screen sizes. Cards and lists stack vertically on mobile with full-width layouts minus consistent 16px horizontal margins. Touch targets meet minimum 44x44px accessibility standards. The bottom navigation remains fixed and accessible on all screens. Horizontal scrolling is used sparingly for filter chips and product carousels. The design scales up for tablets by increasing margins and using a two-column layout for cards where appropriate, while maintaining single-column navigation for consistency.",
+  "accessibility": "All interactive elements meet WCAG 2.1 AA standards with minimum touch target sizes of 44x44px. Color is never the only means of conveying information - stock status uses both color and text labels. Text maintains minimum 4.5:1 contrast ratio against backgrounds. All icons are accompanied by text labels. Form inputs include clear labels and placeholder text. Error states provide descriptive messages. The app supports dynamic type sizing for users with vision impairments. Screen reader labels are provided for all interactive elements. Focus indicators are visible for keyboard navigation. Alert notifications include both visual and text-based information. Critical actions require confirmation dialogs to prevent accidental data loss.",
+  "animations": "Animations are subtle and purposeful, enhancing usability without distraction. Screen transitions use 300ms slide animations (right-to-left for forward navigation, left-to-right for back). Modal dialogs slide up from bottom with 250ms duration and ease-out timing. Button presses show immediate visual feedback with 100ms scale-down animation. List items fade in sequentially when loading (50ms stagger). Pull-to-refresh uses standard iOS/Android spinner animation. Floating action buttons have a subtle bounce on appear. Success states show a brief checkmark animation (400ms). Loading states use skeleton screens with shimmer effect rather than spinners. Swipe gestures on alerts and list items reveal action buttons with smooth 200ms transitions. All animations respect system-level reduced motion preferences.",
+  "icons": "Icons follow a consistent outline style from a cohesive icon family (Lucide or Heroicons). Primary navigation uses: home (house outline), search (magnifying glass), filter (funnel), bell (notification), settings (gear). Action icons include: plus (add), edit (pencil), trash (delete), share (share arrow), user (person outline). All icons are 24px by default, scaling to 20px for compact contexts and 32px for prominent actions. Icons maintain 2px stroke width for visual consistency. Color follows the design system: primary blue for active states, medium gray for inactive, white for buttons with colored backgrounds. Icons are never used alone without text labels except in universally recognized contexts like navigation bars."
+}

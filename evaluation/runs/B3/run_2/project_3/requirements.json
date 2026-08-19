@@ -1,0 +1,96 @@
+{
+  "project_name": "Hospital Appointment Booking System",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Patient Registration",
+      "description": "Patients can create and manage their accounts with personal and medical information.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can register an account so that I can book appointments with doctors.",
+        "As a patient, I can update my profile information so that my records are current."
+      ],
+      "acceptance_criteria": [
+        "Given a new patient, When they complete the registration form, Then an account is created and confirmation email is sent.",
+        "Given a registered patient, When they update their profile, Then the changes are saved and reflected immediately."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Appointment Scheduling",
+      "description": "Patients can view available time slots and book appointments with doctors.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can view available doctor schedules so that I can choose a convenient time.",
+        "As a patient, I can book an appointment so that I can visit the doctor at my selected time."
+      ],
+      "acceptance_criteria": [
+        "Given available doctors, When a patient searches by specialty or date, Then matching available slots are displayed.",
+        "Given an available time slot, When a patient confirms booking, Then the appointment is reserved and confirmation is sent."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Appointment Management",
+      "description": "Patients and doctors can view, reschedule, or cancel existing appointments.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can cancel my appointment so that the slot becomes available for others.",
+        "As a doctor, I can view my appointment schedule so that I know my daily patient list."
+      ],
+      "acceptance_criteria": [
+        "Given a booked appointment, When a patient cancels it, Then the slot is freed and notification is sent to the doctor.",
+        "Given a doctor login, When they access their dashboard, Then all scheduled appointments are displayed chronologically."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Doctor Profile Management",
+      "description": "Doctors can manage their profiles, specialties, and availability schedules.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a doctor, I can set my available hours so that patients can only book during those times.",
+        "As a doctor, I can update my specialty information so that patients find me for relevant conditions."
+      ],
+      "acceptance_criteria": [
+        "Given a doctor account, When they set availability hours, Then only those slots appear for patient booking.",
+        "Given a doctor profile, When specialty is updated, Then the changes are visible in search results immediately."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Notifications and Reminders",
+      "description": "System sends automated reminders and notifications for appointments and updates.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a patient, I can receive appointment reminders so that I don't miss my scheduled visit.",
+        "As a doctor, I can receive notifications of new bookings so that I stay informed of my schedule."
+      ],
+      "acceptance_criteria": [
+        "Given an upcoming appointment, When it is 24 hours away, Then a reminder email and SMS are sent to the patient.",
+        "Given a new appointment booking, When it is confirmed, Then the doctor receives an instant notification."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "JWT Authentication",
+      "SendGrid",
+      "Twilio"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "Patient",
+    "Doctor",
+    "Administrator"
+  ],
+  "database_schema": null
+}

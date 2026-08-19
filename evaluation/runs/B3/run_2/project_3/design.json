@@ -1,0 +1,693 @@
+{
+  "design_overview": "A modern, patient-centric hospital appointment booking system designed for iOS and Android platforms. The interface prioritizes clarity, ease of navigation, and quick access to core functions: finding doctors, booking appointments, and managing schedules. The design uses a clean, medical-professional aesthetic with calming colors, clear visual hierarchy, and touch-optimized components. Navigation follows native mobile patterns with bottom tab navigation for primary flows and contextual top bars for secondary screens.",
+  "color_scheme": {
+    "primary": "#2563EB",
+    "secondary": "#0EA5E9",
+    "accent": "#10B981",
+    "surface": "#FFFFFF",
+    "background": "#F8FAFC",
+    "text_primary": "#1E293B",
+    "error": "#EF4444",
+    "success": "#10B981",
+    "warning": "#F59E0B"
+  },
+  "typography": {
+    "font_family": "Inter",
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "sizes": {
+      "small": "14px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "600"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Home",
+      "Search",
+      "Appointments",
+      "Profile"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Home Dashboard",
+      "purpose": "Primary landing screen showing upcoming appointments, quick actions, and personalized health information",
+      "key_components": [
+        {
+          "name": "Top Header Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with subtle shadow, displays 'Good Morning, Sarah' greeting with user avatar on right",
+          "interaction": "Tapping avatar navigates to Profile screen",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Upcoming Appointment Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Elevated white card with rounded corners (16px), subtle shadow, displays doctor photo, name 'Dr. Michael Chen', specialty 'Cardiologist', date 'Tomorrow, 10:30 AM', with primary blue accent border on left",
+          "interaction": "Tapping card navigates to Appointment Details screen",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Quick Actions Section",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Horizontal scrollable row of 4 action cards with icons: 'Book Appointment', 'Find Doctor', 'Medical Records', 'Prescriptions'. Each card has light blue background, rounded corners, icon on top, label below",
+          "interaction": "Each card navigates to respective feature screen",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Recent Doctors List",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Section header 'Recent Doctors' with 'See All' link. List of 3 doctor cards showing circular profile photo, name, specialty, rating stars, and 'Book Again' button",
+          "interaction": "Tapping doctor card navigates to Doctor Profile screen. 'Book Again' button navigates to Appointment Booking",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Health Tips Card",
+          "type": "Card",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Light green background card with rounded corners, displays health tip icon, title 'Stay Hydrated', brief description, and 'Learn More' link",
+          "interaction": "Tapping card opens health tips detail view",
+          "icon": "heart",
+          "has_image": false,
+          "image_type": "content"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Fixed bottom bar with white background, 4 tabs with icons and labels: Home (active - blue), Search, Appointments, Profile. Active tab has blue icon and text",
+          "interaction": "Tapping each tab navigates to respective main screen",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Entry point after login. Users can view upcoming appointments, access quick actions, or navigate to other main sections via bottom tabs"
+    },
+    {
+      "name": "Doctor Search",
+      "purpose": "Search and filter doctors by specialty, availability, location, and ratings",
+      "key_components": [
+        {
+          "name": "Search Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with back button on left, 'Find a Doctor' title centered, filter icon on right",
+          "interaction": "Back button returns to Home. Filter icon opens filter modal",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Large rounded search bar with light gray background, search icon on left, placeholder 'Search by name, specialty...'",
+          "interaction": "Typing filters doctor list in real-time",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Specialty Filter Chips",
+          "type": "Card",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal scrollable row of specialty chips: 'All', 'Cardiology', 'Pediatrics', 'Dermatology', 'Orthopedics'. Selected chip has blue background, others have light gray",
+          "interaction": "Tapping chip filters doctor list by specialty",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Sort Dropdown",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Small button with text 'Sort by: Rating' and down arrow icon, light border",
+          "interaction": "Opens dropdown menu with sort options: Rating, Experience, Availability, Fee",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Doctor Results List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Scrollable list of doctor cards. Each card shows circular profile photo, name, specialty, experience years, rating with stars, consultation fee, 'Available Today' badge if applicable, and 'View Profile' button",
+          "interaction": "Tapping card or button navigates to Doctor Profile screen",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "No Results State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered illustration with text 'No doctors found' and 'Try adjusting your filters' subtitle. Shown when search returns empty",
+          "interaction": "Static informational component",
+          "icon": "search",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Filter Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "large",
+          "styling": "Bottom sheet modal with white background, rounded top corners. Contains sections: Specialty (checkboxes), Availability (date picker), Experience (slider), Fee Range (slider), Gender preference. 'Apply Filters' primary button at bottom",
+          "interaction": "Selecting options and tapping Apply updates doctor list. Close button dismisses modal",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Fixed bottom bar, Search tab active (blue icon and text)",
+          "interaction": "Tapping tabs navigates to respective screens",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Home quick actions or bottom nav. Users search/filter doctors, view results, then tap to see doctor profile or book appointment"
+    },
+    {
+      "name": "Doctor Profile",
+      "purpose": "Display detailed doctor information, specialties, availability, reviews, and booking option",
+      "key_components": [
+        {
+          "name": "Profile Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with back button on left, bookmark icon on right. Large circular doctor photo centered below, name 'Dr. Michael Chen', specialty 'Cardiologist', rating '4.8 (127 reviews)'",
+          "interaction": "Back button returns to search. Bookmark icon saves doctor to favorites",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Quick Info Cards",
+          "type": "Card",
+          "position": "top",
+          "size": "small",
+          "styling": "Three small cards in a row: '12 Years Experience', '$80 Consultation', 'Available Today'. Light blue background, rounded corners",
+          "interaction": "Static informational display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "About Section",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 'About' header, bio text describing doctor's background, qualifications, and approach. 'Read More' link if text is long",
+          "interaction": "'Read More' expands full bio text",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Specialties Section",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "White card with 'Specialties' header, list of specialty tags with light blue background: 'Cardiology', 'Heart Surgery', 'Preventive Care'",
+          "interaction": "Static informational display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reviews Section",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 'Patient Reviews' header and 'See All' link. Shows 2-3 review cards with patient name, rating stars, date, and review text",
+          "interaction": "'See All' navigates to full reviews screen. Individual reviews are static",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Available Time Slots",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 'Available Slots' header, date selector showing next 7 days, grid of time slot buttons (e.g., '9:00 AM', '10:30 AM'). Available slots have light blue background, booked slots are gray and disabled",
+          "interaction": "Selecting date updates time slots. Tapping available slot selects it for booking",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Book Appointment Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Large primary blue button with white text 'Book Appointment', fixed at bottom with shadow, rounded corners",
+          "interaction": "Navigates to Appointment Booking Confirmation screen with selected time slot",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Share Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Small secondary button with border, 'Share Profile' text and share icon, positioned next to Book button",
+          "interaction": "Opens native share sheet to share doctor profile",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Doctor Search results. Users review doctor details, check availability, select time slot, then proceed to book appointment"
+    },
+    {
+      "name": "Appointment Booking Confirmation",
+      "purpose": "Confirm appointment details, add reason for visit, and finalize booking",
+      "key_components": [
+        {
+          "name": "Confirmation Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with back button on left, 'Confirm Appointment' title centered",
+          "interaction": "Back button returns to Doctor Profile",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Doctor Summary Card",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "White card with doctor photo, name 'Dr. Michael Chen', specialty, selected date 'Tomorrow, March 15', selected time '10:30 AM', consultation fee '$80'",
+          "interaction": "Static summary display",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Reason for Visit Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Multi-line text input with light gray background, rounded corners, placeholder 'Describe your symptoms or reason for visit...'",
+          "interaction": "User types reason for appointment",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Patient Information Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card showing patient name, age, contact number with 'Edit' link on right",
+          "interaction": "'Edit' link navigates to profile editing",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Preferences",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "White card with checkboxes for 'Email reminder' and 'SMS reminder', both checked by default",
+          "interaction": "Toggling checkboxes enables/disables notification channels",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Terms Checkbox",
+          "type": "Input",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Checkbox with text 'I agree to the cancellation policy and terms of service' with linked text",
+          "interaction": "Must be checked to enable Confirm button. Links open policy modals",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirm Booking Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Large primary blue button with white text 'Confirm Booking', fixed at bottom, disabled state (gray) until terms accepted",
+          "interaction": "Creates appointment and navigates to Booking Success screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Text button 'Cancel' in gray, positioned above Confirm button",
+          "interaction": "Returns to Doctor Profile without booking",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Doctor Profile after selecting time slot. Users review details, add visit reason, confirm notifications, accept terms, then confirm booking"
+    },
+    {
+      "name": "My Appointments",
+      "purpose": "View and manage all patient appointments (upcoming, past, cancelled)",
+      "key_components": [
+        {
+          "name": "Appointments Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with 'My Appointments' title centered, filter icon on right",
+          "interaction": "Filter icon opens status filter options",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Tabs",
+          "type": "Card",
+          "position": "top",
+          "size": "small",
+          "styling": "Three tabs: 'Upcoming', 'Past', 'Cancelled'. Active tab has blue underline and text, others are gray",
+          "interaction": "Tapping tab filters appointment list by status",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Upcoming Appointments List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Scrollable list of appointment cards. Each card shows doctor photo, name, specialty, date, time, status badge ('Confirmed' in green), and two action buttons: 'Reschedule' (secondary) and 'Cancel' (text, red)",
+          "interaction": "Tapping card navigates to Appointment Details. 'Reschedule' opens time slot selector. 'Cancel' opens cancellation confirmation modal",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Past Appointments List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Similar card layout showing completed appointments with 'Completed' status badge in gray, 'Book Again' button, and 'Leave Review' link",
+          "interaction": "Tapping card shows appointment details. 'Book Again' navigates to doctor profile. 'Leave Review' opens review modal",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered illustration with text 'No appointments yet' and 'Book your first appointment' subtitle with 'Find Doctor' button",
+          "interaction": "'Find Doctor' button navigates to Doctor Search",
+          "icon": "search",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Cancellation Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bottom sheet modal with 'Cancel Appointment' title, warning text about cancellation policy, reason dropdown, optional notes input, 'Confirm Cancellation' button (red) and 'Keep Appointment' button (secondary)",
+          "interaction": "'Confirm' cancels appointment and updates list. 'Keep' dismisses modal",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Fixed bottom bar, Appointments tab active (blue icon and text)",
+          "interaction": "Tapping tabs navigates to respective screens",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from bottom navigation. Users view appointment lists by status, manage upcoming appointments (reschedule/cancel), or book again from past appointments"
+    },
+    {
+      "name": "User Profile",
+      "purpose": "View and edit patient profile information, settings, and account management",
+      "key_components": [
+        {
+          "name": "Profile Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Gradient background (subtle blue gradient) with large circular profile photo centered, patient name 'Sarah Johnson', email below, 'Edit Profile' button",
+          "interaction": "'Edit Profile' navigates to profile editing screen",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Personal Information Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 'Personal Information' header, list items showing: Date of Birth, Gender, Phone Number, Address. Each item has label and value with right arrow",
+          "interaction": "Tapping item navigates to edit screen for that field",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Medical Information Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 'Medical Information' header, list items: Blood Type, Allergies, Medical History, Emergency Contact. Right arrows on each",
+          "interaction": "Tapping item navigates to edit screen for that field",
+          "icon": "heart",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings Section",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 'Settings' header, list items: Notifications (with toggle switch), Language, Privacy Policy, Terms of Service. Items with arrows navigate, toggle is interactive",
+          "interaction": "Toggle switches notification settings. Other items navigate to respective screens",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Saved Doctors Card",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "White card with 'Saved Doctors' text, bookmark icon, and count badge '5', right arrow",
+          "interaction": "Navigates to list of bookmarked doctors",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Help & Support Card",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "White card with 'Help & Support' text and right arrow",
+          "interaction": "Navigates to help center with FAQs and contact options",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Text button 'Logout' in red color, centered",
+          "interaction": "Opens confirmation modal, then logs out user and returns to login screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Fixed bottom bar, Profile tab active (blue icon and text)",
+          "interaction": "Tapping tabs navigates to respective screens",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from bottom navigation or home header avatar. Users view profile information, edit details, manage settings, access saved doctors, or logout"
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": null,
+      "size": "large",
+      "styling": "Blue background (#2563EB), white text, rounded corners (12px), 48px height, bold font weight, subtle shadow on press",
+      "interaction": "Tap triggers primary action with subtle scale animation",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": null,
+      "size": "medium",
+      "styling": "White background, blue border (2px), blue text, rounded corners (12px), 44px height",
+      "interaction": "Tap triggers secondary action",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Button",
+      "type": "Button",
+      "position": null,
+      "size": "small",
+      "styling": "No background, colored text (blue or red), no border, underline on press",
+      "interaction": "Tap triggers tertiary action",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Input Field",
+      "type": "Input",
+      "position": null,
+      "size": "medium",
+      "styling": "Light gray background (#F1F5F9), rounded corners (8px), 48px height, dark text, placeholder in gray, focus state shows blue border",
+      "interaction": "Tap to focus and show keyboard",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Card Container",
+      "type": "Card",
+      "position": null,
+      "size": "medium",
+      "styling": "White background, rounded corners (16px), subtle shadow (0 2px 8px rgba(0,0,0,0.08)), 16px padding",
+      "interaction": "May be tappable depending on context",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "List Item",
+      "type": "List",
+      "position": null,
+      "size": "medium",
+      "styling": "White background, horizontal layout with left content, right arrow icon, bottom border (light gray), 56px height, 16px horizontal padding",
+      "interaction": "Tap navigates to detail screen",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Status Badge",
+      "type": "Card",
+      "position": null,
+      "size": "small",
+      "styling": "Colored background (green for confirmed, gray for completed, red for cancelled), white text, rounded corners (6px), 8px vertical padding, 12px horizontal padding, small font size",
+      "interaction": "Static informational display",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Avatar Image",
+      "type": "Image",
+      "position": null,
+      "size": "medium",
+      "styling": "Circular image (48px or 64px diameter), border (2px white), subtle shadow",
+      "interaction": "May be tappable to view profile",
+      "icon": null,
+      "has_image": true,
+      "image_type": "user"
+    },
+    {
+      "name": "Bottom Sheet Modal",
+      "type": "Modal",
+      "position": "bottom",
+      "size": "large",
+      "styling": "White background, rounded top corners (24px), slides up from bottom, overlay background (semi-transparent black), drag handle at top",
+      "interaction": "Swipe down or tap outside to dismiss",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Tab Bar Item",
+      "type": "Button",
+      "position": "bottom",
+      "size": "small",
+      "styling": "Icon above label, active state in blue (#2563EB), inactive in gray (#64748B), 24px icon size, 12px label font",
+      "interaction": "Tap switches to respective screen",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "Mobile-first design optimized for iOS and Android devices with screen sizes from 375px to 428px width. Components use flexible layouts with percentage-based widths and minimum touch targets of 44x44px. Cards and lists adapt to screen width with consistent 16px horizontal margins. Typography scales proportionally. Tablet layouts (768px+) use two-column layouts where appropriate, with navigation shifting to side panel.",
+  "accessibility": "WCAG 2.1 AA compliant. All interactive elements have minimum 44x44px touch targets. Color contrast ratios exceed 4.5:1 for text. All images include alt text. Form inputs have associated labels. Screen reader support with semantic HTML and ARIA labels. Focus indicators visible on all interactive elements. Error messages are descriptive and associated with form fields. Support for dynamic text sizing up to 200%.",
+  "animations": "Subtle, purposeful animations enhance usability without distraction. Screen transitions use native slide animations (300ms). Button presses show subtle scale feedback (0.95 scale, 100ms). Cards have gentle elevation change on press. Bottom sheets slide up with spring animation. Loading states use skeleton screens with shimmer effect. Success actions show brief checkmark animation. All animations respect reduced motion preferences.",
+  "icons": "Consistent icon set using outlined style from standard icon libraries (Feather Icons or SF Symbols). Icons are 24px by default, 20px for small contexts. All icons are single-color, matching text color or using primary blue for active states. Icons always paired with labels for clarity except in bottom navigation where context is clear."
+}

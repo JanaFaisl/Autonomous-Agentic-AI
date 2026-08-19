@@ -1,0 +1,143 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Store user account information",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key, auto-incrementing"
+        },
+        {
+          "name": "username",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Unique username for login"
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "User email address, must be unique"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Account creation timestamp"
+        }
+      ],
+      "indexes": [
+        "email",
+        "username"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "tasks",
+      "purpose": "Store task information for users",
+      "columns": [
+        {
+          "name": "id",
+          "type": "int",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key, auto-incrementing"
+        },
+        {
+          "name": "user_id",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key referencing users table"
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Task title, required field"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Optional detailed task description"
+        },
+        {
+          "name": "is_completed",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Task completion status flag"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Task creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Last update timestamp, updated on modification"
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "is_completed"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each task belongs to one user"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Users must be authenticated to create and manage tasks",
+    "Tasks can be permanently deleted based on user action",
+    "Task completion status is a simple boolean flag (true for completed, false for incomplete)",
+    "Timestamps use server timezone or UTC for consistency",
+    "Each user can have multiple tasks (one-to-many relationship)",
+    "Task title is required but description is optional",
+    "Username and email must be unique across all users",
+    "Auto-incrementing integer IDs are used for primary keys"
+  ]
+}

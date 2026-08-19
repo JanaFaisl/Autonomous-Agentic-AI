@@ -1,0 +1,643 @@
+{
+  "project_name": "Real-Time Inventory Management System",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Barcode Scanning",
+      "description": "Enable quick product identification and inventory updates using barcode scanner integration.",
+      "priority": "High",
+      "user_stories": [
+        "As a store clerk, I can scan product barcodes so that I can quickly add items to inventory.",
+        "As a store manager, I can scan barcodes during stock checks so that I can verify inventory accuracy."
+      ],
+      "acceptance_criteria": [
+        "Given a valid barcode, When the clerk scans it, Then the product details are displayed within 2 seconds.",
+        "Given an invalid barcode, When scanned, Then an error message is shown and no inventory change occurs."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Real-Time Inventory Tracking",
+      "description": "Monitor stock levels in real-time with automatic updates when items are added or sold.",
+      "priority": "High",
+      "user_stories": [
+        "As a store manager, I can view current stock levels so that I know what products need reordering.",
+        "As a store clerk, I can see inventory updates immediately after a sale so that stock counts are accurate."
+      ],
+      "acceptance_criteria": [
+        "Given a product sale, When the transaction completes, Then inventory count decreases immediately.",
+        "Given low stock threshold, When inventory falls below it, Then a notification is triggered."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Low Stock Alerts",
+      "description": "Automatically notify staff when product quantities fall below predefined thresholds.",
+      "priority": "High",
+      "user_stories": [
+        "As a store manager, I can set minimum stock levels so that I receive alerts before items run out.",
+        "As a store owner, I can receive low stock notifications so that I can reorder products in time."
+      ],
+      "acceptance_criteria": [
+        "Given a minimum threshold is set, When stock falls below it, Then an alert is sent to the manager.",
+        "Given multiple low stock items, When alerts are generated, Then all items are listed in one notification."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Product Management",
+      "description": "Add, edit, and remove products with details like name, price, SKU, and supplier information.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a store manager, I can add new products to the system so that they are available for inventory tracking.",
+        "As a store manager, I can update product details so that pricing and information remain current."
+      ],
+      "acceptance_criteria": [
+        "Given valid product data, When I submit the form, Then the product is saved and appears in inventory.",
+        "Given an existing product, When I edit its details, Then changes are reflected immediately in the system."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Sales Reporting",
+      "description": "Generate reports on sales trends, inventory turnover, and product performance over time.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a store owner, I can view sales reports so that I can analyze business performance.",
+        "As a store manager, I can export inventory reports so that I can share data with suppliers."
+      ],
+      "acceptance_criteria": [
+        "Given a date range, When I generate a report, Then sales data for that period is displayed accurately.",
+        "Given report data, When I click export, Then a CSV file is downloaded with all relevant information."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "WebSocket",
+      "Barcode Scanner API",
+      "REST API"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "Store Owner",
+    "Store Manager",
+    "Store Clerk"
+  ],
+  "database_schema": {
+    "tables": [
+      {
+        "name": "products",
+        "purpose": "Store product information including SKU, name, price, and supplier details",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "sku",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Stock keeping unit identifier"
+          },
+          {
+            "name": "barcode",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Product barcode for scanning"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(200)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Product name"
+          },
+          {
+            "name": "description",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Product description"
+          },
+          {
+            "name": "price",
+            "type": "DECIMAL(10,2)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Current selling price"
+          },
+          {
+            "name": "cost",
+            "type": "DECIMAL(10,2)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Cost price from supplier"
+          },
+          {
+            "name": "supplier_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to suppliers table"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Record creation timestamp"
+          },
+          {
+            "name": "updated_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Record update timestamp"
+          }
+        ],
+        "indexes": [
+          "idx_products_barcode",
+          "idx_products_sku",
+          "idx_products_supplier_id"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "suppliers",
+            "fk": "supplier_id",
+            "ref": "id",
+            "notes": "Each product has one supplier"
+          }
+        ]
+      },
+      {
+        "name": "inventory",
+        "purpose": "Track current stock levels and minimum thresholds for each product",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "product_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Foreign key to products table"
+          },
+          {
+            "name": "quantity",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "0",
+            "notes": "Current stock quantity"
+          },
+          {
+            "name": "min_threshold",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "10",
+            "notes": "Minimum stock level before alert"
+          },
+          {
+            "name": "location",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Storage location in store"
+          },
+          {
+            "name": "last_restocked",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Last restock date"
+          },
+          {
+            "name": "updated_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Record update timestamp"
+          }
+        ],
+        "indexes": [
+          "idx_inventory_product_id",
+          "idx_inventory_quantity"
+        ],
+        "relationships": [
+          {
+            "type": "one-to-one",
+            "to_table": "products",
+            "fk": "product_id",
+            "ref": "id",
+            "notes": "Each inventory record links to one product"
+          }
+        ]
+      },
+      {
+        "name": "suppliers",
+        "purpose": "Store supplier contact and business information",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(200)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Supplier company name"
+          },
+          {
+            "name": "contact_person",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Contact person name"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Supplier email address"
+          },
+          {
+            "name": "phone",
+            "type": "VARCHAR(20)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Supplier phone number"
+          },
+          {
+            "name": "address",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Supplier address"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Record creation timestamp"
+          }
+        ],
+        "indexes": [
+          "idx_suppliers_name"
+        ],
+        "relationships": []
+      },
+      {
+        "name": "transactions",
+        "purpose": "Record all inventory transactions including sales, restocks, and adjustments",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "product_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to products table"
+          },
+          {
+            "name": "transaction_type",
+            "type": "VARCHAR(20)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Type: sale, restock, adjustment, return"
+          },
+          {
+            "name": "quantity",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Quantity changed (positive or negative)"
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users table"
+          },
+          {
+            "name": "notes",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Additional transaction notes"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Transaction timestamp"
+          }
+        ],
+        "indexes": [
+          "idx_transactions_product_id",
+          "idx_transactions_user_id",
+          "idx_transactions_created_at",
+          "idx_transactions_type"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "products",
+            "fk": "product_id",
+            "ref": "id",
+            "notes": "Each transaction relates to one product"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each transaction is performed by one user"
+          }
+        ]
+      },
+      {
+        "name": "users",
+        "purpose": "Store user accounts for store staff with roles and authentication",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "username",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Unique username for login"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "User email address"
+          },
+          {
+            "name": "password_hash",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Hashed password"
+          },
+          {
+            "name": "role",
+            "type": "VARCHAR(20)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "Store Clerk",
+            "notes": "User role: Store Owner, Store Manager, Store Clerk"
+          },
+          {
+            "name": "full_name",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "User full name"
+          },
+          {
+            "name": "is_active",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "true",
+            "notes": "Account active status"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Account creation timestamp"
+          },
+          {
+            "name": "last_login",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Last login timestamp"
+          }
+        ],
+        "indexes": [
+          "idx_users_username",
+          "idx_users_email",
+          "idx_users_role"
+        ],
+        "relationships": []
+      },
+      {
+        "name": "alerts",
+        "purpose": "Store low stock alerts and notifications for management",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "product_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to products table"
+          },
+          {
+            "name": "alert_type",
+            "type": "VARCHAR(20)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Type: low_stock, out_of_stock"
+          },
+          {
+            "name": "message",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Alert message content"
+          },
+          {
+            "name": "is_read",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "false",
+            "notes": "Whether alert has been read"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Alert creation timestamp"
+          },
+          {
+            "name": "read_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Alert read timestamp"
+          }
+        ],
+        "indexes": [
+          "idx_alerts_product_id",
+          "idx_alerts_is_read",
+          "idx_alerts_created_at"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "products",
+            "fk": "product_id",
+            "ref": "id",
+            "notes": "Each alert relates to one product"
+          }
+        ]
+      }
+    ],
+    "assumptions": [
+      "Single store location assumed; multi-location support can be added later",
+      "Barcode scanner integration via standard USB or Bluetooth devices",
+      "Real-time updates implemented using WebSocket connections",
+      "User authentication required for all operations",
+      "Price changes do not affect historical transaction records",
+      "Inventory adjustments require manager or owner role permissions",
+      "Alerts are generated automatically when inventory falls below minimum threshold",
+      "Transaction history is maintained indefinitely for audit purposes"
+    ]
+  },
+  "model_used": "CrewAI",
+  "timestamp": "2026-08-13 11:49:05"
+}

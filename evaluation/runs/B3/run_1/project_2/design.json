@@ -1,0 +1,653 @@
+{
+  "design_overview": "A clean, modern task management application designed for clarity and efficiency. The interface prioritizes quick task creation, easy status management, and clear visual separation between active and completed tasks. The design uses a card-based layout with strong visual hierarchy, ensuring primary actions are immediately accessible while maintaining a calm, focused user experience suitable for daily productivity.",
+  "color_scheme": {
+    "primary": "#4F46E5",
+    "secondary": "#818CF8",
+    "accent": "#06B6D4",
+    "surface": "#FFFFFF",
+    "background": "#F9FAFB",
+    "text_primary": "#111827",
+    "error": "#EF4444",
+    "success": "#10B981",
+    "warning": "#F59E0B"
+  },
+  "typography": {
+    "font_family": "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "sizes": {
+      "small": "14px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "600"
+    }
+  },
+  "navigation": {
+    "type": "top",
+    "items": [
+      "All Tasks",
+      "Active",
+      "Completed",
+      "Profile"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Task List Home",
+      "purpose": "Primary screen displaying all tasks with filtering options and quick access to task creation",
+      "key_components": [
+        {
+          "name": "App Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with subtle bottom border, 64px height, contains app title 'My Tasks' in bold 28px text and user profile icon on right",
+          "interaction": "Static header, profile icon navigates to Profile screen",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Tabs",
+          "type": "Tab Bar",
+          "position": "top",
+          "size": "medium",
+          "styling": "Horizontal tab bar with three options: All, Active, Completed. Active tab has primary color underline and bold text. 48px height with 16px padding",
+          "interaction": "Tapping each tab filters the task list below to show corresponding tasks",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Count Badge",
+          "type": "Text Label",
+          "position": "top",
+          "size": "small",
+          "styling": "Light gray text showing '12 tasks' below filter tabs, 14px font size, 8px top margin",
+          "interaction": "Non-interactive, updates dynamically based on filter selection",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Card - Active",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with 12px rounded corners, 16px padding, subtle shadow. Contains task title in bold 16px, description in 14px gray text below, checkbox on left, edit icon on right. 80px min height",
+          "interaction": "Tapping card navigates to Task Detail screen. Checkbox marks task complete. Edit icon opens edit mode",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Card - Completed",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with 12px rounded corners, 16px padding, subtle shadow. Title has strikethrough styling, lighter gray text. Green checkmark icon on left. Trash icon on right. 80px min height",
+          "interaction": "Tapping card navigates to Task Detail screen. Trash icon triggers delete confirmation modal",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Illustration",
+          "position": "center",
+          "size": "large",
+          "styling": "Centered content with light gray illustration placeholder, 'No tasks yet' heading in 20px, 'Create your first task to get started' subtext in 14px gray. 200px height",
+          "interaction": "Non-interactive visual feedback when no tasks exist",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Task List Container",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Scrollable vertical list with 12px spacing between cards, 16px horizontal padding, fills available screen height below tabs",
+          "interaction": "Scrollable list containing task cards, supports pull-to-refresh gesture",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Task FAB",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Circular floating action button, 56px diameter, primary color background with white plus icon, positioned 24px from bottom-right corner, elevated shadow",
+          "interaction": "Tapping opens Create Task modal overlay",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Safe Area",
+          "type": "Spacer",
+          "position": "bottom",
+          "size": "small",
+          "styling": "24px bottom padding to ensure FAB doesn't overlap content",
+          "interaction": "Non-interactive spacing element",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Entry point of the app after login. Users can view all tasks, filter by status, tap cards to view details, or tap FAB to create new tasks. Navigates to Task Detail, Create Task, or Profile screens."
+    },
+    {
+      "name": "Create Task Modal",
+      "purpose": "Overlay modal for creating new tasks with title and optional description",
+      "key_components": [
+        {
+          "name": "Modal Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White background, 56px height, 'New Task' title centered in bold 20px, close icon on left, 16px padding",
+          "interaction": "Close icon dismisses modal and returns to Task List",
+          "icon": "close",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Title Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Single-line text input with light gray border, 12px rounded corners, 16px padding, 48px height. Placeholder: 'Task title (required)'",
+          "interaction": "Tapping focuses input and shows keyboard. Required field with validation",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Description Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Multi-line text area with light gray border, 12px rounded corners, 16px padding, 120px height. Placeholder: 'Add description (optional)'",
+          "interaction": "Tapping focuses input and shows keyboard. Optional field",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Character Count",
+          "type": "Text Label",
+          "position": "center",
+          "size": "small",
+          "styling": "Light gray text showing '0/500' below description input, 14px font, right-aligned",
+          "interaction": "Non-interactive, updates as user types in description",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Error Message",
+          "type": "Text Label",
+          "position": "center",
+          "size": "small",
+          "styling": "Red error text 'Title is required' shown below title input when validation fails, 14px font",
+          "interaction": "Appears when user attempts to submit without title",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Secondary button with light gray background, dark text, 48px height, 12px rounded corners, 16px horizontal padding",
+          "interaction": "Dismisses modal without saving, returns to Task List",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Primary button with primary color background, white text, 48px height, 12px rounded corners, 16px horizontal padding, disabled state when title empty",
+          "interaction": "Validates input, creates task, shows success feedback, closes modal and returns to Task List with new task visible",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Button Container",
+          "type": "Container",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Horizontal flex container with 12px gap between buttons, 24px padding, white background with top border",
+          "interaction": "Contains Cancel and Create buttons in horizontal layout",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Modal Backdrop",
+          "type": "Overlay",
+          "position": "center",
+          "size": "large",
+          "styling": "Semi-transparent dark overlay (rgba(0,0,0,0.5)) covering entire screen behind modal",
+          "interaction": "Tapping backdrop dismisses modal",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Task List via FAB. Users enter task details and submit to create. Returns to Task List on success or cancel."
+    },
+    {
+      "name": "Task Detail Screen",
+      "purpose": "Full-screen view of a single task with complete information and action options",
+      "key_components": [
+        {
+          "name": "Navigation Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White background, 56px height, back arrow on left, 'Task Details' title centered in bold 20px, edit icon on right",
+          "interaction": "Back arrow returns to Task List. Edit icon enables inline editing mode",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Title Display",
+          "type": "Text Label",
+          "position": "top",
+          "size": "large",
+          "styling": "Bold 24px text, dark color, 24px top padding, 16px horizontal padding, line-height 1.3",
+          "interaction": "Non-interactive in view mode, becomes editable input in edit mode",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Metadata",
+          "type": "Text Label",
+          "position": "top",
+          "size": "small",
+          "styling": "Light gray text showing 'Created 2 days ago' in 14px, 8px top margin, 16px horizontal padding",
+          "interaction": "Non-interactive timestamp information",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Section",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with light gray background, 12px rounded corners, 16px padding, 24px top margin. Contains 'Description' label in bold 16px and description text in 16px below",
+          "interaction": "Non-interactive in view mode, becomes editable textarea in edit mode",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Section",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with light gray background, 12px rounded corners, 16px padding, 16px top margin. Shows status badge (Active/Completed) with appropriate color",
+          "interaction": "Non-interactive display of current task status",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Mark Complete Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width button with success color background, white text, 52px height, 12px rounded corners, 16px margin. Shows checkmark icon and 'Mark as Complete' text",
+          "interaction": "Marks task as completed, updates status, shows success toast, updates UI to show completed state",
+          "icon": "check",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delete Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width button with error color background, white text, 52px height, 12px rounded corners, 16px margin, 8px top spacing. Shows trash icon and 'Delete Task' text",
+          "interaction": "Opens delete confirmation modal",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Completed Badge",
+          "type": "Badge",
+          "position": "center",
+          "size": "small",
+          "styling": "Green pill-shaped badge with 'Completed' text, 8px padding, 16px rounded corners, shown when task is completed",
+          "interaction": "Non-interactive status indicator",
+          "icon": "check",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Action Container",
+          "type": "Container",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Fixed bottom container with white background, 24px padding, subtle top border, contains action buttons",
+          "interaction": "Container for primary action buttons",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed by tapping task cards from Task List. Users can view full details, mark complete, edit, or delete. Returns to Task List via back button or after actions."
+    },
+    {
+      "name": "Delete Confirmation Modal",
+      "purpose": "Confirmation dialog to prevent accidental task deletion",
+      "key_components": [
+        {
+          "name": "Modal Container",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "White rounded card, 16px rounded corners, 24px padding, centered on screen, max-width 320px, elevated shadow",
+          "interaction": "Contains confirmation dialog content",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Warning Icon",
+          "type": "Icon",
+          "position": "top",
+          "size": "large",
+          "styling": "Error color circular icon, 48px size, centered, contains alert symbol",
+          "interaction": "Non-interactive visual indicator of destructive action",
+          "icon": "alert",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirmation Title",
+          "type": "Text Label",
+          "position": "top",
+          "size": "large",
+          "styling": "Bold 20px text 'Delete Task?' centered, 16px top margin, dark color",
+          "interaction": "Non-interactive heading",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirmation Message",
+          "type": "Text Label",
+          "position": "center",
+          "size": "medium",
+          "styling": "16px gray text 'This action cannot be undone. Are you sure you want to delete this task?' centered, 12px top margin, line-height 1.5",
+          "interaction": "Non-interactive description text",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Title Preview",
+          "type": "Text Label",
+          "position": "center",
+          "size": "small",
+          "styling": "Light gray background, 12px padding, 8px rounded corners, 14px text showing task title being deleted, 16px top margin",
+          "interaction": "Non-interactive preview of task being deleted",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Secondary button with light gray background, dark text, 48px height, 12px rounded corners, 24px top margin",
+          "interaction": "Dismisses modal without deleting, returns to Task Detail screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirm Delete Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Destructive button with error color background, white text, 48px height, 12px rounded corners, 8px top spacing",
+          "interaction": "Permanently deletes task, shows success toast, navigates back to Task List",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Modal Backdrop",
+          "type": "Overlay",
+          "position": "center",
+          "size": "large",
+          "styling": "Semi-transparent dark overlay (rgba(0,0,0,0.5)) covering entire screen",
+          "interaction": "Tapping backdrop dismisses modal without deleting",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Triggered from Task Detail or Task List when user attempts to delete. Requires explicit confirmation before deletion. Returns to previous screen on cancel or Task List on confirm."
+    },
+    {
+      "name": "Profile Screen",
+      "purpose": "User account information and settings management",
+      "key_components": [
+        {
+          "name": "Profile Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White background, 56px height, back arrow on left, 'Profile' title centered in bold 20px",
+          "interaction": "Back arrow returns to Task List",
+          "icon": "back",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "User Avatar",
+          "type": "Image",
+          "position": "top",
+          "size": "large",
+          "styling": "Circular avatar, 96px diameter, centered, 32px top margin, primary color background with white initials if no photo",
+          "interaction": "Non-interactive user profile image",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "User Name",
+          "type": "Text Label",
+          "position": "top",
+          "size": "large",
+          "styling": "Bold 24px text centered, 16px top margin, dark color",
+          "interaction": "Non-interactive display of user's full name",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "User Email",
+          "type": "Text Label",
+          "position": "top",
+          "size": "medium",
+          "styling": "16px gray text centered, 4px top margin",
+          "interaction": "Non-interactive display of user's email",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Statistics Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with light border, 12px rounded corners, 16px padding, 32px top margin. Contains three columns showing Total Tasks, Active, Completed with numbers in bold 24px and labels in 14px gray",
+          "interaction": "Non-interactive statistics display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings Section",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "White background, 24px top margin, contains list items with icons, labels, and chevron indicators",
+          "interaction": "Container for settings options",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Account Settings Item",
+          "type": "List Item",
+          "position": "center",
+          "size": "medium",
+          "styling": "56px height, 16px horizontal padding, settings icon on left, 'Account Settings' text in 16px, chevron on right, bottom border",
+          "interaction": "Taps navigate to account settings (future feature)",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width button with error color background, white text, 52px height, 12px rounded corners, 24px margin",
+          "interaction": "Logs user out and returns to login screen",
+          "icon": "logout",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "App Version",
+          "type": "Text Label",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Light gray text 'Version 1.0.0' centered, 14px font, 16px bottom padding",
+          "interaction": "Non-interactive version information",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from Task List header. Users view account info, statistics, and can logout. Returns to Task List via back button."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": null,
+      "size": "medium",
+      "styling": "Primary color background, white text, 48px height, 12px rounded corners, 16px horizontal padding, bold font, subtle shadow on press",
+      "interaction": "Triggers primary actions, shows pressed state, may show loading spinner",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": null,
+      "size": "medium",
+      "styling": "Light gray background, dark text, 48px height, 12px rounded corners, 16px horizontal padding, medium font weight",
+      "interaction": "Triggers secondary or cancel actions, shows pressed state",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input",
+      "type": "Input",
+      "position": null,
+      "size": "medium",
+      "styling": "Light gray border, 12px rounded corners, 16px padding, 48px height, focus state shows primary color border",
+      "interaction": "Accepts text input, shows keyboard on focus, displays validation errors below",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Checkbox",
+      "type": "Input",
+      "position": null,
+      "size": "small",
+      "styling": "24px square with 4px rounded corners, light gray border, primary color when checked with white checkmark",
+      "interaction": "Toggles between checked and unchecked states",
+      "icon": "check",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Task Card",
+      "type": "Card",
+      "position": null,
+      "size": "large",
+      "styling": "White background, 12px rounded corners, 16px padding, subtle shadow, bottom border, tap highlight on press",
+      "interaction": "Tappable card that navigates to detail view or triggers actions",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toast Notification",
+      "type": "Toast",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "Dark background (rgba(0,0,0,0.9)), white text, 16px rounded corners, 16px padding, slides up from bottom, auto-dismisses after 3s",
+      "interaction": "Non-interactive feedback message, auto-dismisses",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Loading Spinner",
+      "type": "Loader",
+      "position": "center",
+      "size": "medium",
+      "styling": "Primary color circular spinner, 32px diameter, centered in container",
+      "interaction": "Non-interactive loading indicator",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Icon Button",
+      "type": "Button",
+      "position": null,
+      "size": "small",
+      "styling": "40px square, transparent background, icon in primary or gray color, circular tap highlight",
+      "interaction": "Triggers actions, shows pressed state with background color change",
+      "icon": "settings",
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "Mobile-first design optimized for iOS and Android devices. Layouts use flexible containers with percentage-based widths and max-width constraints. Touch targets minimum 44x44px. Content scales appropriately on tablets with max-width 768px centered. Supports both portrait and landscape orientations with adjusted layouts. Safe area insets respected for notched devices.",
+  "accessibility": "WCAG 2.1 AA compliant. All interactive elements have minimum 44x44px touch targets. Color contrast ratios exceed 4.5:1 for text. Form inputs include proper labels and error messages. Screen reader support with semantic HTML and ARIA labels. Keyboard navigation supported for web version. Focus indicators visible on all interactive elements. Error states communicated through color, icons, and text.",
+  "animations": "Subtle micro-interactions enhance usability without distraction. Button press states use 150ms scale transform. Modal overlays fade in over 200ms with slide-up animation. List items use staggered fade-in on load. Task completion shows checkmark animation with success color pulse. Page transitions use 300ms slide animations. Loading states show smooth spinner rotation. Toast notifications slide up with 250ms ease-out timing.",
+  "icons": "Consistent icon set using outline style for visual clarity. Icons sized 20-24px for optimal touch and visibility. Primary icons: home (house outline), search (magnifying glass), user (person outline), settings (gear), bell (notification), bookmark (ribbon), heart (like), filter (funnel), plus (add), edit (pencil), trash (bin), share (arrow), check (checkmark), close (X). All icons use 2px stroke width for consistency."
+}

@@ -1,0 +1,461 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Store user account information for customers, admins, and delivery drivers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "User email for login"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Hashed password"
+        },
+        {
+          "name": "role",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "Customer",
+          "notes": "User role: Customer, Admin, or Delivery Driver"
+        },
+        {
+          "name": "full_name",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "User full name"
+        },
+        {
+          "name": "phone",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Contact phone number"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Account creation timestamp"
+        }
+      ],
+      "indexes": [
+        "email",
+        "role"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "flowers",
+      "purpose": "Store flower product information including details and pricing",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Flower name"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Detailed description"
+        },
+        {
+          "name": "category",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Flower category (e.g., Roses, Tulips)"
+        },
+        {
+          "name": "price",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Price per unit"
+        },
+        {
+          "name": "stock_quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "Available inventory"
+        },
+        {
+          "name": "image_url",
+          "type": "varchar(500)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "URL to flower image"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Whether flower is available for purchase"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Record creation timestamp"
+        }
+      ],
+      "indexes": [
+        "category",
+        "is_active"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "orders",
+      "purpose": "Store customer order information and delivery details",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users table"
+        },
+        {
+          "name": "order_number",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Unique order tracking number"
+        },
+        {
+          "name": "status",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "Pending",
+          "notes": "Order status: Pending, Processing, Delivered, Cancelled"
+        },
+        {
+          "name": "total_amount",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Total order amount"
+        },
+        {
+          "name": "delivery_address",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Full delivery address"
+        },
+        {
+          "name": "delivery_date",
+          "type": "date",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Requested or actual delivery date"
+        },
+        {
+          "name": "payment_status",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "Pending",
+          "notes": "Payment status: Pending, Completed, Failed"
+        },
+        {
+          "name": "driver_id",
+          "type": "bigint",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users table for delivery driver"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Order creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Last update timestamp"
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "order_number",
+        "status",
+        "driver_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Order belongs to a customer"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "driver_id",
+          "ref": "id",
+          "notes": "Order assigned to a delivery driver"
+        }
+      ]
+    },
+    {
+      "name": "order_items",
+      "purpose": "Store individual flower items within each order",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "order_id",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to orders table"
+        },
+        {
+          "name": "flower_id",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to flowers table"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "1",
+          "notes": "Quantity of this flower in the order"
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Price per unit at time of order"
+        },
+        {
+          "name": "subtotal",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Quantity * unit_price"
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "flower_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Order item belongs to an order"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "flowers",
+          "fk": "flower_id",
+          "ref": "id",
+          "notes": "Order item references a flower product"
+        }
+      ]
+    },
+    {
+      "name": "cart_items",
+      "purpose": "Store temporary shopping cart items for customers before checkout",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users table"
+        },
+        {
+          "name": "flower_id",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to flowers table"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "1",
+          "notes": "Quantity in cart"
+        },
+        {
+          "name": "added_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "When item was added to cart"
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "flower_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Cart belongs to a user"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "flowers",
+          "fk": "flower_id",
+          "ref": "id",
+          "notes": "Cart item references a flower product"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Users must register and login to place orders",
+    "Payment processing is handled via third-party integration (e.g., Stripe)",
+    "Delivery drivers are assigned manually by admins or automatically by system",
+    "Stock quantity is decremented when order is confirmed, not when added to cart",
+    "Cart items are user-specific and persist across sessions",
+    "Order status updates trigger notifications to customers",
+    "Prices are stored in order_items to preserve historical pricing",
+    "All primary keys use bigint for scalability",
+    "Timestamps use CURRENT_TIMESTAMP as default for audit trail",
+    "Foreign key constraints ensure referential integrity between tables",
+    "Indexes are created on frequently queried columns for performance optimization"
+  ]
+}

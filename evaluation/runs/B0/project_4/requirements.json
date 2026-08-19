@@ -1,0 +1,177 @@
+{
+  "project_name": "UniNotes - University Study Collaboration Platform",
+  "features": [
+    {
+      "id": "F001",
+      "name": "User Registration and Authentication",
+      "description": "Students can create accounts using university email, login, and manage their profiles",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I want to register with my university email so that I can access the platform",
+        "As a user, I want to login securely so that I can access my notes and groups",
+        "As a user, I want to update my profile information so that others can know more about me"
+      ],
+      "acceptance_criteria": [
+        "Registration requires valid university email domain",
+        "Email verification is required before account activation",
+        "Password must meet security requirements (min 8 chars, uppercase, lowercase, number)",
+        "Users can reset password via email",
+        "Profile includes name, major, year, and bio"
+      ]
+    },
+    {
+      "id": "F002",
+      "name": "Note Upload and Management",
+      "description": "Students can upload, organize, edit, and delete their study notes",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I want to upload my study notes so that I can share them with others",
+        "As a student, I want to organize my notes by course and topic so that they are easy to find",
+        "As a student, I want to edit or delete my notes so that I can keep them up to date",
+        "As a student, I want to add tags to my notes so that they are discoverable"
+      ],
+      "acceptance_criteria": [
+        "Supports PDF, DOCX, and TXT file formats",
+        "Maximum file size of 10MB per note",
+        "Notes must be associated with a course and subject",
+        "Users can only edit/delete their own notes",
+        "Notes include title, description, course, tags, and upload date"
+      ]
+    },
+    {
+      "id": "F003",
+      "name": "Note Discovery and Search",
+      "description": "Students can search and browse notes shared by other students",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I want to search for notes by course name so that I can find relevant study materials",
+        "As a student, I want to filter notes by tags and topics so that I can narrow down results",
+        "As a student, I want to see the most popular notes so that I can access high-quality content",
+        "As a student, I want to preview notes before downloading so that I can verify relevance"
+      ],
+      "acceptance_criteria": [
+        "Search supports course name, tags, and keywords",
+        "Results can be sorted by date, popularity, and rating",
+        "Preview shows first page or excerpt of note",
+        "Search results display note title, author, course, upload date, and rating"
+      ]
+    },
+    {
+      "id": "F004",
+      "name": "Study Group Creation and Management",
+      "description": "Students can create study groups, invite members, and manage group settings",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I want to create a study group for my course so that I can collaborate with peers",
+        "As a group admin, I want to invite students to join my group so that we can study together",
+        "As a group admin, I want to manage group members so that I can remove inactive users",
+        "As a student, I want to leave a group so that I can manage my commitments"
+      ],
+      "acceptance_criteria": [
+        "Groups have a name, description, course association, and privacy setting (public/private)",
+        "Group creator becomes admin by default",
+        "Admins can invite members, remove members, and delete the group",
+        "Members can leave groups voluntarily",
+        "Maximum 50 members per group"
+      ]
+    },
+    {
+      "id": "F005",
+      "name": "Group Discussion Forum",
+      "description": "Group members can post messages, ask questions, and discuss topics within their study groups",
+      "priority": "Medium",
+      "user_stories": [
+        "As a group member, I want to post messages in my group so that I can communicate with peers",
+        "As a group member, I want to reply to posts so that I can participate in discussions",
+        "As a group member, I want to receive notifications for new posts so that I stay updated",
+        "As a group member, I want to search past discussions so that I can find answers to questions"
+      ],
+      "acceptance_criteria": [
+        "Only group members can view and post in group forums",
+        "Posts support text and file attachments",
+        "Users can edit and delete their own posts",
+        "Posts display author, timestamp, and content",
+        "Notifications sent for new posts in groups user belongs to"
+      ]
+    },
+    {
+      "id": "F006",
+      "name": "Note Rating and Reviews",
+      "description": "Students can rate and review notes to help others identify quality content",
+      "priority": "Medium",
+      "user_stories": [
+        "As a student, I want to rate notes I've downloaded so that I can help others find good content",
+        "As a student, I want to write reviews for notes so that I can provide detailed feedback",
+        "As a student, I want to see average ratings so that I can identify high-quality notes",
+        "As a note author, I want to see feedback on my notes so that I can improve them"
+      ],
+      "acceptance_criteria": [
+        "Rating scale is 1-5 stars",
+        "Users can only rate notes they have downloaded",
+        "Users can write optional text reviews",
+        "Average rating is displayed on note listings",
+        "Users can edit their own ratings and reviews"
+      ]
+    },
+    {
+      "id": "F007",
+      "name": "User Dashboard",
+      "description": "Students have a personalized dashboard showing their notes, groups, and activity",
+      "priority": "Medium",
+      "user_stories": [
+        "As a student, I want to see all my uploaded notes in one place so that I can manage them easily",
+        "As a student, I want to see my groups on my dashboard so that I can access them quickly",
+        "As a student, I want to see recent activity so that I can stay updated",
+        "As a student, I want to see my download history so that I can re-access notes"
+      ],
+      "acceptance_criteria": [
+        "Dashboard displays user's uploaded notes",
+        "Dashboard shows all groups user is a member of",
+        "Recent activity includes downloads, uploads, and group posts",
+        "Dashboard is the landing page after login"
+      ]
+    },
+    {
+      "id": "F008",
+      "name": "Notification System",
+      "description": "Users receive notifications for relevant activities and updates",
+      "priority": "Low",
+      "user_stories": [
+        "As a user, I want to receive notifications when someone joins my group so that I can welcome them",
+        "As a user, I want to be notified when my notes are rated so that I can see feedback",
+        "As a user, I want to receive notifications for group posts so that I can participate in discussions",
+        "As a user, I want to manage my notification preferences so that I control what I receive"
+      ],
+      "acceptance_criteria": [
+        "Notifications appear in-app",
+        "Users can mark notifications as read",
+        "Notification types include: group invites, new members, note ratings, group posts",
+        "Users can enable/disable notification types in settings"
+      ]
+    }
+  ],
+  "constraints": [
+    "Must verify university email domains before allowing registration",
+    "Must comply with data privacy regulations (GDPR, FERPA)",
+    "File uploads limited to 10MB per file",
+    "Platform must be accessible via web browsers (Chrome, Firefox, Safari, Edge)",
+    "Must support minimum 1000 concurrent users",
+    "Development timeline: 12 weeks",
+    "Budget constraints require use of open-source technologies where possible"
+  ],
+  "non_functional_requirements": [
+    "Performance: Page load time must be under 2 seconds",
+    "Performance: Search results must return within 1 second",
+    "Scalability: System must support up to 10,000 registered users",
+    "Security: All passwords must be hashed using bcrypt or similar",
+    "Security: All data transmission must use HTTPS/TLS encryption",
+    "Security: File uploads must be scanned for malware",
+    "Availability: System uptime of 99.5% during academic terms",
+    "Usability: Interface must be intuitive with minimal training required",
+    "Usability: Platform must be responsive and work on mobile devices",
+    "Accessibility: Must meet WCAG 2.1 Level AA standards",
+    "Maintainability: Code must follow established style guides and be well-documented",
+    "Backup: Daily automated backups of database and uploaded files",
+    "Recovery: System must be recoverable within 4 hours of failure"
+  ]
+}

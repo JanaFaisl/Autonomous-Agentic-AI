@@ -1,0 +1,17 @@
+{
+  "app_documentation": "UniStudy is a university study notes sharing platform designed to facilitate collaborative learning among students. The application enables students to upload, organize, and share study materials with peers while participating in subject-focused study groups. Core features include secure user registration with university email authentication, comprehensive note upload and download capabilities with AWS S3 storage, study group creation and management for collaborative learning, advanced search and filtering by subject/course/keywords, and a rating and review system to help students identify high-quality content. The platform is built as a mobile-responsive web application using React for the frontend and Node.js/Express for the backend, with PostgreSQL as the database. Intended users are university students seeking to enhance their learning through shared resources and peer collaboration, with role-based access for Students, Group Admins, and Platform Administrators.",
+  "baseline_artifacts": [
+    "Requirements_v1_UniStudy_Features_and_Technical_Specs",
+    "Design_v1_UniStudy_UI_Screens_and_Components",
+    "Database_Schema_v1_PostgreSQL_Tables_and_Relationships",
+    "Cycle_Plan_v1_MVP_Execution_Tasks_and_Risks"
+  ],
+  "glossary": {
+    "Study Notes": "Digital documents uploaded by students containing course materials, lecture summaries, or exam preparation content that can be shared with other platform users. Notes include metadata such as subject, course code, tags, and are stored in AWS S3 with references in the PostgreSQL database.",
+    "Study Group": "A collaborative space where students can join together based on shared subjects or courses to exchange notes, participate in discussions, and support each other's learning. Groups can be open (anyone can join) or closed (requiring admin approval), and are managed by a Group Admin who created the group.",
+    "Rating and Review System": "A quality assessment mechanism allowing students to rate study notes on a 1-5 scale and provide written reviews, helping other users identify high-quality materials. Average ratings are calculated and displayed on note cards to guide download decisions.",
+    "JWT Authentication": "JSON Web Token-based authentication system used to securely verify user identity and manage sessions. Users register with university email addresses and receive tokens upon successful login that authorize access to protected platform features.",
+    "Baseline Artifacts": "Versioned documentation snapshots capturing the approved state of project requirements, design specifications, database schema, and execution plans at specific points in time, used for governance, change tracking, and team alignment.",
+    "Mobile-Responsive Design": "A design approach ensuring the UniStudy platform provides optimal user experience across devices with varying screen sizes (375px to 428px+ width), using flexible layouts, touch-friendly components (minimum 44x44px targets), and bottom navigation optimized for thumb-zone accessibility."
+  }
+}

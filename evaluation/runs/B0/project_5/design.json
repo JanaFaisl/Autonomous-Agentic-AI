@@ -1,0 +1,552 @@
+{
+  "screens": [
+    {
+      "name": "Login Screen",
+      "purpose": "Authenticate users and provide secure access to the system",
+      "key_components": [
+        {
+          "name": "Username Input",
+          "type": "Text Field",
+          "interaction": "User enters username"
+        },
+        {
+          "name": "Password Input",
+          "type": "Password Field",
+          "interaction": "User enters password securely"
+        },
+        {
+          "name": "Login Button",
+          "type": "Button",
+          "interaction": "Submits credentials for authentication"
+        },
+        {
+          "name": "Remember Me Checkbox",
+          "type": "Checkbox",
+          "interaction": "Saves login session"
+        },
+        {
+          "name": "Error Message Display",
+          "type": "Alert",
+          "interaction": "Shows authentication errors"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "purpose": "Provide overview of key metrics and quick access to main functions",
+      "key_components": [
+        {
+          "name": "Current Inventory Value Card",
+          "type": "Metric Card",
+          "interaction": "Displays total inventory valuation"
+        },
+        {
+          "name": "Low Stock Alerts Panel",
+          "type": "Alert List",
+          "interaction": "Shows products below reorder point, links to product details"
+        },
+        {
+          "name": "Today's Sales Summary",
+          "type": "Metric Card",
+          "interaction": "Displays daily sales total and transaction count"
+        },
+        {
+          "name": "Quick Action Buttons",
+          "type": "Button Group",
+          "interaction": "Navigate to Scan, New Sale, Receive Inventory"
+        },
+        {
+          "name": "Recent Transactions List",
+          "type": "Data Table",
+          "interaction": "Shows last 10 transactions with details"
+        },
+        {
+          "name": "Top Selling Products Chart",
+          "type": "Bar Chart",
+          "interaction": "Visual representation of best sellers"
+        }
+      ]
+    },
+    {
+      "name": "Barcode Scanner Screen",
+      "purpose": "Scan product barcodes and display product information",
+      "key_components": [
+        {
+          "name": "Camera Viewfinder",
+          "type": "Video Feed",
+          "interaction": "Shows live camera feed for barcode scanning"
+        },
+        {
+          "name": "Scan Result Display",
+          "type": "Product Card",
+          "interaction": "Shows scanned product details from products table"
+        },
+        {
+          "name": "Manual Barcode Entry",
+          "type": "Text Field",
+          "interaction": "Allows manual barcode input"
+        },
+        {
+          "name": "Action Buttons",
+          "type": "Button Group",
+          "interaction": "Add to Sale, View Details, Adjust Stock"
+        },
+        {
+          "name": "Scan History",
+          "type": "List",
+          "interaction": "Shows recently scanned items"
+        },
+        {
+          "name": "Scanner Status Indicator",
+          "type": "Status Badge",
+          "interaction": "Shows scanner connection status"
+        }
+      ]
+    },
+    {
+      "name": "Product Management Screen",
+      "purpose": "Add, edit, and manage product information",
+      "key_components": [
+        {
+          "name": "Product Search Bar",
+          "type": "Search Field",
+          "interaction": "Search products by name, barcode, or category"
+        },
+        {
+          "name": "Product List Table",
+          "type": "Data Table",
+          "interaction": "Displays products with sorting and filtering from products table"
+        },
+        {
+          "name": "Add Product Button",
+          "type": "Button",
+          "interaction": "Opens product creation form"
+        },
+        {
+          "name": "Edit Product Button",
+          "type": "Icon Button",
+          "interaction": "Opens product edit form for selected product"
+        },
+        {
+          "name": "Product Details Panel",
+          "type": "Form",
+          "interaction": "Input/edit barcode, name, description, prices, category, supplier"
+        },
+        {
+          "name": "Image Upload",
+          "type": "File Upload",
+          "interaction": "Upload product image"
+        },
+        {
+          "name": "Category Dropdown",
+          "type": "Select",
+          "interaction": "Select from categories table"
+        },
+        {
+          "name": "Supplier Dropdown",
+          "type": "Select",
+          "interaction": "Select from suppliers table"
+        },
+        {
+          "name": "Save Button",
+          "type": "Button",
+          "interaction": "Saves product to products table"
+        },
+        {
+          "name": "Delete Button",
+          "type": "Button",
+          "interaction": "Deactivates product"
+        }
+      ]
+    },
+    {
+      "name": "Point of Sale Screen",
+      "purpose": "Process sales transactions and update inventory",
+      "key_components": [
+        {
+          "name": "Scan Item Button",
+          "type": "Button",
+          "interaction": "Opens barcode scanner"
+        },
+        {
+          "name": "Cart Items List",
+          "type": "Data Table",
+          "interaction": "Shows items in current transaction from transaction_items"
+        },
+        {
+          "name": "Item Quantity Input",
+          "type": "Number Field",
+          "interaction": "Adjust quantity for cart items"
+        },
+        {
+          "name": "Remove Item Button",
+          "type": "Icon Button",
+          "interaction": "Removes item from cart"
+        },
+        {
+          "name": "Subtotal Display",
+          "type": "Text Label",
+          "interaction": "Shows running subtotal"
+        },
+        {
+          "name": "Tax Display",
+          "type": "Text Label",
+          "interaction": "Shows calculated tax"
+        },
+        {
+          "name": "Total Display",
+          "type": "Text Label",
+          "interaction": "Shows final total"
+        },
+        {
+          "name": "Payment Method Selector",
+          "type": "Radio Group",
+          "interaction": "Select Cash, Card, or Other"
+        },
+        {
+          "name": "Complete Sale Button",
+          "type": "Button",
+          "interaction": "Finalizes transaction, updates products.quantity_on_hand"
+        },
+        {
+          "name": "Cancel Sale Button",
+          "type": "Button",
+          "interaction": "Clears current transaction"
+        },
+        {
+          "name": "Print Receipt Button",
+          "type": "Button",
+          "interaction": "Generates receipt from transactions table"
+        }
+      ]
+    },
+    {
+      "name": "Inventory Adjustment Screen",
+      "purpose": "Manually adjust inventory quantities with reason tracking",
+      "key_components": [
+        {
+          "name": "Product Search",
+          "type": "Autocomplete Field",
+          "interaction": "Search and select product from products table"
+        },
+        {
+          "name": "Current Quantity Display",
+          "type": "Text Label",
+          "interaction": "Shows products.quantity_on_hand"
+        },
+        {
+          "name": "Adjustment Type Selector",
+          "type": "Radio Group",
+          "interaction": "Select Add or Subtract"
+        },
+        {
+          "name": "Quantity Change Input",
+          "type": "Number Field",
+          "interaction": "Enter adjustment amount"
+        },
+        {
+          "name": "New Quantity Display",
+          "type": "Text Label",
+          "interaction": "Shows calculated new quantity"
+        },
+        {
+          "name": "Reason Dropdown",
+          "type": "Select",
+          "interaction": "Select reason: Damage, Loss, Found, Correction, Other"
+        },
+        {
+          "name": "Notes Field",
+          "type": "Text Area",
+          "interaction": "Enter additional details"
+        },
+        {
+          "name": "Submit Adjustment Button",
+          "type": "Button",
+          "interaction": "Saves to inventory_adjustments, updates products table"
+        },
+        {
+          "name": "Adjustment History Table",
+          "type": "Data Table",
+          "interaction": "Shows past adjustments from inventory_adjustments table"
+        }
+      ]
+    },
+    {
+      "name": "Receiving Screen",
+      "purpose": "Process incoming inventory shipments",
+      "key_components": [
+        {
+          "name": "Purchase Order Selector",
+          "type": "Dropdown",
+          "interaction": "Select PO from purchase_orders table"
+        },
+        {
+          "name": "Expected Items List",
+          "type": "Data Table",
+          "interaction": "Shows items from purchase_order_items"
+        },
+        {
+          "name": "Scan Received Item",
+          "type": "Button",
+          "interaction": "Opens scanner to identify received products"
+        },
+        {
+          "name": "Quantity Received Input",
+          "type": "Number Field",
+          "interaction": "Enter actual quantity received"
+        },
+        {
+          "name": "Discrepancy Indicator",
+          "type": "Status Badge",
+          "interaction": "Highlights differences between expected and received"
+        },
+        {
+          "name": "Discrepancy Notes",
+          "type": "Text Area",
+          "interaction": "Document receiving issues"
+        },
+        {
+          "name": "Received Items List",
+          "type": "Data Table",
+          "interaction": "Shows items being processed"
+        },
+        {
+          "name": "Complete Receiving Button",
+          "type": "Button",
+          "interaction": "Saves to receiving_records and receiving_items, updates products.quantity_on_hand"
+        },
+        {
+          "name": "Manual Receiving Option",
+          "type": "Toggle",
+          "interaction": "Receive items without PO"
+        }
+      ]
+    },
+    {
+      "name": "Reports Screen",
+      "purpose": "Generate and view inventory and sales reports",
+      "key_components": [
+        {
+          "name": "Report Type Selector",
+          "type": "Tabs",
+          "interaction": "Switch between Inventory, Sales, Low Stock, Valuation reports"
+        },
+        {
+          "name": "Date Range Picker",
+          "type": "Date Range Input",
+          "interaction": "Filter reports by date"
+        },
+        {
+          "name": "Category Filter",
+          "type": "Multi-select",
+          "interaction": "Filter by categories from categories table"
+        },
+        {
+          "name": "Generate Report Button",
+          "type": "Button",
+          "interaction": "Queries database and generates report"
+        },
+        {
+          "name": "Report Display Area",
+          "type": "Data Table/Chart",
+          "interaction": "Shows report results from products, transactions, transaction_items"
+        },
+        {
+          "name": "Export to PDF Button",
+          "type": "Button",
+          "interaction": "Downloads report as PDF"
+        },
+        {
+          "name": "Export to CSV Button",
+          "type": "Button",
+          "interaction": "Downloads report as CSV"
+        },
+        {
+          "name": "Low Stock Report",
+          "type": "Data Table",
+          "interaction": "Shows products where quantity_on_hand < reorder_point"
+        },
+        {
+          "name": "Inventory Valuation Summary",
+          "type": "Metric Cards",
+          "interaction": "Calculates total value from products table"
+        }
+      ]
+    },
+    {
+      "name": "Supplier Management Screen",
+      "purpose": "Manage supplier information and relationships",
+      "key_components": [
+        {
+          "name": "Supplier List Table",
+          "type": "Data Table",
+          "interaction": "Displays all suppliers from suppliers table"
+        },
+        {
+          "name": "Add Supplier Button",
+          "type": "Button",
+          "interaction": "Opens supplier creation form"
+        },
+        {
+          "name": "Supplier Details Form",
+          "type": "Form",
+          "interaction": "Input/edit name, contact, email, phone, address"
+        },
+        {
+          "name": "Associated Products List",
+          "type": "Data Table",
+          "interaction": "Shows products linked to supplier from products table"
+        },
+        {
+          "name": "Purchase Order History",
+          "type": "Data Table",
+          "interaction": "Shows POs from purchase_orders table for supplier"
+        },
+        {
+          "name": "Save Supplier Button",
+          "type": "Button",
+          "interaction": "Saves to suppliers table"
+        },
+        {
+          "name": "Deactivate Supplier Button",
+          "type": "Button",
+          "interaction": "Sets is_active to false"
+        }
+      ]
+    },
+    {
+      "name": "User Management Screen",
+      "purpose": "Manage user accounts and permissions (Admin only)",
+      "key_components": [
+        {
+          "name": "User List Table",
+          "type": "Data Table",
+          "interaction": "Displays users from users table"
+        },
+        {
+          "name": "Add User Button",
+          "type": "Button",
+          "interaction": "Opens user creation form"
+        },
+        {
+          "name": "User Details Form",
+          "type": "Form",
+          "interaction": "Input username, email, name, role"
+        },
+        {
+          "name": "Role Selector",
+          "type": "Dropdown",
+          "interaction": "Select Admin, Manager, or Clerk role"
+        },
+        {
+          "name": "Active Status Toggle",
+          "type": "Switch",
+          "interaction": "Enable/disable user account"
+        },
+        {
+          "name": "Reset Password Button",
+          "type": "Button",
+          "interaction": "Generates password reset"
+        },
+        {
+          "name": "Save User Button",
+          "type": "Button",
+          "interaction": "Saves to users table"
+        },
+        {
+          "name": "Activity Log",
+          "type": "Data Table",
+          "interaction": "Shows user actions from audit_logs table"
+        }
+      ]
+    },
+    {
+      "name": "Alerts Dashboard",
+      "purpose": "View and manage system alerts and notifications",
+      "key_components": [
+        {
+          "name": "Active Alerts List",
+          "type": "Data Table",
+          "interaction": "Shows undismissed alerts from alerts table"
+        },
+        {
+          "name": "Alert Type Filter",
+          "type": "Checkbox Group",
+          "interaction": "Filter by Low Stock, Overstock, Expiring, etc."
+        },
+        {
+          "name": "Alert Details Panel",
+          "type": "Card",
+          "interaction": "Shows alert message and related product info"
+        },
+        {
+          "name": "Dismiss Alert Button",
+          "type": "Button",
+          "interaction": "Updates alerts.is_dismissed to true"
+        },
+        {
+          "name": "View Product Button",
+          "type": "Button",
+          "interaction": "Navigates to product details"
+        },
+        {
+          "name": "Alert History",
+          "type": "Data Table",
+          "interaction": "Shows dismissed alerts"
+        }
+      ]
+    },
+    {
+      "name": "Transaction History Screen",
+      "purpose": "View and search past sales transactions",
+      "key_components": [
+        {
+          "name": "Transaction Search",
+          "type": "Search Field",
+          "interaction": "Search by transaction ID, date, or amount"
+        },
+        {
+          "name": "Date Range Filter",
+          "type": "Date Range Input",
+          "interaction": "Filter transactions by date"
+        },
+        {
+          "name": "Transaction List",
+          "type": "Data Table",
+          "interaction": "Shows transactions from transactions table"
+        },
+        {
+          "name": "Transaction Details Panel",
+          "type": "Expandable Row",
+          "interaction": "Shows items from transaction_items table"
+        },
+        {
+          "name": "Reprint Receipt Button",
+          "type": "Button",
+          "interaction": "Regenerates receipt for selected transaction"
+        },
+        {
+          "name": "User Filter",
+          "type": "Dropdown",
+          "interaction": "Filter by cashier from users table"
+        },
+        {
+          "name": "Payment Method Filter",
+          "type": "Checkbox Group",
+          "interaction": "Filter by payment type"
+        }
+      ]
+    }
+  ],
+  "color_scheme": {
+    "primary": "#2563EB",
+    "secondary": "#10B981",
+    "background": "#F9FAFB",
+    "surface": "#FFFFFF",
+    "text": "#1F2937"
+  },
+  "typography": {
+    "heading_font": "Inter",
+    "body_font": "Inter"
+  }
+}

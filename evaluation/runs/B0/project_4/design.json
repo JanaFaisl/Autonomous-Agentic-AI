@@ -1,0 +1,375 @@
+{
+  "screens": [
+    {
+      "name": "Login/Registration Screen",
+      "purpose": "Allow users to create accounts and authenticate",
+      "key_components": [
+        {
+          "name": "Email Input Field",
+          "type": "Text Input",
+          "interaction": "User enters university email address"
+        },
+        {
+          "name": "Password Input Field",
+          "type": "Password Input",
+          "interaction": "User enters password with visibility toggle"
+        },
+        {
+          "name": "Login Button",
+          "type": "Button",
+          "interaction": "Submits credentials and authenticates user against users table"
+        },
+        {
+          "name": "Register Tab",
+          "type": "Tab",
+          "interaction": "Switches to registration form with additional fields (first_name, last_name, major, year)"
+        },
+        {
+          "name": "Forgot Password Link",
+          "type": "Link",
+          "interaction": "Navigates to password reset flow"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Screen",
+      "purpose": "Display personalized overview of user's notes, groups, and recent activity",
+      "key_components": [
+        {
+          "name": "My Notes Section",
+          "type": "Card Grid",
+          "interaction": "Displays notes from notes table where user_id matches current user, click to view/edit"
+        },
+        {
+          "name": "My Groups Section",
+          "type": "List",
+          "interaction": "Shows groups from group_members table where user_id matches, click to open group"
+        },
+        {
+          "name": "Recent Activity Feed",
+          "type": "Timeline",
+          "interaction": "Displays recent downloads, uploads, and posts from downloads, notes, and posts tables"
+        },
+        {
+          "name": "Upload Note Button",
+          "type": "Floating Action Button",
+          "interaction": "Opens note upload modal"
+        },
+        {
+          "name": "Navigation Menu",
+          "type": "Sidebar",
+          "interaction": "Links to Dashboard, Browse Notes, My Groups, Profile, Notifications"
+        },
+        {
+          "name": "Notification Bell",
+          "type": "Icon Button",
+          "interaction": "Shows unread count from notifications table, opens notification dropdown"
+        }
+      ]
+    },
+    {
+      "name": "Browse Notes Screen",
+      "purpose": "Allow users to search, filter, and discover notes shared by others",
+      "key_components": [
+        {
+          "name": "Search Bar",
+          "type": "Search Input",
+          "interaction": "Queries notes table by title, course_name, and associated tags"
+        },
+        {
+          "name": "Filter Panel",
+          "type": "Sidebar",
+          "interaction": "Filters by course, tags from tags table, rating range, and date"
+        },
+        {
+          "name": "Sort Dropdown",
+          "type": "Dropdown",
+          "interaction": "Sorts results by date, download_count, or average_rating"
+        },
+        {
+          "name": "Note Cards Grid",
+          "type": "Card Grid",
+          "interaction": "Displays notes with title, course_name, average_rating, download_count, click to view details"
+        },
+        {
+          "name": "Pagination Controls",
+          "type": "Pagination",
+          "interaction": "Navigate through search results"
+        }
+      ]
+    },
+    {
+      "name": "Note Detail Screen",
+      "purpose": "Display full information about a note and allow download and rating",
+      "key_components": [
+        {
+          "name": "Note Information Panel",
+          "type": "Card",
+          "interaction": "Shows title, description, course_name, author from users table, upload date from notes table"
+        },
+        {
+          "name": "Tags Display",
+          "type": "Chip Group",
+          "interaction": "Shows tags from note_tags and tags tables, clickable to search by tag"
+        },
+        {
+          "name": "Download Button",
+          "type": "Button",
+          "interaction": "Downloads file from file_url, creates entry in downloads table, increments download_count"
+        },
+        {
+          "name": "Preview Panel",
+          "type": "Document Viewer",
+          "interaction": "Shows preview of note content"
+        },
+        {
+          "name": "Rating Section",
+          "type": "Star Rating + Text Area",
+          "interaction": "Allows user to rate (1-5) and review, saves to ratings table, updates average_rating"
+        },
+        {
+          "name": "Reviews List",
+          "type": "List",
+          "interaction": "Displays existing ratings and reviews from ratings table with user info"
+        }
+      ]
+    },
+    {
+      "name": "Upload Note Screen",
+      "purpose": "Allow users to upload new study notes with metadata",
+      "key_components": [
+        {
+          "name": "Title Input",
+          "type": "Text Input",
+          "interaction": "User enters note title"
+        },
+        {
+          "name": "Description Input",
+          "type": "Text Area",
+          "interaction": "User enters note description"
+        },
+        {
+          "name": "Course Input",
+          "type": "Text Input with Autocomplete",
+          "interaction": "User enters or selects course_name"
+        },
+        {
+          "name": "File Upload",
+          "type": "File Input",
+          "interaction": "User selects PDF, DOCX, or TXT file (max 10MB), uploads to storage, saves file_url"
+        },
+        {
+          "name": "Tags Input",
+          "type": "Tag Input",
+          "interaction": "User adds tags, creates entries in tags and note_tags tables"
+        },
+        {
+          "name": "Submit Button",
+          "type": "Button",
+          "interaction": "Creates new entry in notes table with user_id, file metadata"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "interaction": "Returns to previous screen without saving"
+        }
+      ]
+    },
+    {
+      "name": "My Groups Screen",
+      "purpose": "Display all groups user is a member of and allow group creation",
+      "key_components": [
+        {
+          "name": "Groups List",
+          "type": "Card List",
+          "interaction": "Shows groups from group_members table where user_id matches, displays group_name, course_name, member_count"
+        },
+        {
+          "name": "Create Group Button",
+          "type": "Button",
+          "interaction": "Opens create group modal"
+        },
+        {
+          "name": "Search Groups",
+          "type": "Search Input",
+          "interaction": "Searches public groups from groups table where is_private = false"
+        },
+        {
+          "name": "Group Card",
+          "type": "Card",
+          "interaction": "Click to open group detail, shows role from group_members table"
+        }
+      ]
+    },
+    {
+      "name": "Create Group Screen",
+      "purpose": "Allow users to create new study groups",
+      "key_components": [
+        {
+          "name": "Group Name Input",
+          "type": "Text Input",
+          "interaction": "User enters group_name"
+        },
+        {
+          "name": "Description Input",
+          "type": "Text Area",
+          "interaction": "User enters group description"
+        },
+        {
+          "name": "Course Input",
+          "type": "Text Input",
+          "interaction": "User enters course_name"
+        },
+        {
+          "name": "Privacy Toggle",
+          "type": "Toggle Switch",
+          "interaction": "Sets is_private field in groups table"
+        },
+        {
+          "name": "Create Button",
+          "type": "Button",
+          "interaction": "Creates entry in groups table with creator_id, creates membership in group_members with role='admin'"
+        }
+      ]
+    },
+    {
+      "name": "Group Detail Screen",
+      "purpose": "Display group information, members, and discussion forum",
+      "key_components": [
+        {
+          "name": "Group Header",
+          "type": "Header",
+          "interaction": "Shows group_name, description, course_name from groups table"
+        },
+        {
+          "name": "Members Tab",
+          "type": "Tab Panel",
+          "interaction": "Lists members from group_members joined with users table, shows role"
+        },
+        {
+          "name": "Discussion Tab",
+          "type": "Tab Panel",
+          "interaction": "Shows posts from posts table where group_id matches"
+        },
+        {
+          "name": "New Post Button",
+          "type": "Button",
+          "interaction": "Opens post creation form"
+        },
+        {
+          "name": "Post List",
+          "type": "List",
+          "interaction": "Displays posts with content, user info, created_at, attachment_url if present"
+        },
+        {
+          "name": "Reply Button",
+          "type": "Button",
+          "interaction": "Creates post with parent_post_id set"
+        },
+        {
+          "name": "Invite Member Button",
+          "type": "Button",
+          "interaction": "Opens invite modal (visible only to admins based on group_members.role)"
+        },
+        {
+          "name": "Leave Group Button",
+          "type": "Button",
+          "interaction": "Removes entry from group_members table, decrements member_count"
+        }
+      ]
+    },
+    {
+      "name": "Profile Screen",
+      "purpose": "Display and edit user profile information",
+      "key_components": [
+        {
+          "name": "Profile Picture",
+          "type": "Image Upload",
+          "interaction": "Displays profile_image_url from users table, allows upload"
+        },
+        {
+          "name": "Name Display",
+          "type": "Text",
+          "interaction": "Shows first_name and last_name from users table"
+        },
+        {
+          "name": "Email Display",
+          "type": "Text",
+          "interaction": "Shows email from users table (read-only)"
+        },
+        {
+          "name": "Major Input",
+          "type": "Text Input",
+          "interaction": "Editable field for major in users table"
+        },
+        {
+          "name": "Year Input",
+          "type": "Number Input",
+          "interaction": "Editable field for year in users table"
+        },
+        {
+          "name": "Bio Input",
+          "type": "Text Area",
+          "interaction": "Editable field for bio in users table"
+        },
+        {
+          "name": "Save Button",
+          "type": "Button",
+          "interaction": "Updates users table with modified fields, sets updated_at"
+        },
+        {
+          "name": "Statistics Panel",
+          "type": "Card",
+          "interaction": "Shows count of uploaded notes, groups joined, notes downloaded from respective tables"
+        }
+      ]
+    },
+    {
+      "name": "Notifications Screen",
+      "purpose": "Display all notifications and allow management",
+      "key_components": [
+        {
+          "name": "Notifications List",
+          "type": "List",
+          "interaction": "Shows all notifications from notifications table where user_id matches, ordered by created_at"
+        },
+        {
+          "name": "Notification Item",
+          "type": "List Item",
+          "interaction": "Displays type, message, created_at, highlights if is_read = false"
+        },
+        {
+          "name": "Mark as Read Button",
+          "type": "Button",
+          "interaction": "Updates is_read to true in notifications table"
+        },
+        {
+          "name": "Mark All Read Button",
+          "type": "Button",
+          "interaction": "Updates all user's notifications to is_read = true"
+        },
+        {
+          "name": "Filter Tabs",
+          "type": "Tabs",
+          "interaction": "Filters notifications by type (all, groups, ratings, invites)"
+        },
+        {
+          "name": "Notification Link",
+          "type": "Link",
+          "interaction": "Navigates to referenced item using reference_id (group, note, etc.)"
+        }
+      ]
+    }
+  ],
+  "color_scheme": {
+    "primary": "#2563EB",
+    "secondary": "#7C3AED",
+    "background": "#F9FAFB",
+    "surface": "#FFFFFF",
+    "text": "#111827"
+  },
+  "typography": {
+    "heading_font": "Inter",
+    "body_font": "Inter"
+  }
+}

@@ -1,0 +1,739 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "username",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "password_hash",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "role",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "last_login",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "users.user_id -> transactions.user_id (one-to-many)",
+        "users.user_id -> inventory_adjustments.user_id (one-to-many)",
+        "users.user_id -> audit_logs.user_id (one-to-many)"
+      ]
+    },
+    {
+      "name": "categories",
+      "columns": [
+        {
+          "name": "category_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "category_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "parent_category_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "categories.category_id -> products.category_id (one-to-many)",
+        "categories.category_id -> categories.parent_category_id (self-referencing)"
+      ]
+    },
+    {
+      "name": "suppliers",
+      "columns": [
+        {
+          "name": "supplier_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "supplier_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "contact_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "address",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "suppliers.supplier_id -> products.supplier_id (one-to-many)",
+        "suppliers.supplier_id -> purchase_orders.supplier_id (one-to-many)"
+      ]
+    },
+    {
+      "name": "products",
+      "columns": [
+        {
+          "name": "product_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "barcode",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "product_name",
+          "type": "VARCHAR(200)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "category_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "supplier_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "cost_price",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "selling_price",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity_on_hand",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "reorder_point",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "reorder_quantity",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "image_url",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "products.category_id -> categories.category_id (many-to-one)",
+        "products.supplier_id -> suppliers.supplier_id (many-to-one)",
+        "products.product_id -> transaction_items.product_id (one-to-many)",
+        "products.product_id -> inventory_adjustments.product_id (one-to-many)",
+        "products.product_id -> purchase_order_items.product_id (one-to-many)"
+      ]
+    },
+    {
+      "name": "transactions",
+      "columns": [
+        {
+          "name": "transaction_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "transaction_date",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "subtotal",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "tax_amount",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "total_amount",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "payment_method",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "notes",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "transactions.user_id -> users.user_id (many-to-one)",
+        "transactions.transaction_id -> transaction_items.transaction_id (one-to-many)"
+      ]
+    },
+    {
+      "name": "transaction_items",
+      "columns": [
+        {
+          "name": "transaction_item_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "transaction_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "unit_price",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "line_total",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "transaction_items.transaction_id -> transactions.transaction_id (many-to-one)",
+        "transaction_items.product_id -> products.product_id (many-to-one)"
+      ]
+    },
+    {
+      "name": "inventory_adjustments",
+      "columns": [
+        {
+          "name": "adjustment_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "adjustment_date",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity_change",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "reason",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "notes",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "previous_quantity",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "new_quantity",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "inventory_adjustments.product_id -> products.product_id (many-to-one)",
+        "inventory_adjustments.user_id -> users.user_id (many-to-one)"
+      ]
+    },
+    {
+      "name": "purchase_orders",
+      "columns": [
+        {
+          "name": "purchase_order_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "supplier_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "order_date",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "expected_delivery_date",
+          "type": "DATE",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "total_amount",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "notes",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_by",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "purchase_orders.supplier_id -> suppliers.supplier_id (many-to-one)",
+        "purchase_orders.created_by -> users.user_id (many-to-one)",
+        "purchase_orders.purchase_order_id -> purchase_order_items.purchase_order_id (one-to-many)",
+        "purchase_orders.purchase_order_id -> receiving_records.purchase_order_id (one-to-many)"
+      ]
+    },
+    {
+      "name": "purchase_order_items",
+      "columns": [
+        {
+          "name": "po_item_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "purchase_order_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity_ordered",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "unit_cost",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "line_total",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "purchase_order_items.purchase_order_id -> purchase_orders.purchase_order_id (many-to-one)",
+        "purchase_order_items.product_id -> products.product_id (many-to-one)"
+      ]
+    },
+    {
+      "name": "receiving_records",
+      "columns": [
+        {
+          "name": "receiving_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "purchase_order_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "received_date",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "received_by",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "notes",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "receiving_records.purchase_order_id -> purchase_orders.purchase_order_id (many-to-one)",
+        "receiving_records.received_by -> users.user_id (many-to-one)",
+        "receiving_records.receiving_id -> receiving_items.receiving_id (one-to-many)"
+      ]
+    },
+    {
+      "name": "receiving_items",
+      "columns": [
+        {
+          "name": "receiving_item_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "receiving_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity_received",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity_expected",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "discrepancy_notes",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "receiving_items.receiving_id -> receiving_records.receiving_id (many-to-one)",
+        "receiving_items.product_id -> products.product_id (many-to-one)"
+      ]
+    },
+    {
+      "name": "alerts",
+      "columns": [
+        {
+          "name": "alert_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "alert_type",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "alert_message",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_dismissed",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "dismissed_by",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "dismissed_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "alerts.product_id -> products.product_id (many-to-one)",
+        "alerts.dismissed_by -> users.user_id (many-to-one)"
+      ]
+    },
+    {
+      "name": "audit_logs",
+      "columns": [
+        {
+          "name": "log_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "action",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "entity_type",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "entity_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "details",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "ip_address",
+          "type": "VARCHAR(45)",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "audit_logs.user_id -> users.user_id (many-to-one)"
+      ]
+    }
+  ]
+}

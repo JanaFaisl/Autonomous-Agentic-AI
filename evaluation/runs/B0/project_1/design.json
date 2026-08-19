@@ -1,0 +1,683 @@
+{
+  "screens": [
+    {
+      "name": "Login Screen",
+      "purpose": "Allow users to authenticate and access their accounts",
+      "key_components": [
+        {
+          "name": "Email Input Field",
+          "type": "Text Input",
+          "interaction": "User enters email address"
+        },
+        {
+          "name": "Password Input Field",
+          "type": "Password Input",
+          "interaction": "User enters password securely"
+        },
+        {
+          "name": "Login Button",
+          "type": "Button",
+          "interaction": "Submits credentials and authenticates user against users table"
+        },
+        {
+          "name": "Forgot Password Link",
+          "type": "Link",
+          "interaction": "Navigates to password reset flow"
+        },
+        {
+          "name": "Sign Up Link",
+          "type": "Link",
+          "interaction": "Navigates to registration screen"
+        }
+      ]
+    },
+    {
+      "name": "Registration Screen",
+      "purpose": "Enable new users to create accounts",
+      "key_components": [
+        {
+          "name": "First Name Input",
+          "type": "Text Input",
+          "interaction": "User enters first name"
+        },
+        {
+          "name": "Last Name Input",
+          "type": "Text Input",
+          "interaction": "User enters last name"
+        },
+        {
+          "name": "Email Input",
+          "type": "Text Input",
+          "interaction": "User enters email address"
+        },
+        {
+          "name": "Phone Input",
+          "type": "Text Input",
+          "interaction": "User enters phone number"
+        },
+        {
+          "name": "Password Input",
+          "type": "Password Input",
+          "interaction": "User creates password"
+        },
+        {
+          "name": "Confirm Password Input",
+          "type": "Password Input",
+          "interaction": "User confirms password"
+        },
+        {
+          "name": "Register Button",
+          "type": "Button",
+          "interaction": "Creates new user record in users table"
+        }
+      ]
+    },
+    {
+      "name": "Home Screen",
+      "purpose": "Main landing page showing featured flowers and categories",
+      "key_components": [
+        {
+          "name": "Header with Logo",
+          "type": "Header",
+          "interaction": "Displays app branding"
+        },
+        {
+          "name": "Search Bar",
+          "type": "Search Input",
+          "interaction": "Allows searching products table by name"
+        },
+        {
+          "name": "Category Grid",
+          "type": "Grid",
+          "interaction": "Displays categories from categories table, navigates to filtered catalog"
+        },
+        {
+          "name": "Featured Products Carousel",
+          "type": "Carousel",
+          "interaction": "Shows featured products from products table"
+        },
+        {
+          "name": "Navigation Menu",
+          "type": "Menu",
+          "interaction": "Provides access to cart, orders, profile"
+        },
+        {
+          "name": "Cart Icon with Badge",
+          "type": "Icon",
+          "interaction": "Shows cart item count from cart_items, navigates to cart"
+        }
+      ]
+    },
+    {
+      "name": "Product Catalog Screen",
+      "purpose": "Display all available flower products with filtering and search",
+      "key_components": [
+        {
+          "name": "Filter Panel",
+          "type": "Filter Group",
+          "interaction": "Filters products by category, price range from products and categories tables"
+        },
+        {
+          "name": "Sort Dropdown",
+          "type": "Dropdown",
+          "interaction": "Sorts products by price, rating, name"
+        },
+        {
+          "name": "Product Grid",
+          "type": "Grid",
+          "interaction": "Displays products from products table with images, names, prices"
+        },
+        {
+          "name": "Product Card",
+          "type": "Card",
+          "interaction": "Shows product details, tapping navigates to product detail screen"
+        },
+        {
+          "name": "Search Results Count",
+          "type": "Text",
+          "interaction": "Displays number of matching products"
+        }
+      ]
+    },
+    {
+      "name": "Product Detail Screen",
+      "purpose": "Show detailed information about a specific flower product",
+      "key_components": [
+        {
+          "name": "Product Image Gallery",
+          "type": "Image Carousel",
+          "interaction": "Displays product images from products table"
+        },
+        {
+          "name": "Product Name",
+          "type": "Text",
+          "interaction": "Displays product name from products table"
+        },
+        {
+          "name": "Price Display",
+          "type": "Text",
+          "interaction": "Shows product price from products table"
+        },
+        {
+          "name": "Description",
+          "type": "Text",
+          "interaction": "Shows product description from products table"
+        },
+        {
+          "name": "Rating Display",
+          "type": "Star Rating",
+          "interaction": "Shows average_rating from products table"
+        },
+        {
+          "name": "Quantity Selector",
+          "type": "Number Input",
+          "interaction": "User selects quantity to add to cart"
+        },
+        {
+          "name": "Add to Cart Button",
+          "type": "Button",
+          "interaction": "Creates cart_item record in cart_items table"
+        },
+        {
+          "name": "Reviews Section",
+          "type": "List",
+          "interaction": "Displays reviews from reviews table for this product"
+        },
+        {
+          "name": "Stock Availability",
+          "type": "Text",
+          "interaction": "Shows stock_quantity from products table"
+        }
+      ]
+    },
+    {
+      "name": "Shopping Cart Screen",
+      "purpose": "Display cart contents and allow modifications before checkout",
+      "key_components": [
+        {
+          "name": "Cart Items List",
+          "type": "List",
+          "interaction": "Displays cart_items with product details from cart_items and products tables"
+        },
+        {
+          "name": "Quantity Adjuster",
+          "type": "Stepper",
+          "interaction": "Updates quantity in cart_items table"
+        },
+        {
+          "name": "Remove Item Button",
+          "type": "Button",
+          "interaction": "Deletes cart_item from cart_items table"
+        },
+        {
+          "name": "Subtotal Display",
+          "type": "Text",
+          "interaction": "Calculates sum of cart items"
+        },
+        {
+          "name": "Tax Display",
+          "type": "Text",
+          "interaction": "Shows calculated tax"
+        },
+        {
+          "name": "Delivery Fee Display",
+          "type": "Text",
+          "interaction": "Shows delivery charge"
+        },
+        {
+          "name": "Total Display",
+          "type": "Text",
+          "interaction": "Shows final total amount"
+        },
+        {
+          "name": "Checkout Button",
+          "type": "Button",
+          "interaction": "Navigates to checkout screen"
+        }
+      ]
+    },
+    {
+      "name": "Checkout Screen",
+      "purpose": "Collect delivery and payment information to complete order",
+      "key_components": [
+        {
+          "name": "Delivery Address Selector",
+          "type": "Dropdown",
+          "interaction": "Selects from user's addresses in addresses table or adds new"
+        },
+        {
+          "name": "Add New Address Button",
+          "type": "Button",
+          "interaction": "Opens form to create new address record"
+        },
+        {
+          "name": "Delivery Date Picker",
+          "type": "Date Picker",
+          "interaction": "User selects delivery_date for order"
+        },
+        {
+          "name": "Time Slot Selector",
+          "type": "Radio Group",
+          "interaction": "User selects delivery_time_slot"
+        },
+        {
+          "name": "Gift Message Input",
+          "type": "Text Area",
+          "interaction": "User enters optional gift_message for order"
+        },
+        {
+          "name": "Payment Method Selector",
+          "type": "Radio Group",
+          "interaction": "Selects from saved_payment_methods or new payment"
+        },
+        {
+          "name": "Order Summary",
+          "type": "Card",
+          "interaction": "Shows items, prices from cart"
+        },
+        {
+          "name": "Place Order Button",
+          "type": "Button",
+          "interaction": "Creates order in orders table, order_items, payment records"
+        }
+      ]
+    },
+    {
+      "name": "Order Confirmation Screen",
+      "purpose": "Confirm successful order placement and provide order details",
+      "key_components": [
+        {
+          "name": "Success Message",
+          "type": "Text",
+          "interaction": "Displays order confirmation"
+        },
+        {
+          "name": "Order Number",
+          "type": "Text",
+          "interaction": "Shows order_number from orders table"
+        },
+        {
+          "name": "Order Summary",
+          "type": "Card",
+          "interaction": "Displays order details from orders and order_items tables"
+        },
+        {
+          "name": "Delivery Information",
+          "type": "Card",
+          "interaction": "Shows delivery_date, time_slot, address from orders and addresses tables"
+        },
+        {
+          "name": "Track Order Button",
+          "type": "Button",
+          "interaction": "Navigates to order tracking screen"
+        },
+        {
+          "name": "Continue Shopping Button",
+          "type": "Button",
+          "interaction": "Returns to home screen"
+        }
+      ]
+    },
+    {
+      "name": "Order History Screen",
+      "purpose": "Display all past and current orders for the user",
+      "key_components": [
+        {
+          "name": "Orders List",
+          "type": "List",
+          "interaction": "Displays orders from orders table for current user"
+        },
+        {
+          "name": "Order Card",
+          "type": "Card",
+          "interaction": "Shows order_number, date, status, total from orders table"
+        },
+        {
+          "name": "Status Badge",
+          "type": "Badge",
+          "interaction": "Displays current status from orders table"
+        },
+        {
+          "name": "Filter Tabs",
+          "type": "Tabs",
+          "interaction": "Filters orders by status (active, completed, cancelled)"
+        },
+        {
+          "name": "Order Detail Button",
+          "type": "Button",
+          "interaction": "Navigates to order detail screen"
+        }
+      ]
+    },
+    {
+      "name": "Order Detail Screen",
+      "purpose": "Show comprehensive details of a specific order",
+      "key_components": [
+        {
+          "name": "Order Status Timeline",
+          "type": "Timeline",
+          "interaction": "Shows order status progression from orders table"
+        },
+        {
+          "name": "Order Items List",
+          "type": "List",
+          "interaction": "Displays order_items with product details"
+        },
+        {
+          "name": "Delivery Address",
+          "type": "Card",
+          "interaction": "Shows delivery address from addresses table"
+        },
+        {
+          "name": "Delivery Date and Time",
+          "type": "Text",
+          "interaction": "Shows delivery_date and delivery_time_slot from orders table"
+        },
+        {
+          "name": "Payment Information",
+          "type": "Card",
+          "interaction": "Shows payment details from payments table"
+        },
+        {
+          "name": "Gift Message",
+          "type": "Text",
+          "interaction": "Displays gift_message from orders table if present"
+        },
+        {
+          "name": "Write Review Button",
+          "type": "Button",
+          "interaction": "Navigates to review screen for delivered orders"
+        }
+      ]
+    },
+    {
+      "name": "Order Tracking Screen",
+      "purpose": "Real-time tracking of order delivery status",
+      "key_components": [
+        {
+          "name": "Status Progress Bar",
+          "type": "Progress Indicator",
+          "interaction": "Shows current status from orders table"
+        },
+        {
+          "name": "Estimated Delivery Time",
+          "type": "Text",
+          "interaction": "Shows delivery_date and delivery_time_slot from orders table"
+        },
+        {
+          "name": "Driver Information",
+          "type": "Card",
+          "interaction": "Shows driver details from users table where role=driver"
+        },
+        {
+          "name": "Delivery Address",
+          "type": "Text",
+          "interaction": "Shows address from addresses table"
+        },
+        {
+          "name": "Order Items Summary",
+          "type": "List",
+          "interaction": "Shows items from order_items table"
+        }
+      ]
+    },
+    {
+      "name": "Write Review Screen",
+      "purpose": "Allow customers to rate and review purchased products",
+      "key_components": [
+        {
+          "name": "Product Information",
+          "type": "Card",
+          "interaction": "Shows product details from products table"
+        },
+        {
+          "name": "Star Rating Selector",
+          "type": "Star Rating Input",
+          "interaction": "User selects rating 1-5"
+        },
+        {
+          "name": "Review Text Input",
+          "type": "Text Area",
+          "interaction": "User enters comment for review"
+        },
+        {
+          "name": "Photo Upload",
+          "type": "File Upload",
+          "interaction": "User uploads image_url for review"
+        },
+        {
+          "name": "Submit Review Button",
+          "type": "Button",
+          "interaction": "Creates review record in reviews table"
+        }
+      ]
+    },
+    {
+      "name": "User Profile Screen",
+      "purpose": "Display and manage user account information",
+      "key_components": [
+        {
+          "name": "Profile Information Card",
+          "type": "Card",
+          "interaction": "Shows user details from users table"
+        },
+        {
+          "name": "Edit Profile Button",
+          "type": "Button",
+          "interaction": "Enables editing of user information"
+        },
+        {
+          "name": "Saved Addresses Section",
+          "type": "List",
+          "interaction": "Displays addresses from addresses table"
+        },
+        {
+          "name": "Add Address Button",
+          "type": "Button",
+          "interaction": "Opens form to create new address"
+        },
+        {
+          "name": "Saved Payment Methods",
+          "type": "List",
+          "interaction": "Shows saved_payment_methods for user"
+        },
+        {
+          "name": "Notification Preferences",
+          "type": "Toggle Group",
+          "interaction": "Manages notification_preferences settings"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "interaction": "Logs user out of session"
+        }
+      ]
+    },
+    {
+      "name": "Notifications Screen",
+      "purpose": "Display all notifications for the user",
+      "key_components": [
+        {
+          "name": "Notifications List",
+          "type": "List",
+          "interaction": "Displays notifications from notifications table"
+        },
+        {
+          "name": "Notification Card",
+          "type": "Card",
+          "interaction": "Shows title, message, created_at from notifications table"
+        },
+        {
+          "name": "Read/Unread Indicator",
+          "type": "Badge",
+          "interaction": "Shows is_read status from notifications table"
+        },
+        {
+          "name": "Mark as Read Button",
+          "type": "Button",
+          "interaction": "Updates is_read in notifications table"
+        },
+        {
+          "name": "Filter Tabs",
+          "type": "Tabs",
+          "interaction": "Filters by notification type"
+        }
+      ]
+    },
+    {
+      "name": "Admin Dashboard Screen",
+      "purpose": "Administrative overview and management interface",
+      "key_components": [
+        {
+          "name": "Sales Metrics Cards",
+          "type": "Card Grid",
+          "interaction": "Shows aggregated data from orders and payments tables"
+        },
+        {
+          "name": "Recent Orders List",
+          "type": "List",
+          "interaction": "Displays recent orders from orders table"
+        },
+        {
+          "name": "Low Stock Alerts",
+          "type": "Alert List",
+          "interaction": "Shows products with low stock_quantity from products table"
+        },
+        {
+          "name": "Navigation Menu",
+          "type": "Menu",
+          "interaction": "Links to product management, order management, user management"
+        },
+        {
+          "name": "Revenue Chart",
+          "type": "Chart",
+          "interaction": "Visualizes sales data from orders table"
+        }
+      ]
+    },
+    {
+      "name": "Admin Product Management Screen",
+      "purpose": "Manage flower products in the catalog",
+      "key_components": [
+        {
+          "name": "Products Table",
+          "type": "Data Table",
+          "interaction": "Displays all products from products table"
+        },
+        {
+          "name": "Add Product Button",
+          "type": "Button",
+          "interaction": "Opens form to create new product"
+        },
+        {
+          "name": "Edit Product Button",
+          "type": "Button",
+          "interaction": "Opens form to update product in products table"
+        },
+        {
+          "name": "Delete Product Button",
+          "type": "Button",
+          "interaction": "Removes product from products table"
+        },
+        {
+          "name": "Stock Update Input",
+          "type": "Number Input",
+          "interaction": "Updates stock_quantity in products table"
+        },
+        {
+          "name": "Category Filter",
+          "type": "Dropdown",
+          "interaction": "Filters products by category_id"
+        },
+        {
+          "name": "Active/Inactive Toggle",
+          "type": "Toggle",
+          "interaction": "Updates is_active in products table"
+        }
+      ]
+    },
+    {
+      "name": "Admin Order Management Screen",
+      "purpose": "View and manage all customer orders",
+      "key_components": [
+        {
+          "name": "Orders Table",
+          "type": "Data Table",
+          "interaction": "Displays all orders from orders table"
+        },
+        {
+          "name": "Status Filter",
+          "type": "Dropdown",
+          "interaction": "Filters orders by status"
+        },
+        {
+          "name": "Assign Driver Dropdown",
+          "type": "Dropdown",
+          "interaction": "Updates driver_id in orders table with users where role=driver"
+        },
+        {
+          "name": "Update Status Button",
+          "type": "Button",
+          "interaction": "Updates status in orders table"
+        },
+        {
+          "name": "View Order Details Button",
+          "type": "Button",
+          "interaction": "Shows full order information from orders and order_items"
+        },
+        {
+          "name": "Date Range Filter",
+          "type": "Date Range Picker",
+          "interaction": "Filters orders by created_at"
+        }
+      ]
+    },
+    {
+      "name": "Driver Delivery Screen",
+      "purpose": "Show assigned deliveries for drivers",
+      "key_components": [
+        {
+          "name": "Assigned Deliveries List",
+          "type": "List",
+          "interaction": "Shows orders from orders table where driver_id matches current user"
+        },
+        {
+          "name": "Delivery Card",
+          "type": "Card",
+          "interaction": "Shows order details, delivery address from orders and addresses tables"
+        },
+        {
+          "name": "Navigation Button",
+          "type": "Button",
+          "interaction": "Opens map navigation to delivery address"
+        },
+        {
+          "name": "Mark Delivered Button",
+          "type": "Button",
+          "interaction": "Updates status to 'delivered' in orders table"
+        },
+        {
+          "name": "Contact Customer Button",
+          "type": "Button",
+          "interaction": "Initiates call to customer phone from users table"
+        },
+        {
+          "name": "Delivery Instructions",
+          "type": "Text",
+          "interaction": "Shows gift_message and special instructions from orders table"
+        }
+      ]
+    }
+  ],
+  "color_scheme": {
+    "primary": "#E91E63",
+    "secondary": "#4CAF50",
+    "background": "#FAFAFA",
+    "surface": "#FFFFFF",
+    "text": "#212121"
+  },
+  "typography": {
+    "heading_font": "Playfair Display",
+    "body_font": "Roboto"
+  }
+}

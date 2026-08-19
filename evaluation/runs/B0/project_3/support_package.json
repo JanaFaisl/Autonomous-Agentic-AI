@@ -1,0 +1,95 @@
+{
+  "documentation": [
+    "System Architecture Document - Overview of system components, technology stack, and infrastructure",
+    "Database Schema Documentation - Detailed ER diagrams and table specifications",
+    "API Documentation - RESTful API endpoints, request/response formats, and authentication",
+    "User Manual for Patients - Step-by-step guide for registration, booking, and managing appointments",
+    "User Manual for Doctors - Guide for managing availability, viewing appointments, and entering medical records",
+    "Administrator Guide - Instructions for managing users, generating reports, and system configuration",
+    "Security and Compliance Guide - HIPAA compliance measures, data protection policies, and security protocols",
+    "Installation and Deployment Guide - Server requirements, installation steps, and configuration",
+    "Troubleshooting Guide - Common issues and resolution steps",
+    "Backup and Recovery Procedures - Data backup schedules and disaster recovery processes",
+    "Testing Documentation - Test plans, test cases, and testing results",
+    "Change Log - Version history and release notes"
+  ],
+  "baselines": [
+    "Requirements Baseline v1.0 - Approved requirements specification",
+    "Database Schema Baseline v1.0 - Production database structure",
+    "Design Baseline v1.0 - Approved UI/UX designs and wireframes",
+    "Code Baseline v1.0 - Source code repository tag for initial release",
+    "Test Baseline v1.0 - Complete test suite and results",
+    "Configuration Baseline v1.0 - System configuration settings and parameters",
+    "Security Baseline v1.0 - Security policies and access control configurations"
+  ],
+  "glossary": [
+    {
+      "term": "Appointment",
+      "definition": "A scheduled meeting between a patient and a doctor at a specific date and time"
+    },
+    {
+      "term": "Availability",
+      "definition": "Time slots when a doctor is available to see patients"
+    },
+    {
+      "term": "Blocked Slot",
+      "definition": "A specific time period when a doctor is unavailable despite regular availability"
+    },
+    {
+      "term": "Cancellation Window",
+      "definition": "The minimum time period (24 hours) before an appointment during which cancellation is allowed"
+    },
+    {
+      "term": "Medical Record",
+      "definition": "Documentation of a patient's visit including diagnosis, treatment, and notes"
+    },
+    {
+      "term": "Patient",
+      "definition": "An individual registered in the system who can book appointments with doctors"
+    },
+    {
+      "term": "Doctor",
+      "definition": "A healthcare provider who offers medical services and accepts appointments"
+    },
+    {
+      "term": "Specialty",
+      "definition": "A specific area of medical practice (e.g., Cardiology, Pediatrics)"
+    },
+    {
+      "term": "Time Slot",
+      "definition": "A 30-minute interval during which an appointment can be scheduled"
+    },
+    {
+      "term": "Notification",
+      "definition": "An automated message sent to users about appointment confirmations, reminders, or cancellations"
+    },
+    {
+      "term": "Admin",
+      "definition": "System administrator with privileges to manage doctors, view reports, and configure system settings"
+    },
+    {
+      "term": "Audit Log",
+      "definition": "A record of all system actions and data modifications for security and compliance purposes"
+    },
+    {
+      "term": "HIPAA",
+      "definition": "Health Insurance Portability and Accountability Act - US law requiring protection of patient health information"
+    },
+    {
+      "term": "Session",
+      "definition": "A period of authenticated access to the system, automatically expiring after 30 minutes of inactivity"
+    },
+    {
+      "term": "Concurrent Booking",
+      "definition": "Multiple users attempting to book the same appointment slot simultaneously"
+    },
+    {
+      "term": "Encryption",
+      "definition": "Process of encoding data to prevent unauthorized access"
+    },
+    {
+      "term": "Role",
+      "definition": "User classification determining system access and permissions (Patient, Doctor, Admin)"
+    }
+  ]
+}

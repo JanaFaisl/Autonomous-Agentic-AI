@@ -1,0 +1,1030 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Stores all user accounts including customers, admins, and delivery drivers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "User email for login"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Hashed password"
+        },
+        {
+          "name": "first_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "last_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "phone",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Contact phone number"
+        },
+        {
+          "name": "role",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "customer",
+          "notes": "User role: customer, admin, delivery_driver"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "email",
+        "role"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "categories",
+      "purpose": "Stores flower categories for browsing and organization",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Category name"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "image_url",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Category image"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "name"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "flowers",
+      "purpose": "Stores flower products with details, pricing, and availability",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "category_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to categories"
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Flower product name"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Detailed description"
+        },
+        {
+          "name": "price",
+          "type": "numeric(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Price in currency"
+        },
+        {
+          "name": "image_url",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Primary product image"
+        },
+        {
+          "name": "stock_quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "Available inventory"
+        },
+        {
+          "name": "is_available",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Availability status"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "category_id",
+        "is_available",
+        "name"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "categories",
+          "fk": "category_id",
+          "ref": "id",
+          "notes": "Each flower belongs to one category"
+        }
+      ]
+    },
+    {
+      "name": "reviews",
+      "purpose": "Stores customer reviews and ratings for flowers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "flower_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to flowers"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users"
+        },
+        {
+          "name": "rating",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Rating from 1 to 5"
+        },
+        {
+          "name": "comment",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Review text"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "flower_id",
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "flowers",
+          "fk": "flower_id",
+          "ref": "id",
+          "notes": "Each review is for one flower"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each review is written by one user"
+        }
+      ]
+    },
+    {
+      "name": "carts",
+      "purpose": "Stores shopping cart sessions for customers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Foreign key to users, one cart per user"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "one-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each cart belongs to one user"
+        }
+      ]
+    },
+    {
+      "name": "cart_items",
+      "purpose": "Stores individual items in shopping carts with quantities",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "cart_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to carts"
+        },
+        {
+          "name": "flower_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to flowers"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "1",
+          "notes": "Quantity of this flower in cart"
+        },
+        {
+          "name": "added_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "cart_id",
+        "flower_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "carts",
+          "fk": "cart_id",
+          "ref": "id",
+          "notes": "Each cart item belongs to one cart"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "flowers",
+          "fk": "flower_id",
+          "ref": "id",
+          "notes": "Each cart item references one flower"
+        }
+      ]
+    },
+    {
+      "name": "addresses",
+      "purpose": "Stores delivery addresses for users",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users"
+        },
+        {
+          "name": "address_line1",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "address_line2",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "city",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "state",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "postal_code",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "country",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "is_default",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Default delivery address"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each address belongs to one user"
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "purpose": "Stores customer orders with delivery and payment information",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "order_number",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Human-readable order number"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users"
+        },
+        {
+          "name": "delivery_address_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to addresses"
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "pending",
+          "notes": "Order status: pending, confirmed, preparing, out_for_delivery, delivered, cancelled"
+        },
+        {
+          "name": "total_amount",
+          "type": "numeric(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Total order amount"
+        },
+        {
+          "name": "payment_status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "pending",
+          "notes": "Payment status: pending, completed, failed, refunded"
+        },
+        {
+          "name": "payment_method",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Payment method used"
+        },
+        {
+          "name": "payment_transaction_id",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "External payment transaction ID (e.g., Stripe)"
+        },
+        {
+          "name": "estimated_delivery_date",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Estimated delivery date and time"
+        },
+        {
+          "name": "actual_delivery_date",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Actual delivery date and time"
+        },
+        {
+          "name": "delivery_driver_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users (delivery driver)"
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Special delivery instructions"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_number",
+        "user_id",
+        "status",
+        "created_at",
+        "delivery_driver_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each order belongs to one customer"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "addresses",
+          "fk": "delivery_address_id",
+          "ref": "id",
+          "notes": "Each order has one delivery address"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "delivery_driver_id",
+          "ref": "id",
+          "notes": "Each order may be assigned to one delivery driver"
+        }
+      ]
+    },
+    {
+      "name": "order_items",
+      "purpose": "Stores individual items within an order",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to orders"
+        },
+        {
+          "name": "flower_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to flowers"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Quantity ordered"
+        },
+        {
+          "name": "unit_price",
+          "type": "numeric(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Price per unit at time of order"
+        },
+        {
+          "name": "subtotal",
+          "type": "numeric(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Quantity * unit_price"
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "flower_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Each order item belongs to one order"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "flowers",
+          "fk": "flower_id",
+          "ref": "id",
+          "notes": "Each order item references one flower"
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "purpose": "Stores notifications sent to users for order updates",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to orders (if notification is order-related)"
+        },
+        {
+          "name": "type",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Notification type: email, sms, push"
+        },
+        {
+          "name": "subject",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Notification subject"
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Notification message content"
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "pending",
+          "notes": "Notification status: pending, sent, failed"
+        },
+        {
+          "name": "sent_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Timestamp when notification was sent"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "order_id",
+        "status"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each notification is sent to one user"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Each notification may be related to one order"
+        }
+      ]
+    },
+    {
+      "name": "order_status_history",
+      "purpose": "Tracks the history of status changes for orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to orders"
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Status at this point in time"
+        },
+        {
+          "name": "changed_by_user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key to users (admin or system who changed status)"
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Additional notes about status change"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Timestamp of status change"
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Each status history entry belongs to one order"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "changed_by_user_id",
+          "ref": "id",
+          "notes": "Each status change may be made by one user"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Users table contains all user types (customers, admins, delivery drivers) differentiated by role column",
+    "Each user can have only one active shopping cart at a time",
+    "Prices are stored in a single currency (no multi-currency support assumed)",
+    "Payment processing is handled externally via Stripe API, only transaction IDs are stored",
+    "Email notifications are sent via SendGrid, notification records track delivery status",
+    "Order status follows a predefined workflow: pending -> confirmed -> preparing -> out_for_delivery -> delivered",
+    "Flower stock quantity is managed manually by admins through inventory updates",
+    "Reviews can only be submitted by customers who have purchased the flower (enforced at application level)",
+    "Delivery addresses are stored separately to allow users to maintain multiple addresses",
+    "Order items capture price at time of order to preserve historical pricing",
+    "Notifications support email and SMS channels for order updates",
+    "Order status history provides audit trail for all status changes",
+    "Delivery drivers are assigned to orders by admins through the order management interface",
+    "Cart items are cleared after successful order placement (handled at application level)",
+    "Unique constraint on user_id in carts table ensures one cart per user"
+  ]
+}

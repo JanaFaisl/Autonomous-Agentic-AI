@@ -1,0 +1,17 @@
+{
+  "app_documentation": "Simple Task Manager is a streamlined productivity application designed to help users efficiently organize and track their daily tasks. The application provides a clean, intuitive interface for creating, managing, and completing tasks with minimal friction. Users can create tasks with titles and optional descriptions, mark them as complete to track progress, view all tasks in an organized list with filtering capabilities, and permanently delete tasks they no longer need. The app features a modern card-based layout with clear visual separation between active and completed tasks, making it easy to focus on what needs to be done. Built with React for the frontend and Node.js/Express for the backend, with PostgreSQL as the database, the application is optimized for web platforms and follows WCAG 2.1 AA accessibility standards. The intended users are individuals seeking a simple, no-frills task management solution for personal productivity without the complexity of advanced project management features.",
+  "baseline_artifacts": [
+    "Requirements_v1_SimpleTaskManager",
+    "Design_v1_UIScreensAndComponents",
+    "Database_Schema_v1_PostgreSQL",
+    "Cycle_Plan_v1_MVP"
+  ],
+  "glossary": {
+    "Task": "A discrete unit of work that a user needs to complete, consisting of a required title and optional description, with tracking for completion status and timestamps.",
+    "FAB (Floating Action Button)": "A circular button that floats above the UI content, positioned in the bottom-right corner, used to trigger the primary action of creating a new task.",
+    "Modal": "An overlay dialog that appears on top of the main content, requiring user interaction before returning to the underlying screen, used for task creation and deletion confirmation.",
+    "Baseline Artifact": "A versioned snapshot of project documentation (requirements, design, database schema, or plan) that serves as a reference point for the project state at a specific time.",
+    "Toast Notification": "A brief, auto-dismissing message that appears temporarily at the bottom of the screen to provide feedback on user actions such as task creation, completion, or deletion.",
+    "CRUD Operations": "Create, Read, Update, and Delete - the four basic operations for persistent storage, implemented via REST API endpoints for task management in the application."
+  }
+}

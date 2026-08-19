@@ -1,0 +1,85 @@
+{
+  "documentation": [
+    "API Documentation - Complete REST API reference with endpoints, request/response formats, and authentication requirements",
+    "Database Schema Documentation - Entity relationship diagrams and table definitions with field descriptions",
+    "User Manual - Customer-facing guide for using the mobile and web applications",
+    "Admin Manual - Guide for administrators on managing products, orders, and users",
+    "Driver Manual - Instructions for delivery drivers on using the delivery management interface",
+    "Deployment Guide - Step-by-step instructions for deploying the application to production",
+    "Security Best Practices - Guidelines for maintaining security standards and handling sensitive data",
+    "Testing Documentation - Test plans, test cases, and testing procedures for QA team",
+    "Troubleshooting Guide - Common issues and their resolutions for support team",
+    "Integration Guide - Documentation for payment gateway and third-party service integrations"
+  ],
+  "baselines": [
+    "Requirements Baseline v1.0 - Approved functional and non-functional requirements",
+    "Design Baseline v1.0 - Approved UI/UX designs and screen specifications",
+    "Database Schema Baseline v1.0 - Approved database structure and relationships",
+    "API Specification Baseline v1.0 - Approved API contracts and endpoints",
+    "Test Plan Baseline v1.0 - Approved testing strategy and acceptance criteria",
+    "Security Standards Baseline v1.0 - Approved security requirements and compliance standards",
+    "Performance Benchmarks Baseline v1.0 - Approved performance targets and metrics"
+  ],
+  "glossary": [
+    {
+      "term": "Cart",
+      "definition": "A temporary collection of products that a customer intends to purchase"
+    },
+    {
+      "term": "Checkout",
+      "definition": "The process of finalizing a purchase by providing delivery and payment information"
+    },
+    {
+      "term": "Delivery Time Slot",
+      "definition": "A specific time window during which an order will be delivered"
+    },
+    {
+      "term": "Driver",
+      "definition": "A user with the role of delivering flower orders to customers"
+    },
+    {
+      "term": "Gift Message",
+      "definition": "An optional personalized message that accompanies a flower delivery"
+    },
+    {
+      "term": "Order Status",
+      "definition": "The current state of an order in the fulfillment process (pending, confirmed, processing, out for delivery, delivered, cancelled)"
+    },
+    {
+      "term": "Payment Gateway",
+      "definition": "A third-party service that processes credit card and other payment transactions securely"
+    },
+    {
+      "term": "Product",
+      "definition": "A flower arrangement or bouquet available for purchase in the catalog"
+    },
+    {
+      "term": "Review",
+      "definition": "Customer feedback including a rating and optional comment about a purchased product"
+    },
+    {
+      "term": "Stock Quantity",
+      "definition": "The number of units of a product currently available for sale"
+    },
+    {
+      "term": "Tokenization",
+      "definition": "The process of replacing sensitive payment card data with a non-sensitive equivalent for secure storage"
+    },
+    {
+      "term": "User Role",
+      "definition": "The type of user account (customer, driver, or admin) that determines access permissions"
+    },
+    {
+      "term": "Category",
+      "definition": "A classification grouping for flower products (e.g., roses, mixed bouquets, occasions)"
+    },
+    {
+      "term": "Notification Preference",
+      "definition": "User settings that control which types of notifications they receive and through which channels"
+    },
+    {
+      "term": "Average Rating",
+      "definition": "The mean of all customer ratings for a specific product"
+    }
+  ]
+}

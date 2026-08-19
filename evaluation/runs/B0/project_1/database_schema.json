@@ -1,0 +1,742 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "password_hash",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "role",
+          "type": "ENUM('customer','driver','admin')",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "email_verified",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One user has many orders",
+        "One user has many addresses",
+        "One user has many reviews",
+        "One user has one cart"
+      ]
+    },
+    {
+      "name": "addresses",
+      "columns": [
+        {
+          "name": "address_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "address_line1",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "address_line2",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "city",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "state",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "postal_code",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "country",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_default",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many addresses belong to one user (FK: user_id)",
+        "One address can be used in many orders"
+      ]
+    },
+    {
+      "name": "categories",
+      "columns": [
+        {
+          "name": "category_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "image_url",
+          "type": "VARCHAR(500)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One category has many products"
+      ]
+    },
+    {
+      "name": "products",
+      "columns": [
+        {
+          "name": "product_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "category_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(200)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "price",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "stock_quantity",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "image_url",
+          "type": "VARCHAR(500)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "average_rating",
+          "type": "DECIMAL(3,2)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many products belong to one category (FK: category_id)",
+        "One product has many order items",
+        "One product has many cart items",
+        "One product has many reviews"
+      ]
+    },
+    {
+      "name": "carts",
+      "columns": [
+        {
+          "name": "cart_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One cart belongs to one user (FK: user_id)",
+        "One cart has many cart items"
+      ]
+    },
+    {
+      "name": "cart_items",
+      "columns": [
+        {
+          "name": "cart_item_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "cart_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "added_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many cart items belong to one cart (FK: cart_id)",
+        "Many cart items reference one product (FK: product_id)"
+      ]
+    },
+    {
+      "name": "orders",
+      "columns": [
+        {
+          "name": "order_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "delivery_address_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "order_number",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "ENUM('pending','confirmed','processing','out_for_delivery','delivered','cancelled')",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "subtotal",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "tax",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "delivery_fee",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "total",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "delivery_date",
+          "type": "DATE",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "delivery_time_slot",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "gift_message",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "driver_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many orders belong to one user (FK: user_id)",
+        "Many orders reference one address (FK: delivery_address_id)",
+        "Many orders can be assigned to one driver (FK: driver_id)",
+        "One order has many order items",
+        "One order has one payment"
+      ]
+    },
+    {
+      "name": "order_items",
+      "columns": [
+        {
+          "name": "order_item_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "order_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "quantity",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "unit_price",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "subtotal",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many order items belong to one order (FK: order_id)",
+        "Many order items reference one product (FK: product_id)"
+      ]
+    },
+    {
+      "name": "payments",
+      "columns": [
+        {
+          "name": "payment_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "order_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "payment_method",
+          "type": "ENUM('credit_card','debit_card','paypal')",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "amount",
+          "type": "DECIMAL(10,2)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "ENUM('pending','completed','failed','refunded')",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "transaction_id",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "payment_gateway",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One payment belongs to one order (FK: order_id)"
+      ]
+    },
+    {
+      "name": "saved_payment_methods",
+      "columns": [
+        {
+          "name": "payment_method_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "payment_type",
+          "type": "ENUM('credit_card','debit_card')",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "card_last_four",
+          "type": "VARCHAR(4)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "card_brand",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "token",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_default",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many saved payment methods belong to one user (FK: user_id)"
+      ]
+    },
+    {
+      "name": "reviews",
+      "columns": [
+        {
+          "name": "review_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "order_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "rating",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "comment",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "image_url",
+          "type": "VARCHAR(500)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many reviews belong to one product (FK: product_id)",
+        "Many reviews belong to one user (FK: user_id)",
+        "Many reviews reference one order (FK: order_id)"
+      ]
+    },
+    {
+      "name": "notifications",
+      "columns": [
+        {
+          "name": "notification_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "type",
+          "type": "ENUM('order_confirmation','status_update','delivery','promotional')",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "title",
+          "type": "VARCHAR(200)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "message",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_read",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many notifications belong to one user (FK: user_id)"
+      ]
+    },
+    {
+      "name": "notification_preferences",
+      "columns": [
+        {
+          "name": "preference_id",
+          "type": "UUID",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "UUID",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "email_notifications",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "push_notifications",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "promotional_emails",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One notification preference belongs to one user (FK: user_id)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "documentation": [
+    "User Guide: Registration and getting started with UniNotes",
+    "User Guide: How to upload and organize study notes",
+    "User Guide: Searching and downloading notes effectively",
+    "User Guide: Creating and managing study groups",
+    "User Guide: Participating in group discussions",
+    "Administrator Guide: System configuration and maintenance",
+    "Administrator Guide: User management and moderation",
+    "Developer Guide: System architecture and component overview",
+    "Developer Guide: Database schema and relationships",
+    "Developer Guide: API documentation and endpoints",
+    "Developer Guide: Deployment and scaling guide",
+    "Security Guide: Authentication and authorization mechanisms",
+    "Security Guide: Data privacy and GDPR compliance",
+    "Troubleshooting Guide: Common issues and solutions",
+    "FAQ: Frequently asked questions for users"
+  ],
+  "baselines": [
+    "Requirements Specification v1.0 - approved baseline for all functional and non-functional requirements",
+    "Database Schema v1.0 - approved schema with all tables, columns, and relationships",
+    "UI/UX Design v1.0 - approved screen designs and component specifications",
+    "API Specification v1.0 - approved REST API endpoints and contracts",
+    "Test Plan v1.0 - approved testing strategy and test cases",
+    "Security Policy v1.0 - approved security requirements and implementation guidelines",
+    "Deployment Configuration v1.0 - approved infrastructure and deployment specifications"
+  ],
+  "glossary": [
+    {
+      "term": "Note",
+      "definition": "A digital study document uploaded by a student, including PDFs, DOCX, or TXT files containing course-related content"
+    },
+    {
+      "term": "Study Group",
+      "definition": "A collaborative space where students can discuss course topics, share resources, and coordinate study activities"
+    },
+    {
+      "term": "Tag",
+      "definition": "A keyword or label associated with a note to improve discoverability and organization"
+    },
+    {
+      "term": "Rating",
+      "definition": "A 1-5 star evaluation given by a user to indicate the quality or usefulness of a note"
+    },
+    {
+      "term": "Review",
+      "definition": "Written feedback provided by a user about a note, accompanying the numerical rating"
+    },
+    {
+      "term": "Download",
+      "definition": "The action of retrieving a note file from the platform to a user's device"
+    },
+    {
+      "term": "Group Admin",
+      "definition": "A user with elevated permissions in a study group, typically the creator, who can manage members and settings"
+    },
+    {
+      "term": "Group Member",
+      "definition": "A user who has joined a study group and can participate in discussions and access group resources"
+    },
+    {
+      "term": "Post",
+      "definition": "A message or discussion thread entry created by a group member in the group forum"
+    },
+    {
+      "term": "Reply",
+      "definition": "A response to an existing post in a group discussion, creating a threaded conversation"
+    },
+    {
+      "term": "Notification",
+      "definition": "An in-app alert informing users of relevant activities such as new group members, ratings, or posts"
+    },
+    {
+      "term": "Public Group",
+      "definition": "A study group visible to all users and joinable without invitation"
+    },
+    {
+      "term": "Private Group",
+      "definition": "A study group visible only to members and requiring an invitation to join"
+    },
+    {
+      "term": "Dashboard",
+      "definition": "The main landing page showing a personalized overview of a user's notes, groups, and activity"
+    },
+    {
+      "term": "Course",
+      "definition": "An academic class or subject that notes and groups are associated with for organization"
+    },
+    {
+      "term": "University Email",
+      "definition": "An email address issued by an educational institution, required for platform registration to verify student status"
+    },
+    {
+      "term": "Profile",
+      "definition": "A user's personal information page including name, major, year, bio, and statistics"
+    },
+    {
+      "term": "Upload",
+      "definition": "The process of adding a new note file to the platform with associated metadata"
+    },
+    {
+      "term": "Preview",
+      "definition": "A limited view of note content before downloading, typically showing the first page or excerpt"
+    },
+    {
+      "term": "Attachment",
+      "definition": "A file added to a group discussion post to share additional resources with members"
+    }
+  ]
+}

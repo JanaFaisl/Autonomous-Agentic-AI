@@ -1,0 +1,18 @@
+{
+  "app_documentation": "The Hospital Appointment Booking System is a comprehensive mobile healthcare platform designed to streamline the appointment scheduling process between patients and doctors. Built for iOS and Android devices using React Native, Node.js, Express, and PostgreSQL, this application serves as a digital bridge connecting patients seeking medical care with healthcare providers. The system enables patients to register accounts, search for doctors by specialty and availability, book appointments at convenient times, and manage their healthcare schedules efficiently. Doctors can maintain their professional profiles, set availability schedules, manage specialties, and receive real-time notifications of new bookings. The platform features automated reminder systems using SendGrid for email and Twilio for SMS notifications, ensuring patients never miss appointments. With a clean, medical-professional aesthetic using calming blue color schemes and intuitive bottom-tab navigation, the app prioritizes user experience through features like real-time availability checking, appointment rescheduling, cancellation management, and comprehensive patient medical history tracking. The system supports three user roles\u2014patients, doctors, and administrators\u2014each with tailored interfaces and functionalities to optimize the healthcare appointment experience.",
+  "baseline_artifacts": [
+    "Requirements_v1_Hospital_Appointment_Booking_System",
+    "Design_v1_Mobile_UI_Specifications",
+    "Database_Schema_v1_PostgreSQL",
+    "Development_Cycle_Plan_v1_MVP",
+    "Technical_Architecture_v1_React_Node_PostgreSQL"
+  ],
+  "glossary": {
+    "Appointment Slot": "A specific time period defined by a doctor's availability schedule during which a patient can book an appointment. Slots are derived from the doctor_availability table based on day_of_week, start_time, end_time, and slot_duration_minutes.",
+    "JWT Authentication": "JSON Web Token authentication mechanism used to securely authenticate users and maintain session state across the application. Tokens are generated upon successful login and must be included in API requests to access protected resources.",
+    "Specialty": "A medical field or area of expertise that a doctor practices, such as Cardiology, Pediatrics, or Dermatology. Doctors can have multiple specialties through the doctor_specialties junction table, with one marked as primary.",
+    "Notification Channel": "The medium through which appointment reminders and updates are delivered to users, including email (via SendGrid), SMS (via Twilio), and push notifications. Users can configure their preferred channels in notification preferences.",
+    "Baseline Artifact": "A versioned snapshot of project documentation including requirements, design specifications, database schemas, and development plans that serves as a reference point for project governance and change management.",
+    "Bottom Sheet Modal": "A mobile UI component that slides up from the bottom of the screen to display contextual information or actions, such as filters, confirmations, or detailed forms. It features rounded top corners, a drag handle, and can be dismissed by swiping down or tapping outside."
+  }
+}

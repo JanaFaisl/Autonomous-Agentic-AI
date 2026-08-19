@@ -30,10 +30,15 @@ _REAL_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 # Skip only when no key is set or it's the test stub used in conftest.py
 _IS_REAL_KEY = bool(_REAL_KEY) and _REAL_KEY != "test-api-key-12345"
 
-pytestmark = pytest.mark.skipif(
-    not _IS_REAL_KEY,
-    reason="ANTHROPIC_API_KEY is not set to a real key — skipping live LLM call",
-)
+pytestmark = [
+    pytest.mark.skipif(
+        not _IS_REAL_KEY,
+        reason="ANTHROPIC_API_KEY is not set to a real key — skipping live LLM call",
+    ),
+    # Excluded from a plain `pytest` run by pytest.ini so a real key in .env
+    # cannot silently bill 5 live calls. Run with: pytest -m slow
+    pytest.mark.slow,
+]
 
 
 PROJECTS = [

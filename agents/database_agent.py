@@ -10,6 +10,7 @@ from core.constants import (
 from core.models import PYDANTIC_AVAILABLE, DatabaseSchemaModel
 from core.llm import CREWAI_AVAILABLE, Agent, Task, Crew, Process, get_llm
 from core.utils import parse_json_from_text, extract_crewai_output, create_error_response
+from core.prompts import build_database_prompt
 from utils.io_suppression import suppress_stderr, suppress_io
 
 # SQL type mappings for DDL generation
@@ -65,9 +66,25 @@ _SQLITE_TYPE_MAP = {
 
 
 def _map_type(raw_type: str, dialect: str) -> str:
+    """Map a schema column type onto a type the target dialect accepts.
+
+    Unrecognised types must NOT pass through verbatim. An LLM legitimately emits
+    dialect-specific types it has seen elsewhere -- ENUM('A','B') is valid MySQL
+    but not SQLite -- and echoing them produces DDL that fails at execution.
+    Anything parameterised or unknown degrades to TEXT, which every dialect
+    accepts and which preserves the value; only bare, already-safe identifiers
+    are passed through uppercased.
+    """
     key = raw_type.lower().split("(")[0].strip()
     mapping = _PG_TYPE_MAP if dialect == "postgresql" else _SQLITE_TYPE_MAP
-    return mapping.get(key, raw_type.upper())
+    if key in mapping:
+        return mapping[key]
+    # Parameterised unknown (ENUM(...), SET(...), NUMERIC(10,2) in SQLite):
+    # the argument list is what breaks execution, so drop to TEXT.
+    if "(" in raw_type:
+        return "TEXT"
+    # Bare unknown word: safe to emit only if it is a plain identifier.
+    return raw_type.upper() if raw_type.strip().isalnum() else "TEXT"
 
 
 # Cross-dialect DEFAULT expression translation. Keys are lowercased, whitespace-stripped.
@@ -446,29 +463,7 @@ Return the corrected JSON with the same structure: tables (name, purpose, column
             return create_error_response(ERROR_NO_API_KEY, SOLUTION_ADD_API_KEY)
 
         req_json = json.dumps(requirements, indent=2)
-        prompt = f"""From these requirements, produce a complete database schema. Rules:
-- Use snake_case for all table and column names.
-- Every table must have exactly one primary key column.
-- Explicitly define foreign key columns (e.g. user_id) and list them in the relationships array with fk/ref fields.
-- Add junction tables for many-to-many relationships.
-- Output ONLY a flat JSON object (no wrapper key) with no markdown.
-
-REQUIREMENTS:
-{req_json}
-
-Output JSON structure exactly:
-{{
-  "tables": [
-    {{
-      "name": "table_name",
-      "purpose": "...",
-      "columns": [{{"name": "id", "type": "uuid", "pk": true, "nullable": false, "unique": false, "default": null, "notes": null}}],
-      "indexes": ["col_name"],
-      "relationships": [{{"type": "many-to-one", "to_table": "other", "fk": "other_id", "ref": "id", "notes": null}}]
-    }}
-  ],
-  "assumptions": ["..."]
-}}"""
+        prompt = build_database_prompt(req_json)
 
         def _process(result: Dict[str, Any]) -> Dict[str, Any]:
             if "error" in result:

@@ -1,0 +1,216 @@
+{
+  "project_name": "Simple Task Manager",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Task Creation",
+      "description": "Users can create new tasks with title and description.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can create a new task so that I can track my work.",
+        "As a user, I can add a description to my task so that I remember details."
+      ],
+      "acceptance_criteria": [
+        "Given I am on the task page, When I click create and enter a title, Then a new task is saved.",
+        "Given I create a task, When I submit without a title, Then I see an error message."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Task Completion",
+      "description": "Users can mark tasks as complete to track progress.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can mark a task as complete so that I know it is done.",
+        "As a user, I can see completed tasks separately so that I can review my accomplishments."
+      ],
+      "acceptance_criteria": [
+        "Given I have an active task, When I click complete, Then the task is marked as completed.",
+        "Given a task is completed, When I view my tasks, Then it appears in the completed section."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Task Deletion",
+      "description": "Users can permanently delete tasks they no longer need.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a user, I can delete a task so that I can remove unwanted items.",
+        "As a user, I can confirm deletion so that I do not accidentally remove tasks."
+      ],
+      "acceptance_criteria": [
+        "Given I select a task, When I click delete and confirm, Then the task is permanently removed.",
+        "Given I click delete, When I cancel the confirmation, Then the task remains in the list."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Task Listing",
+      "description": "Users can view all their tasks in an organized list.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can view all my tasks so that I can see what needs to be done.",
+        "As a user, I can filter tasks by status so that I can focus on active or completed items."
+      ],
+      "acceptance_criteria": [
+        "Given I have tasks, When I open the app, Then I see a list of all my tasks.",
+        "Given I apply a filter, When I select active tasks, Then only incomplete tasks are displayed."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "User"
+  ],
+  "database_schema": {
+    "tables": [
+      {
+        "name": "users",
+        "purpose": "Store user account information",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "username",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Unique username"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "User email address"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Account creation timestamp"
+          }
+        ],
+        "indexes": [
+          "email",
+          "username"
+        ],
+        "relationships": []
+      },
+      {
+        "name": "tasks",
+        "purpose": "Store task information for users",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users table"
+          },
+          {
+            "name": "title",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Task title"
+          },
+          {
+            "name": "description",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Task description"
+          },
+          {
+            "name": "is_completed",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "false",
+            "notes": "Task completion status"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Task creation timestamp"
+          },
+          {
+            "name": "completed_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Task completion timestamp"
+          }
+        ],
+        "indexes": [
+          "user_id",
+          "is_completed"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each task belongs to one user"
+          }
+        ]
+      }
+    ],
+    "assumptions": [
+      "Users must be authenticated to access tasks",
+      "Soft delete not implemented - tasks are permanently deleted",
+      "Tasks are sorted by creation date by default",
+      "No task priority or due date fields in initial version"
+    ]
+  },
+  "model_used": "CrewAI",
+  "timestamp": "2026-08-17 11:37:38"
+}

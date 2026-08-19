@@ -1,0 +1,172 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Stores user account information for authentication and task ownership",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key for users table"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "User email address for login"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Hashed password for authentication"
+        },
+        {
+          "name": "full_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "User's full name"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Timestamp when user account was created"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Timestamp when user account was last updated"
+        }
+      ],
+      "indexes": [
+        "email"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "tasks",
+      "purpose": "Stores task information including title, description, completion status, and ownership",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key for tasks table"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Foreign key referencing the user who owns this task"
+        },
+        {
+          "name": "title",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Task title - required field"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Detailed description of the task"
+        },
+        {
+          "name": "is_completed",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Flag indicating whether task is completed"
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Timestamp when task was marked as completed"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Timestamp when task was created"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Timestamp when task was last updated"
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "is_completed",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each task belongs to one user"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Each user can have multiple tasks (one-to-many relationship)",
+    "Tasks are soft-deleted or hard-deleted based on F3 requirements - schema supports hard deletion",
+    "User authentication and session management will be handled at application layer",
+    "Task filtering by status (active/completed) is supported via is_completed boolean flag",
+    "The system supports a single user role as specified in requirements",
+    "Email is used as the unique identifier for user login",
+    "Timestamps are stored in UTC and timezone conversion handled at application layer",
+    "Task completion tracking includes both a boolean flag and timestamp for audit purposes",
+    "No task priority, due date, or category fields included as not specified in requirements",
+    "No task sharing or collaboration features as only single user role exists"
+  ]
+}

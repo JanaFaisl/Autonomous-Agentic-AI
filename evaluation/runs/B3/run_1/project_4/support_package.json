@@ -1,0 +1,17 @@
+{
+  "app_documentation": "UniStudy is a comprehensive university student study platform designed to facilitate collaborative learning and knowledge sharing among students. The application serves as a centralized hub where students can upload, browse, and download study notes shared by their peers, create and join subject-specific study groups for collaborative learning, and stay informed about new educational resources through an intelligent notification system. The platform features a modern, mobile-responsive interface built with React and Node.js, supporting secure user authentication, file management through AWS S3, and a robust rating system to ensure content quality. Intended users include university students seeking to enhance their learning experience through peer collaboration, share their knowledge with classmates, and access high-quality study materials across various subjects. The platform also supports admin and moderator roles for content governance and community management.",
+  "baseline_artifacts": [
+    "Requirements_v1_UniStudy_Features_and_Technical_Specifications",
+    "Design_v1_UniStudy_UI_UX_Design_System",
+    "Database_Schema_v1_PostgreSQL_Data_Model",
+    "Cycle_Plan_v1_MVP_Execution_Roadmap"
+  ],
+  "glossary": {
+    "Study Notes": "Digital educational materials (PDFs, documents) uploaded by students and stored in AWS S3, categorized by subject and available for download by other students on the platform",
+    "Study Group": "A collaborative learning space where students can join together based on specific subjects to participate in discussions, share resources, and engage in group activities",
+    "Rating System": "A quality assurance mechanism allowing students to rate study notes on a scale of 1-5 stars and provide written reviews to help others identify high-quality content",
+    "Subject Subscription": "A feature enabling students to follow specific academic subjects and receive notifications when new study notes are uploaded in those subjects",
+    "JWT Authentication": "JSON Web Token-based security system used to securely authenticate users and manage session tokens for accessing protected platform features",
+    "Notification System": "An automated alert mechanism that informs students about new notes in subscribed subjects, group activities, and other relevant platform updates"
+  }
+}

@@ -1,0 +1,803 @@
+{
+  "design_overview": "A modern, user-friendly flower delivery mobile application designed with clean visual hierarchy, intuitive navigation, and seamless user flows. The design prioritizes product discovery through rich imagery, simplified checkout processes, and real-time order tracking. The interface follows native iOS/Android patterns with bottom navigation for primary actions, card-based layouts for content organization, and clear call-to-action buttons. The color scheme uses soft, nature-inspired tones that evoke freshness and elegance while maintaining excellent readability and accessibility.",
+  "color_scheme": {
+    "primary": "#E91E63",
+    "secondary": "#4CAF50",
+    "accent": "#FF6F00",
+    "surface": "#FFFFFF",
+    "background": "#F5F5F5",
+    "text_primary": "#212121",
+    "error": "#D32F2F",
+    "success": "#388E3C",
+    "warning": "#F57C00"
+  },
+  "typography": {
+    "font_family": "SF Pro Display, Roboto",
+    "heading_font": "SF Pro Display Bold, Roboto Bold",
+    "body_font": "SF Pro Text, Roboto Regular",
+    "sizes": {
+      "small": "12px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "700"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Home",
+      "Categories",
+      "Orders",
+      "Profile"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Home Screen",
+      "purpose": "Primary landing screen showcasing featured flowers, categories, and quick access to main features",
+      "key_components": [
+        {
+          "name": "Top Header Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "White background with subtle shadow, contains app logo on left and notification bell icon on right, height 60px",
+          "interaction": "Bell icon navigates to notifications screen",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Bar",
+          "type": "Input",
+          "position": "top",
+          "size": "medium",
+          "styling": "Light gray background (#F0F0F0), rounded corners (24px), placeholder text 'Search flowers...', magnifying glass icon on left, height 48px, margin 16px",
+          "interaction": "Tapping opens search screen with keyboard and recent searches",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Featured Banner",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Full-width card with rounded corners (16px), gradient overlay from transparent to dark at bottom, height 200px, contains promotional text 'Spring Collection' in white bold text",
+          "interaction": "Tapping navigates to featured collection detail screen",
+          "icon": null,
+          "has_image": true,
+          "image_type": "background"
+        },
+        {
+          "name": "Categories Section Header",
+          "type": "Header",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold text 'Shop by Category', 20px font size, dark gray color, padding 16px horizontal",
+          "interaction": "Non-interactive label",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Category Cards Horizontal Scroll",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Horizontal scrollable list of 6 category cards, each card 120px wide with rounded corners (12px), white background, contains category image (80x80px) and category name below, spacing 12px between cards",
+          "interaction": "Tapping any category card navigates to category detail screen showing filtered flowers",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Popular Flowers Section Header",
+          "type": "Header",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold text 'Popular This Week', 20px font size, dark gray color, padding 16px horizontal, includes 'See All' link on right in primary color",
+          "interaction": "See All link navigates to full popular flowers list",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Popular Flowers Grid",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "2-column grid of flower product cards, each card has white background, rounded corners (12px), shadow, contains flower image (160x160px), flower name, price in bold, rating stars, spacing 12px",
+          "interaction": "Tapping any flower card navigates to flower detail screen",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Quick Add to Cart Button",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Small circular button with plus icon, positioned at bottom-right of each flower card, primary color background, white icon, 36px diameter, subtle shadow",
+          "interaction": "Tapping adds flower to cart with quantity 1 and shows brief success toast message",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation Bar",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Fixed bottom bar, white background, height 64px, contains 4 navigation items with icons and labels: Home (active - primary color), Categories, Orders, Profile, subtle top border",
+          "interaction": "Tapping each item navigates to respective screen, active item highlighted in primary color",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Floating Cart Badge",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Floating action button, circular, 56px diameter, primary color background, white shopping bag icon, positioned above bottom nav on right side, shows cart item count badge in accent color",
+          "interaction": "Tapping navigates to shopping cart screen",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Entry point of app after login. Users can search, browse categories, view popular flowers, or access cart. Navigation to Categories, Orders, or Profile screens via bottom nav."
+    },
+    {
+      "name": "Flower Detail Screen",
+      "purpose": "Display comprehensive information about a specific flower including images, description, price, reviews, and purchase options",
+      "key_components": [
+        {
+          "name": "Back Navigation Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Transparent background overlaying image, back arrow on left, share and heart icons on right, white icons with subtle shadow for visibility, height 56px",
+          "interaction": "Back arrow returns to previous screen, heart icon toggles favorite status, share icon opens share sheet",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Flower Image Gallery",
+          "type": "Image",
+          "position": "top",
+          "size": "large",
+          "styling": "Full-width image carousel, height 400px, swipeable horizontally, page indicator dots at bottom, high-quality product images with white or subtle background",
+          "interaction": "Swipe left/right to view multiple flower images, tap to view fullscreen gallery",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Flower Name and Price Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded top corners (24px), negative margin to overlap image, contains flower name in bold 24px, category tag in small gray text, price in bold 28px primary color on right",
+          "interaction": "Non-interactive information display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Rating and Reviews Summary",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "Horizontal layout with star rating (4.5 stars in gold), review count '(127 reviews)' in gray, 'See all' link in primary color on right, padding 16px",
+          "interaction": "Tapping navigates to reviews screen showing all customer reviews",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Section",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White background, padding 16px, 'Description' header in bold, followed by 3-4 lines of descriptive text in gray, 'Read more' link if text is truncated",
+          "interaction": "Read more expands full description text inline",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Availability Status",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "Light green background badge with checkmark icon, text 'In Stock - 23 available', rounded corners (8px), padding 8px 12px",
+          "interaction": "Non-interactive status indicator",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quantity Selector",
+          "type": "Input",
+          "position": "center",
+          "size": "small",
+          "styling": "Horizontal layout with minus button, quantity number in center (default 1), plus button, each button 40px square with light gray border, rounded corners (8px)",
+          "interaction": "Minus/plus buttons decrease/increase quantity, minimum 1, maximum based on stock",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Add to Cart Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width primary color button, white text 'Add to Cart - $45.99', height 56px, rounded corners (12px), bold font, positioned above bottom safe area",
+          "interaction": "Tapping adds selected quantity to cart, shows success animation, and displays cart preview modal",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Similar Flowers Section",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Section header 'You May Also Like' in bold, horizontal scrollable list of 4-5 flower cards similar to home screen style, each 140px wide",
+          "interaction": "Tapping any similar flower card navigates to that flower's detail screen",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        }
+      ],
+      "user_flow": "Accessed from Home screen flower cards or category listings. Users view details, adjust quantity, add to cart, or navigate back. Can also view reviews or similar products."
+    },
+    {
+      "name": "Shopping Cart Screen",
+      "purpose": "Display cart contents, allow quantity modifications, show pricing breakdown, and proceed to checkout",
+      "key_components": [
+        {
+          "name": "Cart Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White background, back arrow on left, 'My Cart' title in center bold 20px, 'Clear All' text button on right in gray, height 56px, bottom border",
+          "interaction": "Back arrow returns to previous screen, Clear All shows confirmation dialog then empties cart",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cart Items List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Vertical scrollable list of cart item cards, each card has white background, rounded corners (12px), contains flower thumbnail (80x80px), name, price, quantity selector, remove icon, spacing 12px between cards",
+          "interaction": "Quantity selector adjusts item quantity, trash icon removes item with confirmation, tapping card navigates to flower detail",
+          "icon": "trash",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Empty Cart State",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Centered content when cart is empty, contains illustration of empty shopping bag, 'Your cart is empty' heading, 'Start shopping' secondary button, light gray background",
+          "interaction": "Start shopping button navigates to home screen",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Promo Code Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with light gray border, contains text input 'Enter promo code', 'Apply' button on right in primary color, rounded corners (12px), padding 12px",
+          "interaction": "User enters code, tapping Apply validates and applies discount if valid, shows error message if invalid",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Price Breakdown Card",
+          "type": "Card",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White card with subtle shadow, contains rows for Subtotal, Delivery Fee, Tax, and Total (bold, larger font), each row has label on left and amount on right, padding 16px, rounded top corners (16px)",
+          "interaction": "Non-interactive pricing summary",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Proceed to Checkout Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width primary color button, white text 'Proceed to Checkout', height 56px, rounded corners (12px), bold font, positioned at bottom with safe area padding",
+          "interaction": "Tapping navigates to checkout screen with delivery address selection",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Continue Shopping Link",
+          "type": "Button",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Text button below checkout button, 'Continue Shopping' in primary color, no background, padding 12px",
+          "interaction": "Tapping returns to home screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cart Item Count Badge",
+          "type": "Card",
+          "position": "top",
+          "size": "small",
+          "styling": "Small badge below header showing '3 items in cart' in gray text, padding 8px",
+          "interaction": "Non-interactive item count display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from floating cart button on home screen or after adding items. Users review cart, modify quantities, apply promo codes, and proceed to checkout or continue shopping."
+    },
+    {
+      "name": "Checkout Screen",
+      "purpose": "Collect delivery information, select payment method, review order, and complete purchase",
+      "key_components": [
+        {
+          "name": "Checkout Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White background, back arrow on left, 'Checkout' title in center bold 20px, progress indicator '2 of 3' on right, height 56px, bottom border",
+          "interaction": "Back arrow returns to cart screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delivery Address Card",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "White card with rounded corners (12px), 'Delivery Address' header with edit icon, displays selected address (name, street, city, postal code), 'Change' button in primary color on right, padding 16px",
+          "interaction": "Tapping Change or edit icon opens address selection modal showing saved addresses and add new option",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delivery Date Selector",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners (12px), 'Delivery Date' label, shows selected date with calendar icon, dropdown arrow on right, padding 16px",
+          "interaction": "Tapping opens date picker modal showing available delivery dates (next 7 days), user selects preferred date",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Special Instructions Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners (12px), 'Special Instructions (Optional)' label, multiline text input with placeholder 'e.g., Leave at door, Ring doorbell', light gray border, padding 16px",
+          "interaction": "User can type delivery instructions, character limit 200",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Payment Method Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners (12px), 'Payment Method' header, displays selected payment method with card icon and last 4 digits, 'Change' button in primary color, padding 16px",
+          "interaction": "Tapping Change opens payment method selection modal with saved cards and add new card option",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Order Summary Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners (12px), 'Order Summary' header, shows item count, subtotal, delivery fee, tax, total in bold, collapsible to show/hide item details, padding 16px",
+          "interaction": "Tapping header toggles expansion to show individual cart items with thumbnails",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Terms Checkbox",
+          "type": "Input",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Checkbox with label 'I agree to Terms & Conditions and Privacy Policy', links in primary color, padding 16px",
+          "interaction": "User must check to enable place order button, tapping links opens respective policy screens",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Place Order Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width primary color button, white text 'Place Order - $52.48', height 56px, rounded corners (12px), bold font, disabled state (gray) until terms checked",
+          "interaction": "Tapping processes payment via Stripe, shows loading indicator, navigates to order confirmation screen on success",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Secure Payment Badge",
+          "type": "Card",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Small badge with lock icon and 'Secure Payment' text in gray, centered below place order button",
+          "interaction": "Non-interactive security indicator",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from cart screen after proceeding to checkout. Users select/confirm delivery address, choose delivery date, add instructions, select payment method, review order, and place order. Success navigates to order confirmation."
+    },
+    {
+      "name": "Order Tracking Screen",
+      "purpose": "Display order status, delivery progress, and estimated arrival time with real-time updates",
+      "key_components": [
+        {
+          "name": "Tracking Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White background, back arrow on left, 'Order Tracking' title in center bold 20px, share icon on right, height 56px, bottom border",
+          "interaction": "Back arrow returns to orders list, share icon opens share sheet with tracking link",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Order Number Card",
+          "type": "Card",
+          "position": "top",
+          "size": "small",
+          "styling": "Light background card, 'Order #FL-2024-0123' in bold, 'Placed on Mar 15, 2024' in gray text below, padding 16px, rounded corners (12px)",
+          "interaction": "Non-interactive order identifier",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delivery Status Timeline",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with vertical timeline showing 5 stages: Order Confirmed (complete), Preparing (complete), Out for Delivery (active with pulsing animation), Delivered (pending), each stage has icon, title, timestamp, connecting line between stages, active stage in primary color",
+          "interaction": "Non-interactive visual progress indicator, updates in real-time",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Estimated Arrival Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Highlighted card with light primary color background, 'Estimated Arrival' label, large bold time 'Today, 3:30 PM - 4:00 PM', small map thumbnail showing delivery route, padding 16px, rounded corners (12px)",
+          "interaction": "Tapping opens full-screen map view with live driver location (if available)",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Delivery Address Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with rounded corners (12px), 'Delivering to' label, full address displayed, small location pin icon, padding 16px",
+          "interaction": "Non-interactive address display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Order Items Summary",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with 'Order Items (3)' header, collapsible list showing flower thumbnails, names, quantities, expandable to show full details, padding 16px, rounded corners (12px)",
+          "interaction": "Tapping header toggles expansion to show/hide full item list with images",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Contact Support Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Secondary button with light gray background, primary color text 'Contact Support', height 48px, rounded corners (12px), full width with margin",
+          "interaction": "Tapping opens support options modal (call, email, chat)",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Order Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Text button in error color 'Cancel Order', only visible if order status is pending or confirmed, padding 16px",
+          "interaction": "Tapping shows confirmation dialog, if confirmed cancels order and updates status",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Update Notification",
+          "type": "Card",
+          "position": "top",
+          "size": "small",
+          "styling": "Animated banner appearing at top when status changes, success color background, white text 'Your order is out for delivery!', auto-dismisses after 3 seconds",
+          "interaction": "Auto-dismisses or user can swipe up to dismiss",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from orders list or order confirmation screen. Users view real-time delivery status, estimated arrival, and order details. Can contact support or cancel order if eligible. Updates automatically as order progresses."
+    },
+    {
+      "name": "Profile Screen",
+      "purpose": "Manage user account, view order history, access settings, and manage saved addresses and payment methods",
+      "key_components": [
+        {
+          "name": "Profile Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Gradient background (primary to secondary color), contains circular user avatar (80px), user name in white bold 24px, email in white 14px, edit profile button, height 200px",
+          "interaction": "Edit profile button navigates to profile edit screen",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Quick Stats Cards",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "Horizontal row of 3 small cards with white background, rounded corners (12px), each showing icon, number, and label: Total Orders (23), Favorites (12), Rewards Points (450), spacing 8px",
+          "interaction": "Tapping each card navigates to respective detailed screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "My Orders Menu Item",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with left icon (package), 'My Orders' text, 'View order history' subtitle in gray, right chevron, padding 16px, bottom border",
+          "interaction": "Tapping navigates to orders list screen showing all past and current orders",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Saved Addresses Menu Item",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with left icon (location pin), 'Saved Addresses' text, '3 addresses' subtitle in gray, right chevron, padding 16px, bottom border",
+          "interaction": "Tapping navigates to addresses management screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Payment Methods Menu Item",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with left icon (credit card), 'Payment Methods' text, '2 cards saved' subtitle in gray, right chevron, padding 16px, bottom border",
+          "interaction": "Tapping navigates to payment methods management screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notifications Settings Menu Item",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with left icon (bell), 'Notifications' text, 'Manage preferences' subtitle in gray, right chevron, padding 16px, bottom border",
+          "interaction": "Tapping navigates to notification preferences screen",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Help & Support Menu Item",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with left icon (question mark), 'Help & Support' text, 'FAQs and contact' subtitle in gray, right chevron, padding 16px, bottom border",
+          "interaction": "Tapping navigates to help center screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Settings Menu Item",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card with left icon (gear), 'Settings' text, 'App preferences' subtitle in gray, right chevron, padding 16px, bottom border",
+          "interaction": "Tapping navigates to settings screen",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Logout Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Full-width button with light error color background, error color text 'Logout', height 48px, rounded corners (12px), margin 16px",
+          "interaction": "Tapping shows confirmation dialog, if confirmed logs out user and returns to login screen",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "App Version Footer",
+          "type": "Card",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Centered gray text 'Version 1.2.0', padding 16px",
+          "interaction": "Non-interactive version display",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "user_flow": "Accessed from bottom navigation. Users view profile info, access order history, manage addresses and payment methods, adjust settings, get help, or logout. Each menu item navigates to detailed management screens."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": null,
+      "size": "large",
+      "styling": "Primary color background (#E91E63), white text, height 56px, rounded corners 12px, bold font weight, full width or auto width based on context, subtle shadow on press",
+      "interaction": "Tappable, shows pressed state with slight scale down, triggers primary actions",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": null,
+      "size": "medium",
+      "styling": "Light gray background (#F0F0F0), primary color text, height 48px, rounded corners 12px, medium font weight, border optional",
+      "interaction": "Tappable, shows pressed state, triggers secondary actions",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Product Card",
+      "type": "Card",
+      "position": null,
+      "size": "medium",
+      "styling": "White background, rounded corners 12px, subtle shadow, contains product image (square aspect ratio), product name (2 lines max), price in bold, rating stars, optional quick action button",
+      "interaction": "Tappable entire card navigates to product detail, quick action button adds to cart",
+      "icon": null,
+      "has_image": true,
+      "image_type": "product"
+    },
+    {
+      "name": "Text Input Field",
+      "type": "Input",
+      "position": null,
+      "size": "medium",
+      "styling": "Light gray background (#F5F5F5), dark text, height 48px, rounded corners 8px, padding 12px horizontal, placeholder in gray, focus state shows primary color border",
+      "interaction": "Tappable to focus and show keyboard, supports text entry, validation states (error shows red border)",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Icon Button",
+      "type": "Button",
+      "position": null,
+      "size": "small",
+      "styling": "Circular or square, 40px size, transparent or light background, icon in primary or gray color, optional badge for notifications",
+      "interaction": "Tappable, shows pressed state with background color change, triggers specific actions",
+      "icon": "bell",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Status Badge",
+      "type": "Card",
+      "position": null,
+      "size": "small",
+      "styling": "Pill-shaped badge with colored background based on status (success green, warning orange, error red, info blue), white or dark text, padding 6px 12px, rounded corners 16px",
+      "interaction": "Non-interactive status indicator",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Sheet Modal",
+      "type": "Modal",
+      "position": "bottom",
+      "size": "large",
+      "styling": "White background, rounded top corners 24px, slides up from bottom, drag handle at top, shadow overlay on background, max height 80% of screen",
+      "interaction": "Swipe down or tap outside to dismiss, contains scrollable content, used for selections and forms",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toast Notification",
+      "type": "Card",
+      "position": "top",
+      "size": "small",
+      "styling": "Colored background based on type (success, error, info), white text, rounded corners 8px, appears at top with slide-down animation, auto-dismisses after 3 seconds, icon on left",
+      "interaction": "Auto-dismisses or swipe up to dismiss manually",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Loading Spinner",
+      "type": "Card",
+      "position": "center",
+      "size": "medium",
+      "styling": "Circular spinner in primary color, centered on screen or within component, semi-transparent overlay when full-screen",
+      "interaction": "Non-interactive loading indicator",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Empty State",
+      "type": "Card",
+      "position": "center",
+      "size": "large",
+      "styling": "Centered content with illustration or icon, heading text, descriptive subtext in gray, optional action button, light background",
+      "interaction": "Action button navigates to relevant screen or triggers action to populate content",
+      "icon": null,
+      "has_image": true,
+      "image_type": "content"
+    }
+  ],
+  "responsive_design": "The application uses a mobile-first approach optimized for iOS and Android devices with screen sizes from 375px to 428px width. All components use relative sizing and flexible layouts to adapt to different screen sizes. Touch targets are minimum 44x44px for accessibility. The bottom navigation remains fixed and accessible on all screens. Cards and lists use full-width layouts with consistent horizontal padding (16px). Images maintain aspect ratios and use responsive sizing. The design supports both portrait and landscape orientations with appropriate layout adjustments.",
+  "accessibility": "All interactive elements meet WCAG 2.1 AA standards with minimum touch target sizes of 44x44px. Color contrast ratios exceed 4.5:1 for normal text and 3:1 for large text. All images include alt text descriptions. Form inputs have associated labels and error messages. Screen reader support is implemented for all navigation and content. Focus indicators are visible for keyboard navigation. Dynamic text sizing is supported up to 200% without loss of functionality. Color is not the only means of conveying information (icons and text labels accompany color coding).",
+  "animations": "Subtle animations enhance user experience without causing distraction. Screen transitions use slide animations (300ms duration with ease-in-out timing). Button presses show scale-down effect (0.95 scale, 100ms). Loading states use smooth spinner rotation. Toast notifications slide down from top (250ms). Bottom sheets slide up with spring animation. Card taps show subtle shadow increase. List items use staggered fade-in when loading (50ms delay between items). Pull-to-refresh uses elastic scroll animation. All animations respect system accessibility settings for reduced motion.",
+  "icons": "Icons follow a consistent outline style with 2px stroke weight. Primary icons used throughout: home (house outline), search (magnifying glass), user (person outline), settings (gear), bell (notification bell), bookmark (shopping bag for cart), heart (favorite/like), filter (funnel), plus (add), edit (pencil), trash (delete), share (share arrow). Icons are 24x24px by default, scaled to 20px for small contexts and 28px for large contexts. All icons use the primary color for active states and gray (#757575) for inactive states. Icons are always accompanied by labels for clarity except in space-constrained contexts where tooltips are provided."
+}

@@ -1,0 +1,525 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "password_hash",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "major",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "year",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "bio",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "profile_image_url",
+          "type": "VARCHAR(500)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "email_verified",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One user can upload many notes (one-to-many with notes)",
+        "One user can create many groups (one-to-many with groups)",
+        "One user can belong to many groups (many-to-many via group_members)",
+        "One user can create many posts (one-to-many with posts)",
+        "One user can create many ratings (one-to-many with ratings)"
+      ]
+    },
+    {
+      "name": "notes",
+      "columns": [
+        {
+          "name": "note_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "title",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "course_name",
+          "type": "VARCHAR(200)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "file_url",
+          "type": "VARCHAR(500)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "file_type",
+          "type": "VARCHAR(10)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "file_size",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "download_count",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "average_rating",
+          "type": "DECIMAL(3,2)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many notes belong to one user (foreign key: user_id references users.user_id)",
+        "One note can have many tags (one-to-many with note_tags)",
+        "One note can have many ratings (one-to-many with ratings)",
+        "One note can have many downloads (one-to-many with downloads)"
+      ]
+    },
+    {
+      "name": "tags",
+      "columns": [
+        {
+          "name": "tag_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "tag_name",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One tag can be associated with many notes (many-to-many via note_tags)"
+      ]
+    },
+    {
+      "name": "note_tags",
+      "columns": [
+        {
+          "name": "note_tag_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "note_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "tag_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many note_tags belong to one note (foreign key: note_id references notes.note_id)",
+        "Many note_tags belong to one tag (foreign key: tag_id references tags.tag_id)"
+      ]
+    },
+    {
+      "name": "groups",
+      "columns": [
+        {
+          "name": "group_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "creator_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "group_name",
+          "type": "VARCHAR(200)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "course_name",
+          "type": "VARCHAR(200)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_private",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "member_count",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many groups belong to one creator (foreign key: creator_id references users.user_id)",
+        "One group can have many members (one-to-many with group_members)",
+        "One group can have many posts (one-to-many with posts)"
+      ]
+    },
+    {
+      "name": "group_members",
+      "columns": [
+        {
+          "name": "membership_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "group_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "role",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "joined_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many memberships belong to one group (foreign key: group_id references groups.group_id)",
+        "Many memberships belong to one user (foreign key: user_id references users.user_id)"
+      ]
+    },
+    {
+      "name": "posts",
+      "columns": [
+        {
+          "name": "post_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "group_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "parent_post_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "content",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "attachment_url",
+          "type": "VARCHAR(500)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many posts belong to one group (foreign key: group_id references groups.group_id)",
+        "Many posts belong to one user (foreign key: user_id references users.user_id)",
+        "One post can have many replies (self-referencing: parent_post_id references posts.post_id)"
+      ]
+    },
+    {
+      "name": "ratings",
+      "columns": [
+        {
+          "name": "rating_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "note_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "rating_value",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "review_text",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many ratings belong to one note (foreign key: note_id references notes.note_id)",
+        "Many ratings belong to one user (foreign key: user_id references users.user_id)"
+      ]
+    },
+    {
+      "name": "downloads",
+      "columns": [
+        {
+          "name": "download_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "note_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "downloaded_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many downloads belong to one note (foreign key: note_id references notes.note_id)",
+        "Many downloads belong to one user (foreign key: user_id references users.user_id)"
+      ]
+    },
+    {
+      "name": "notifications",
+      "columns": [
+        {
+          "name": "notification_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "type",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "message",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "reference_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "is_read",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Many notifications belong to one user (foreign key: user_id references users.user_id)"
+      ]
+    }
+  ]
+}

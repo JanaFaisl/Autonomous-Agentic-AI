@@ -1,0 +1,108 @@
+{
+  "documentation": [
+    "System Architecture Document: Overview of application structure, technology stack, and component interactions",
+    "Database Schema Documentation: Detailed entity-relationship diagrams and table descriptions",
+    "API Documentation: RESTful endpoint specifications with request/response examples",
+    "User Manual: Step-by-step guide for all user roles (Admin, Manager, Clerk) with screenshots",
+    "Administrator Guide: System configuration, user management, and maintenance procedures",
+    "Installation Guide: Deployment instructions for various environments",
+    "Barcode Scanner Configuration Guide: Setup instructions for supported scanner hardware",
+    "Offline Mode User Guide: How to use the system without internet connectivity",
+    "Troubleshooting Guide: Common issues and resolution steps",
+    "Security Best Practices: Guidelines for secure system operation and data protection",
+    "Backup and Recovery Procedures: Instructions for data backup and restoration",
+    "Training Materials: Presentation slides and hands-on exercises for user onboarding"
+  ],
+  "baselines": [
+    "Requirements Specification v1.0: Approved feature set and acceptance criteria",
+    "Database Schema v1.0: Initial production database structure",
+    "UI/UX Design Mockups v1.0: Approved screen designs and user flows",
+    "Test Plan v1.0: Comprehensive testing strategy and test cases",
+    "Source Code Repository Tag v1.0: Initial production release codebase",
+    "Deployment Configuration v1.0: Production environment settings and parameters",
+    "Performance Benchmarks v1.0: Baseline metrics for response times and throughput",
+    "Security Audit Report v1.0: Initial security assessment and remediation status"
+  ],
+  "glossary": [
+    {
+      "term": "SKU",
+      "definition": "Stock Keeping Unit - a unique identifier for each distinct product in inventory"
+    },
+    {
+      "term": "Barcode",
+      "definition": "Machine-readable representation of data in visual format, typically printed on product labels"
+    },
+    {
+      "term": "UPC",
+      "definition": "Universal Product Code - a 12-digit barcode standard used primarily in North America"
+    },
+    {
+      "term": "EAN-13",
+      "definition": "European Article Number - a 13-digit barcode standard used internationally"
+    },
+    {
+      "term": "Code 128",
+      "definition": "A high-density barcode symbology capable of encoding full ASCII character set"
+    },
+    {
+      "term": "Reorder Point",
+      "definition": "The inventory level at which a new order should be placed to replenish stock"
+    },
+    {
+      "term": "Reorder Quantity",
+      "definition": "The standard amount to order when inventory reaches the reorder point"
+    },
+    {
+      "term": "Stock Adjustment",
+      "definition": "Manual correction to inventory quantities to account for discrepancies, damage, or loss"
+    },
+    {
+      "term": "Purchase Order (PO)",
+      "definition": "A commercial document issued to a supplier indicating products, quantities, and agreed prices"
+    },
+    {
+      "term": "Receiving",
+      "definition": "The process of accepting and recording incoming inventory shipments"
+    },
+    {
+      "term": "Transaction",
+      "definition": "A completed sales event consisting of one or more products sold to a customer"
+    },
+    {
+      "term": "Inventory Valuation",
+      "definition": "The total monetary value of all inventory on hand, calculated using cost prices"
+    },
+    {
+      "term": "Shrinkage",
+      "definition": "Loss of inventory due to theft, damage, miscounting, or other factors"
+    },
+    {
+      "term": "Point of Sale (POS)",
+      "definition": "The location and system where sales transactions are completed"
+    },
+    {
+      "term": "Offline Mode",
+      "definition": "System operation capability without active internet connection, with later synchronization"
+    },
+    {
+      "term": "Role-Based Access Control (RBAC)",
+      "definition": "Security approach restricting system access based on user roles and permissions"
+    },
+    {
+      "term": "Audit Log",
+      "definition": "Chronological record of system activities and user actions for security and compliance"
+    },
+    {
+      "term": "Low Stock Alert",
+      "definition": "Automated notification when product quantity falls below the defined reorder point"
+    },
+    {
+      "term": "Sales Velocity",
+      "definition": "The rate at which inventory is sold over a specific time period"
+    },
+    {
+      "term": "Batch Receiving",
+      "definition": "Processing multiple products or quantities in a single receiving operation"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "gate_decision": "FAIL",
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database Schema"
+  ],
+  "checklist": {
+    "requirements_complete": false,
+    "design_consistent": true,
+    "db_matches_requirements": false,
+    "nfr_defined": false
+  },
+  "issues": [
+    {
+      "severity": "High",
+      "item": "Requirements - Non-Functional Requirements",
+      "message": "No explicit non-functional requirements defined. Missing performance targets (response time, throughput), security standards (encryption, authentication methods), scalability metrics (concurrent users, data volume), availability SLAs, and disaster recovery requirements."
+    },
+    {
+      "severity": "High",
+      "item": "Database Schema - Missing saved_addresses table",
+      "message": "Requirements F3 mentions delivery address entry and Design Checkout screen shows address management, but no saved_addresses table exists. Users cannot save multiple addresses for reuse as implied by design 'Save this address for future orders' toggle."
+    },
+    {
+      "severity": "High",
+      "item": "Database Schema - Missing payment_methods table",
+      "message": "Design Checkout and Profile screens show saved payment methods management, but no payment_methods table exists to store customer payment information securely."
+    },
+    {
+      "severity": "High",
+      "item": "Database Schema - Missing notifications table",
+      "message": "Requirements F4 specifies email/SMS notifications for order status updates, but no notifications table exists to track notification history, preferences, or delivery status."
+    },
+    {
+      "severity": "High",
+      "item": "Database Schema - Missing delivery_time field in orders table",
+      "message": "Design Checkout screen shows delivery time slot selection (Morning/Afternoon/Evening), but orders table only has delivery_date without time slot information."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database Schema - Missing wishlist table",
+      "message": "Design Profile screen shows 'My Wishlist' with saved items count and Flower Detail screen has wishlist heart icon, but no wishlist/favorites table exists to persist this data."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database Schema - Missing promo_codes table",
+      "message": "Design Shopping Cart screen shows promo code input and validation, but no promo_codes or discounts table exists to manage promotional campaigns and validate codes."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database Schema - Missing order_addons table",
+      "message": "Design Shopping Cart shows recommended add-ons (Greeting Card, Chocolates, Vase), but no table exists to track these additional items separately from flowers in order_items."
+    },
+    {
+      "severity": "Medium",
+      "item": "Requirements - Delivery Driver role underspecified",
+      "message": "Delivery Driver is listed as a user role but has no associated features, user stories, or acceptance criteria. No requirements for driver app functionality, order assignment, or route management."
+    },
+    {
+      "severity": "Low",
+      "item": "Database Schema - Missing updated_at on users table",
+      "message": "Users table lacks updated_at timestamp for tracking profile modifications, while orders table has it. Inconsistent audit trail approach."
+    },
+    {
+      "severity": "Low",
+      "item": "Database Schema - Missing admin_audit_log table",
+      "message": "Requirements F5 mentions admin inventory management but no audit logging table exists to track admin actions for compliance and security."
+    },
+    {
+      "severity": "Low",
+      "item": "Database Schema - No soft delete support",
+      "message": "Tables lack deleted_at or is_deleted fields for soft delete functionality, which is best practice for data retention and recovery."
+    }
+  ],
+  "required_fixes": [
+    "Add explicit non-functional requirements section covering performance (e.g., page load < 2s, API response < 500ms), security (HTTPS, password hashing algorithm, PCI compliance), scalability (support 10,000+ concurrent users), and availability (99.9% uptime SLA)",
+    "Create saved_addresses table with columns: id, user_id, address_line1, address_line2, city, state, zip_code, country, is_default, created_at, updated_at",
+    "Create payment_methods table with columns: id, user_id, payment_type, last_four_digits, expiry_month, expiry_year, billing_address_id, is_default, stripe_payment_method_id, created_at, updated_at",
+    "Create notifications table with columns: id, user_id, order_id, notification_type, channel (email/sms), subject, message, sent_at, read_at, status",
+    "Add delivery_time_slot column to orders table with type VARCHAR(50) to store selected time slot (Morning/Afternoon/Evening)",
+    "Create wishlist table with columns: id, user_id, flower_id, added_at",
+    "Create promo_codes table with columns: id, code, description, discount_type (percentage/fixed), discount_value, min_order_amount, max_uses, uses_count, valid_from, valid_until, is_active",
+    "Create order_addons table with columns: id, order_id, addon_type, addon_name, price, quantity to track non-flower items like greeting cards and chocolates"
+  ],
+  "recommendations": [
+    "Add comprehensive non-functional requirements including specific metrics for performance (response times, throughput), security standards (OAuth 2.0, JWT tokens, encryption at rest and in transit), scalability targets (concurrent users, transaction volume), and compliance requirements (GDPR, PCI-DSS for payment data)",
+    "Expand Delivery Driver role requirements with dedicated features for driver mobile app including order acceptance, navigation/routing, delivery confirmation with photo proof, and earnings tracking",
+    "Implement database audit logging strategy with created_at, updated_at, and deleted_at timestamps on all tables, plus dedicated audit_logs table for tracking critical admin and system actions",
+    "Add database constraints and validation rules: CHECK constraints for positive prices and quantities, ENUM types for status fields to prevent invalid values, and proper CASCADE rules for foreign key deletions",
+    "Consider adding tables for advanced features: product_reviews (ratings and comments), delivery_zones (geographic service areas with pricing), inventory_history (stock movement tracking), and customer_support_tickets",
+    "Enhance security requirements to specify password complexity rules, session management, rate limiting, and API authentication mechanisms (API keys, OAuth scopes)",
+    "Add data retention and privacy policies to requirements addressing GDPR compliance, user data export/deletion capabilities, and PII handling procedures"
+  ]
+}

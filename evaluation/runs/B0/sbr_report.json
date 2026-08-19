@@ -1,0 +1,95 @@
+{
+  "condition": "B0",
+  "partial": false,
+  "stages_verified": [
+    "frontend_build",
+    "npm_install",
+    "render",
+    "schema_exec",
+    "server_start"
+  ],
+  "sbr_percent": 100.0,
+  "passed": 5,
+  "total": 5,
+  "runs_attempted": 5,
+  "excluded_environmental": 0,
+  "failure_causes": {},
+  "environmental_causes": {},
+  "results": [
+    {
+      "project_id": 1,
+      "condition": "B0",
+      "checks": {
+        "render": "pass",
+        "schema_exec": "pass",
+        "server_start": "pass",
+        "npm_install": "pass",
+        "frontend_build": "pass"
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "file_count": 42,
+      "build_dir": "/Users/janafaisl/Desktop/Agentic_AI/evaluation/builds/B0/project_1"
+    },
+    {
+      "project_id": 2,
+      "condition": "B0",
+      "checks": {
+        "render": "pass",
+        "schema_exec": "pass",
+        "server_start": "pass",
+        "npm_install": "pass",
+        "frontend_build": "pass"
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "file_count": 16,
+      "build_dir": "/Users/janafaisl/Desktop/Agentic_AI/evaluation/builds/B0/project_2"
+    },
+    {
+      "project_id": 3,
+      "condition": "B0",
+      "checks": {
+        "render": "pass",
+        "schema_exec": "pass",
+        "server_start": "pass",
+        "npm_install": "pass",
+        "frontend_build": "pass"
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "file_count": 38,
+      "build_dir": "/Users/janafaisl/Desktop/Agentic_AI/evaluation/builds/B0/project_3"
+    },
+    {
+      "project_id": 4,
+      "condition": "B0",
+      "checks": {
+        "render": "pass",
+        "schema_exec": "pass",
+        "server_start": "pass",
+        "npm_install": "pass",
+        "frontend_build": "pass"
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "file_count": 31,
+      "build_dir": "/Users/janafaisl/Desktop/Agentic_AI/evaluation/builds/B0/project_4"
+    },
+    {
+      "project_id": 5,
+      "condition": "B0",
+      "checks": {
+        "render": "pass",
+        "schema_exec": "pass",
+        "server_start": "pass",
+        "npm_install": "pass",
+        "frontend_build": "pass"
+      },
+      "failure_stage": null,
+      "failure_reason": null,
+      "file_count": 36,
+      "build_dir": "/Users/janafaisl/Desktop/Agentic_AI/evaluation/builds/B0/project_5"
+    }
+  ]
+}

@@ -1,0 +1,555 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "password_hash",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "role",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "last_login",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "One user can be one patient (one-to-one)",
+        "One user can be one doctor (one-to-one)",
+        "One user can be one admin (one-to-one)"
+      ]
+    },
+    {
+      "name": "patients",
+      "columns": [
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "date_of_birth",
+          "type": "DATE",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "address",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "emergency_contact",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "emergency_phone",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "notification_enabled",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Foreign key user_id references users(user_id)",
+        "One patient can have many appointments (one-to-many)"
+      ]
+    },
+    {
+      "name": "doctors",
+      "columns": [
+        {
+          "name": "doctor_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "specialty_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "qualifications",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "years_experience",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "bio",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "Foreign key user_id references users(user_id)",
+        "Foreign key specialty_id references specialties(specialty_id)",
+        "One doctor can have many appointments (one-to-many)",
+        "One doctor can have many availability schedules (one-to-many)"
+      ]
+    },
+    {
+      "name": "specialties",
+      "columns": [
+        {
+          "name": "specialty_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "One specialty can have many doctors (one-to-many)"
+      ]
+    },
+    {
+      "name": "appointments",
+      "columns": [
+        {
+          "name": "appointment_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "patient_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "doctor_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "appointment_date",
+          "type": "DATE",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "start_time",
+          "type": "TIME",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "end_time",
+          "type": "TIME",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "reason",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "cancelled_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "cancellation_reason",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "Foreign key patient_id references patients(patient_id)",
+        "Foreign key doctor_id references doctors(doctor_id)",
+        "One appointment can have one medical record (one-to-one)"
+      ]
+    },
+    {
+      "name": "doctor_availability",
+      "columns": [
+        {
+          "name": "availability_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "doctor_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "day_of_week",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "start_time",
+          "type": "TIME",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "end_time",
+          "type": "TIME",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Foreign key doctor_id references doctors(doctor_id)"
+      ]
+    },
+    {
+      "name": "blocked_slots",
+      "columns": [
+        {
+          "name": "blocked_slot_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "doctor_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "blocked_date",
+          "type": "DATE",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "start_time",
+          "type": "TIME",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "end_time",
+          "type": "TIME",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "reason",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "Foreign key doctor_id references doctors(doctor_id)"
+      ]
+    },
+    {
+      "name": "medical_records",
+      "columns": [
+        {
+          "name": "record_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "appointment_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "diagnosis",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "treatment",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "prescriptions",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Foreign key appointment_id references appointments(appointment_id)"
+      ]
+    },
+    {
+      "name": "notifications",
+      "columns": [
+        {
+          "name": "notification_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "appointment_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "type",
+          "type": "VARCHAR(50)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "message",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "sent_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "is_read",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": [
+        "Foreign key user_id references users(user_id)",
+        "Foreign key appointment_id references appointments(appointment_id)"
+      ]
+    },
+    {
+      "name": "audit_logs",
+      "columns": [
+        {
+          "name": "log_id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "action",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "table_name",
+          "type": "VARCHAR(100)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "record_id",
+          "type": "INTEGER",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "old_values",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "new_values",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "ip_address",
+          "type": "VARCHAR(45)",
+          "pk": false,
+          "nullable": true
+        }
+      ],
+      "relationships": [
+        "Foreign key user_id references users(user_id)"
+      ]
+    }
+  ]
+}

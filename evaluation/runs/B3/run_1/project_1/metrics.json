@@ -1,0 +1,25 @@
+{
+  "condition": "B3/run_1",
+  "project_id": 1,
+  "domain": "E-commerce / logistics",
+  "complexity": "Medium",
+  "user_input": "A flower delivery app where customers can browse flowers, place orders, and get them delivered to their door.",
+  "latency_s": {
+    "requirements": 15.59,
+    "database_schema": 70.69,
+    "design": 115.44,
+    "cycle_plan": 13.54,
+    "quality_report": 30.82,
+    "support_package": 23.54
+  },
+  "fallbacks": {
+    "prompt_tokens": 379968,
+    "completion_tokens": 114270,
+    "total_tokens": 494238,
+    "cached_prompt_tokens": 0,
+    "successful_requests": 36
+  },
+  "errors": {},
+  "total_latency_s": 269.63,
+  "completed": true
+}

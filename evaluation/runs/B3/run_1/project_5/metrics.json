@@ -1,0 +1,25 @@
+{
+  "condition": "B3/run_1",
+  "project_id": 5,
+  "domain": "Retail / operations",
+  "complexity": "High",
+  "user_input": "A real-time inventory management tool for small retail stores with barcode scanning.",
+  "latency_s": {
+    "requirements": 17.91,
+    "database_schema": 59.77,
+    "design": 156.52,
+    "cycle_plan": 29.59,
+    "quality_report": 56.29,
+    "support_package": 38.42
+  },
+  "fallbacks": {
+    "prompt_tokens": 388326,
+    "completion_tokens": 121302,
+    "total_tokens": 509628,
+    "cached_prompt_tokens": 0,
+    "successful_requests": 36
+  },
+  "errors": {},
+  "total_latency_s": 358.55,
+  "completed": true
+}

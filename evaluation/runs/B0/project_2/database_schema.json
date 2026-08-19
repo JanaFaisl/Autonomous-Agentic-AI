@@ -1,0 +1,52 @@
+{
+  "tables": [
+    {
+      "name": "tasks",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "pk": true,
+          "nullable": false
+        },
+        {
+          "name": "title",
+          "type": "VARCHAR(255)",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "is_completed",
+          "type": "BOOLEAN",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        },
+        {
+          "name": "completed_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "pk": false,
+          "nullable": false
+        }
+      ],
+      "relationships": []
+    }
+  ]
+}

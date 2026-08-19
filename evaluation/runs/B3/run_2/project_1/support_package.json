@@ -1,0 +1,18 @@
+{
+  "app_documentation": "The Flower Delivery App is a comprehensive mobile application designed to streamline the process of browsing, purchasing, and tracking flower deliveries. Built for both iOS and Android platforms using React Native, Node.js, and PostgreSQL, the app serves as a complete e-commerce solution for the floral industry. The application enables customers to browse an extensive catalog of flowers organized by categories, view detailed product information with high-quality images, add items to their shopping cart, and complete secure purchases through integrated Stripe payment processing. Customers can track their orders in real-time from preparation through delivery, receive automated notifications via SendGrid, and manage their delivery addresses and payment methods through a personalized profile. The app also includes an administrative interface that allows inventory managers to add new flowers, update pricing, manage stock levels, and monitor order fulfillment. With features like customer reviews, promotional code support, and delivery scheduling, the app provides a seamless end-to-end experience for both customers seeking beautiful floral arrangements and administrators managing the business operations. The intuitive design follows modern mobile UI patterns with bottom navigation, card-based layouts, and nature-inspired color schemes that create an elegant and user-friendly shopping experience.",
+  "baseline_artifacts": [
+    "Requirements_v1_FlowerDeliveryApp",
+    "Design_v1_UIUXSpecifications",
+    "DatabaseSchema_v1_PostgreSQL",
+    "CyclePlan_v1_MVPTasks",
+    "TechnicalArchitecture_v1_ReactNodeStripe"
+  ],
+  "glossary": {
+    "Flower Catalog": "A browsable collection of flower products organized by categories, displaying images, descriptions, prices, and availability status. Customers can filter and search through the catalog to find desired arrangements.",
+    "Shopping Cart": "A temporary storage mechanism that holds selected flower items with specified quantities before checkout. Users can modify quantities, remove items, and apply promotional codes within the cart.",
+    "Order Tracking": "A real-time monitoring system that displays the current status of a flower delivery order through various stages including confirmed, preparing, out for delivery, and delivered. Includes estimated arrival times and delivery driver information.",
+    "Stripe Payment Intent": "A Stripe API object that represents the customer's intent to pay and tracks the payment lifecycle from creation through completion. Used to securely process credit card transactions and handle payment confirmations.",
+    "Baseline Artifacts": "Version-controlled documentation and specifications that represent the approved state of project requirements, design, database schema, and implementation plans. These serve as reference points for project governance and change management.",
+    "Admin Inventory Management": "An administrative interface that allows authorized users to manage the flower catalog by adding new products, updating existing flower information, adjusting pricing, and controlling stock availability levels."
+  }
+}

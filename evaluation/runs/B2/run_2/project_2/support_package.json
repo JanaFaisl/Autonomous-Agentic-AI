@@ -1,0 +1,18 @@
+{
+  "app_documentation": "The Task Manager App is a modern web-based task management application designed to help users organize and track their daily tasks efficiently. Built with React on the frontend and Node.js/Express on the backend, the application provides a clean, intuitive interface for creating, managing, and completing tasks. The app features a mobile-first design approach with a card-based layout, bottom navigation for easy access, and visual distinction between active and completed tasks.\n\nThe application's core functionality centers around four primary features: Task Creation allows users to add new tasks with titles and optional descriptions, with built-in validation to ensure data quality. Task Completion enables users to mark tasks as done and view them separately in a dedicated Completed Tasks screen, helping users focus on pending work while maintaining a record of accomplishments. Task Deletion provides a safe way to remove unwanted tasks with confirmation dialogs to prevent accidental deletions. Task Listing presents all tasks in an organized, visually appealing format with empty state messaging and task counters for better user awareness.\n\nThe app is designed for individual users who need a straightforward, reliable tool for personal task management without the complexity of team collaboration features. The interface emphasizes accessibility with WCAG 2.1 AA compliance, including proper color contrast ratios, minimum touch target sizes of 44x44px, and support for screen readers and keyboard navigation. The responsive design adapts gracefully across different screen sizes while maintaining usability, and subtle animations enhance the user experience without causing distraction. User authentication ensures that each person's tasks remain private and secure, with all data stored in a PostgreSQL database that maintains referential integrity between users and their tasks.",
+  "baseline_artifacts": [
+    "Requirements_Specification_v1.0_2026-08-13",
+    "UI_UX_Design_Document_v1.0_2026-08-13",
+    "Database_Schema_Definition_v1.0_2026-08-13",
+    "Development_Cycle_Plan_v1.0_2026-08-13",
+    "Technical_Architecture_Specification_v1.0_2026-08-13"
+  ],
+  "glossary": {
+    "Task": "A discrete unit of work or activity that a user needs to complete, consisting of a required title, optional description, completion status, and timestamps for creation and completion.",
+    "Completion Status": "A boolean flag (is_completed) that indicates whether a task has been finished, which determines whether the task appears in the active task list or the completed tasks view.",
+    "Floating Action Button (FAB)": "A circular button with a plus icon positioned in the bottom-right corner of the screen that provides quick access to the task creation functionality from the main task list view.",
+    "Bottom Navigation": "A fixed navigation bar at the bottom of the screen containing three main sections (Tasks, Completed, Profile) that allows users to switch between primary app views with thumb-friendly tap targets.",
+    "Baseline Artifact": "A versioned snapshot of project documentation (requirements, design, schema, or plan) that serves as a reference point for tracking changes and maintaining project governance throughout the development lifecycle.",
+    "Modal Overlay": "A semi-transparent layer that appears over the main content to display confirmation dialogs or important messages, such as the delete confirmation, requiring user interaction before returning to the main interface."
+  }
+}

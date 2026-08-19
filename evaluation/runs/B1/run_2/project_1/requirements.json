@@ -1,0 +1,655 @@
+{
+  "project_name": "Flower Delivery App",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Flower Catalog Browsing",
+      "description": "Customers can browse available flowers with images, descriptions, and prices.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can browse flower categories so that I can find the type of flowers I want.",
+        "As a customer, I can view detailed flower information so that I can make informed purchase decisions."
+      ],
+      "acceptance_criteria": [
+        "Given I am on the catalog page, When I select a category, Then I see all flowers in that category.",
+        "Given I click on a flower, When the detail page loads, Then I see image, price, description, and availability."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Shopping Cart Management",
+      "description": "Customers can add flowers to cart, modify quantities, and review before checkout.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can add flowers to my cart so that I can purchase multiple items together.",
+        "As a customer, I can modify cart quantities so that I can adjust my order before checkout."
+      ],
+      "acceptance_criteria": [
+        "Given I am viewing a flower, When I click add to cart, Then the item appears in my cart with correct quantity.",
+        "Given I have items in cart, When I change quantity or remove items, Then the cart total updates immediately."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Order Placement and Checkout",
+      "description": "Customers can complete purchases with delivery details and payment information.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can enter delivery address and date so that flowers are delivered to the right location.",
+        "As a customer, I can complete payment securely so that I can finalize my flower order."
+      ],
+      "acceptance_criteria": [
+        "Given I am at checkout, When I enter valid delivery details, Then I can proceed to payment.",
+        "Given I submit payment, When transaction succeeds, Then I receive order confirmation with tracking number."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Order Tracking",
+      "description": "Customers can track their order status from preparation to delivery.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a customer, I can view my order status so that I know when my flowers will arrive.",
+        "As a customer, I can receive delivery notifications so that I am informed of order progress."
+      ],
+      "acceptance_criteria": [
+        "Given I have placed an order, When I check order status, Then I see current stage and estimated delivery time.",
+        "Given my order status changes, When update occurs, Then I receive email or SMS notification."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Admin Inventory Management",
+      "description": "Administrators can manage flower inventory, pricing, and availability.",
+      "priority": "Medium",
+      "user_stories": [
+        "As an admin, I can add or update flower listings so that customers see current inventory.",
+        "As an admin, I can manage order fulfillment so that deliveries are processed efficiently."
+      ],
+      "acceptance_criteria": [
+        "Given I am logged in as admin, When I add a new flower, Then it appears in the catalog immediately.",
+        "Given there are pending orders, When I update order status, Then customers see the updated status."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "Stripe API",
+      "SendGrid"
+    ],
+    "database": "PostgreSQL"
+  },
+  "user_roles": [
+    "Customer",
+    "Admin",
+    "Delivery Driver"
+  ],
+  "database_schema": {
+    "tables": [
+      {
+        "name": "users",
+        "purpose": "Store user account information for customers, admins, and delivery drivers",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "User email for login"
+          },
+          {
+            "name": "password_hash",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Hashed password"
+          },
+          {
+            "name": "role",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "Customer",
+            "notes": "User role: Customer, Admin, or Delivery Driver"
+          },
+          {
+            "name": "full_name",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "User full name"
+          },
+          {
+            "name": "phone",
+            "type": "VARCHAR(20)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Contact phone number"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Account creation timestamp"
+          }
+        ],
+        "indexes": [
+          "email",
+          "role"
+        ],
+        "relationships": []
+      },
+      {
+        "name": "flowers",
+        "purpose": "Store flower product information including name, price, and availability",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(255)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Flower name"
+          },
+          {
+            "name": "description",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Detailed description"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(100)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Flower category (e.g., Roses, Tulips)"
+          },
+          {
+            "name": "price",
+            "type": "DECIMAL(10,2)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Price per unit"
+          },
+          {
+            "name": "stock_quantity",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "0",
+            "notes": "Available inventory"
+          },
+          {
+            "name": "image_url",
+            "type": "VARCHAR(500)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Product image URL"
+          },
+          {
+            "name": "is_active",
+            "type": "BOOLEAN",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "true",
+            "notes": "Whether product is available for purchase"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Product creation timestamp"
+          }
+        ],
+        "indexes": [
+          "category",
+          "is_active"
+        ],
+        "relationships": []
+      },
+      {
+        "name": "orders",
+        "purpose": "Store customer order information including delivery details and status",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users table"
+          },
+          {
+            "name": "order_number",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Unique order tracking number"
+          },
+          {
+            "name": "total_amount",
+            "type": "DECIMAL(10,2)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Total order amount"
+          },
+          {
+            "name": "status",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "Pending",
+            "notes": "Order status: Pending, Processing, Out for Delivery, Delivered, Cancelled"
+          },
+          {
+            "name": "delivery_address",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Full delivery address"
+          },
+          {
+            "name": "delivery_date",
+            "type": "DATE",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Requested delivery date"
+          },
+          {
+            "name": "delivery_time_slot",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Preferred delivery time slot"
+          },
+          {
+            "name": "payment_status",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "Pending",
+            "notes": "Payment status: Pending, Completed, Failed, Refunded"
+          },
+          {
+            "name": "payment_method",
+            "type": "VARCHAR(50)",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Payment method used"
+          },
+          {
+            "name": "special_instructions",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Customer delivery instructions"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Order creation timestamp"
+          },
+          {
+            "name": "updated_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "Last update timestamp"
+          }
+        ],
+        "indexes": [
+          "user_id",
+          "order_number",
+          "status",
+          "delivery_date"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each order belongs to one user"
+          }
+        ]
+      },
+      {
+        "name": "order_items",
+        "purpose": "Store individual flower items within each order",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "order_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to orders table"
+          },
+          {
+            "name": "flower_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to flowers table"
+          },
+          {
+            "name": "quantity",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "1",
+            "notes": "Quantity ordered"
+          },
+          {
+            "name": "unit_price",
+            "type": "DECIMAL(10,2)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Price per unit at time of order"
+          },
+          {
+            "name": "subtotal",
+            "type": "DECIMAL(10,2)",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Line item total (quantity * unit_price)"
+          }
+        ],
+        "indexes": [
+          "order_id",
+          "flower_id"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "orders",
+            "fk": "order_id",
+            "ref": "id",
+            "notes": "Each order item belongs to one order"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "flowers",
+            "fk": "flower_id",
+            "ref": "id",
+            "notes": "Each order item references one flower product"
+          }
+        ]
+      },
+      {
+        "name": "cart",
+        "purpose": "Store temporary shopping cart items for customers before checkout",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users table"
+          },
+          {
+            "name": "flower_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to flowers table"
+          },
+          {
+            "name": "quantity",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "1",
+            "notes": "Quantity in cart"
+          },
+          {
+            "name": "added_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "When item was added to cart"
+          }
+        ],
+        "indexes": [
+          "user_id",
+          "flower_id"
+        ],
+        "relationships": [
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "user_id",
+            "ref": "id",
+            "notes": "Each cart item belongs to one user"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "flowers",
+            "fk": "flower_id",
+            "ref": "id",
+            "notes": "Each cart item references one flower product"
+          }
+        ]
+      },
+      {
+        "name": "delivery_assignments",
+        "purpose": "Assign orders to delivery drivers and track delivery progress",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "pk": true,
+            "nullable": false,
+            "unique": true,
+            "default": null,
+            "notes": "Primary key"
+          },
+          {
+            "name": "order_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to orders table"
+          },
+          {
+            "name": "driver_id",
+            "type": "INTEGER",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": null,
+            "notes": "Foreign key to users table (driver role)"
+          },
+          {
+            "name": "assigned_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": false,
+            "unique": false,
+            "default": "CURRENT_TIMESTAMP",
+            "notes": "When order was assigned to driver"
+          },
+          {
+            "name": "picked_up_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "When driver picked up the order"
+          },
+          {
+            "name": "delivered_at",
+            "type": "TIMESTAMP",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "When order was delivered"
+          },
+          {
+            "name": "delivery_notes",
+            "type": "TEXT",
+            "pk": false,
+            "nullable": true,
+            "unique": false,
+            "default": null,
+            "notes": "Driver notes about delivery"
+          }
+        ],
+        "indexes": [
+          "order_id",
+          "driver_id"
+        ],
+        "relationships": [
+          {
+            "type": "one-to-one",
+            "to_table": "orders",
+            "fk": "order_id",
+            "ref": "id",
+            "notes": "Each delivery assignment is for one order"
+          },
+          {
+            "type": "many-to-one",
+            "to_table": "users",
+            "fk": "driver_id",
+            "ref": "id",
+            "notes": "Each delivery is assigned to one driver"
+          }
+        ]
+      }
+    ],
+    "assumptions": [
+      "Users must register and login to place orders",
+      "Payment processing is handled via third-party integration (Stripe)",
+      "Email and SMS notifications are sent for order updates",
+      "Delivery drivers are users with a specific role in the system",
+      "Cart items are cleared after successful order placement",
+      "Flower prices are stored in order_items to preserve historical pricing",
+      "Stock quantity is decremented when orders are placed",
+      "Delivery time slots are predefined options (morning, afternoon, evening)",
+      "Order status transitions: Pending \u2192 Processing \u2192 Out for Delivery \u2192 Delivered"
+    ]
+  },
+  "model_used": "CrewAI",
+  "timestamp": "2026-08-17 11:33:35"
+}

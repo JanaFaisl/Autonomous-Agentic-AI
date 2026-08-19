@@ -1,0 +1,18 @@
+{
+  "app_documentation": "Simple Task Manager is a web-based task management application designed to help users organize and track their daily tasks efficiently. The application provides a clean, intuitive interface for creating tasks with titles and optional descriptions, marking tasks as complete to monitor progress, and permanently deleting tasks that are no longer needed. Built with modern web technologies including React for the frontend, Node.js and Express for the backend API, and PostgreSQL for data persistence, the application features a mobile-first responsive design optimized for both desktop and mobile devices. The primary users are individuals seeking a straightforward solution to manage their personal to-do lists without unnecessary complexity. Key features include a task list view with filtering capabilities, separate views for active and completed tasks, detailed task information screens, and a user profile section. The application emphasizes usability with WCAG 2.1 AA accessibility compliance, touch-optimized interactions, and subtle animations that enhance the user experience without causing distraction.",
+  "baseline_artifacts": [
+    "Requirements_v1_SimpleTaskManager",
+    "Design_v1_UISpecifications",
+    "DatabaseSchema_v1_PostgreSQL",
+    "CyclePlan_v1_MVPTasks",
+    "TechnicalArchitecture_v1_ReactNodeExpress"
+  ],
+  "glossary": {
+    "Task": "A work item created by a user containing a required title and optional description that can be marked as complete or deleted. Tasks are stored in the PostgreSQL database with metadata including creation timestamp, completion status, and completion timestamp.",
+    "Completion Status": "A boolean flag (is_completed) indicating whether a task has been finished. When a task is marked complete, the completion timestamp is recorded and the task appears in the Completed Tasks view with visual indicators such as strikethrough text and a green checkmark.",
+    "Floating Action Button (FAB)": "A circular button with a plus icon positioned in the bottom-right corner of the Task List screen that provides quick access to create new tasks. The FAB follows Material Design principles with a 56px diameter, primary color background, and elevated shadow.",
+    "Bottom Navigation": "A fixed navigation bar at the bottom of the screen containing three tabs (Tasks, Completed, Profile) that allows users to switch between main application screens. The active tab is highlighted in the primary color while inactive tabs appear in gray.",
+    "Delete Confirmation Modal": "A centered dialog overlay that appears when a user attempts to delete a task, requiring explicit confirmation to prevent accidental deletion. The modal includes a warning icon, descriptive message, and two action buttons (Cancel and Delete) following the application's design system.",
+    "Baseline Artifact": "A versioned snapshot of project documentation including requirements, design specifications, database schema, and development plans that serves as a reference point for project governance, change management, and support activities."
+  }
+}
