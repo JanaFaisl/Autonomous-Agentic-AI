@@ -15,8 +15,10 @@ completion-rate line always shows the excluded count.
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import statistics as stats
+from contextlib import redirect_stdout
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -236,11 +238,62 @@ def print_latex(all_data: List[Dict[str, Any]]) -> None:
         print(r"\end{tabular}")
 
 
+def summary_dict(all_data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Machine-readable aggregate: every figure the paper quotes, in one place.
+
+    Written alongside the human-readable tables so the reported numbers exist as
+    a durable artifact rather than only as terminal output that must be
+    regenerated to be checked.
+    """
+    out: Dict[str, Any] = {"generated_from": str(RUNS_DIR), "conditions": {}}
+    for d in all_data:
+        if not d["n_complete"]:
+            continue
+        totals = d["totals"]
+        grand = sum(stats.mean(v) for v in d["per_agent"].values()) or 1.0
+        sbr_paths = sorted((RUNS_DIR / d["condition"]).rglob("sbr_report.json"))
+        sbr = _load(sbr_paths[0]) if sbr_paths else None
+        out["conditions"][d["condition"]] = {
+            "n_complete": d["n_complete"],
+            "n_incomplete": d["n_incomplete"],
+            "completion_rate_pct": round(100.0 * d["n_complete"] /
+                                         (d["n_complete"] + d["n_incomplete"]), 1),
+            "fallback_activations": d["fallbacks"],
+            "tokens_total": d["tokens"] or None,
+            "latency_s": {
+                "mean": round(stats.mean(totals), 1),
+                "sd": round(_sd(totals), 1),
+                "min": round(min(totals), 1),
+                "max": round(max(totals), 1),
+            },
+            "per_agent_s": {
+                a: {"mean": round(stats.mean(v), 1), "sd": round(_sd(v), 1),
+                    "share_pct": round(100 * stats.mean(v) / grand, 1)}
+                for a, v in d["per_agent"].items()
+            },
+            "per_project_mean_s": {
+                str(pid): round(stats.mean([m["total_latency_s"] for m in rows]), 1)
+                for pid, rows in sorted(
+                    {m["project_id"]: [r for r in d["complete"]
+                                       if r["project_id"] == m["project_id"]]
+                     for m in d["complete"]}.items())
+            },
+            "scaffold_build_rate": (
+                {"passed": sbr["passed"], "total": sbr["total"],
+                 "percent": sbr["sbr_percent"], "partial": sbr.get("partial", False)}
+                if sbr else None
+            ),
+        }
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Aggregate saved runs into paper tables.")
     parser.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     parser.add_argument("--condition", help="Only this condition (default: all found)")
     parser.add_argument("--latex", action="store_true", help="Emit LaTeX table bodies")
+    parser.add_argument("--no-save", action="store_true",
+                        help="Print only; do not write results_summary.{txt,json}")
     args = parser.parse_args()
 
     if not args.runs_dir.is_dir():
@@ -255,14 +308,33 @@ def main() -> int:
         print(f"error: no runs found under {args.runs_dir}")
         return 1
 
-    if args.latex:
-        print_latex(all_data)
+    # Capture rather than print directly, so the same text reaches both the
+    # terminal and the saved report without being formatted twice.
+    buf = io.StringIO()
+    with redirect_stdout(buf):
+        if args.latex:
+            print_latex(all_data)
+        else:
+            for data in all_data:
+                print_condition(data)
+            print_comparison(all_data)
+            print()
+    text = buf.getvalue()
+    print(text, end="")
+
+    if args.no_save or args.condition:
         return 0
 
-    for data in all_data:
-        print_condition(data)
-    print_comparison(all_data)
-    print()
+    out_dir = args.runs_dir.parent
+    suffix = "_latex" if args.latex else ""
+    txt = out_dir / f"results_summary{suffix}.txt"
+    txt.write_text(text, encoding="utf-8")
+    written = [txt]
+    if not args.latex:
+        js = out_dir / "results_summary.json"
+        js.write_text(json.dumps(summary_dict(all_data), indent=2), encoding="utf-8")
+        written.append(js)
+    print("saved: " + ", ".join(str(p) for p in written))
     return 0
 
 
