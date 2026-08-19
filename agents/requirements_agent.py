@@ -190,27 +190,29 @@ STRICT RULES:
         # 2) Fallback: direct Anthropic API if CrewAI unavailable or failed
         for attempt in range(max_retries):
             try:
-                with st.spinner("🔄 Analyzing requirements..."):
-                    resp = requests.post(
-                        f"{self.api_base}/messages",
-                        headers=self.headers,
-                        json={
-                            "model": DEFAULT_MODEL,
-                            "max_tokens": 8192,
-                            "system": self.system_prompt,
-                            "messages": [
-                                {
-                                    "role": "user",
-                                    "content": (
-                                        f"{user_input}\n\n"
-                                        "IMPORTANT: Output ONLY the JSON object described in your instructions. "
-                                        "Do not write any text, explanation, or questions. Start with { and end with }."
-                                    ),
-                                },
-                            ],
-                        },
-                        timeout=90,
-                    )
+                # No spinner here: the caller already displays one, and a nested
+                # st.spinner renders a second identical message. Progress display
+                # belongs to the UI layer, not to the agent.
+                resp = requests.post(
+                    f"{self.api_base}/messages",
+                    headers=self.headers,
+                    json={
+                        "model": DEFAULT_MODEL,
+                        "max_tokens": 8192,
+                        "system": self.system_prompt,
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": (
+                                    f"{user_input}\n\n"
+                                    "IMPORTANT: Output ONLY the JSON object described in your instructions. "
+                                    "Do not write any text, explanation, or questions. Start with { and end with }."
+                                ),
+                            },
+                        ],
+                    },
+                    timeout=90,
+                )
 
                 if resp.status_code == 401:
                     return {
