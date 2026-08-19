@@ -10,6 +10,7 @@ from core.constants import (
 from core.models import PYDANTIC_AVAILABLE, SupportGovernanceOutputModel
 from core.llm import CREWAI_AVAILABLE, Agent, Task, Crew, Process, get_llm
 from core.utils import parse_json_from_text, extract_crewai_output, create_error_response
+from core.prompts import build_support_prompt
 from utils.io_suppression import suppress_stderr, suppress_io
 
 class SupportManagerAgent:
@@ -107,24 +108,7 @@ class SupportManagerAgent:
         db_json = json.dumps(database_schema, indent=2) if database_schema else "No schema."
         plan_json = json.dumps(cycle_plan, indent=2) if cycle_plan else "No cycle plan."
 
-        prompt = f"""Produce a support governance package from these project artifacts. Output ONLY a JSON object with no markdown.
-
-REQUIREMENTS:
-{req_json}
-
-DESIGN:
-{design_json}
-
-DATABASE SCHEMA:
-{db_json}
-
-CYCLE PLAN:
-{plan_json}
-
-Output JSON with:
-- app_documentation: 2-4 paragraph string describing the app being built (what it is, main purpose, main features, intended users)
-- baseline_artifacts: list of at least 3 strings e.g. ["Requirements_v1", "Design_v1", "Database_v1"]
-- glossary: object mapping 4-6 terms to their definitions"""
+        prompt = build_support_prompt(req_json, design_json, db_json, plan_json)
 
         # 1) Try CrewAI first — full orchestration with role, goal, and backstory context
         if CREWAI_AVAILABLE and self.crew:

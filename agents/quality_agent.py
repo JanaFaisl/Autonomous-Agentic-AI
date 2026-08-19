@@ -10,6 +10,7 @@ from core.constants import (
 from core.models import PYDANTIC_AVAILABLE, QualityReportOutputModel
 from core.llm import CREWAI_AVAILABLE, Agent, Task, Crew, Process, get_llm
 from core.utils import parse_json_from_text, extract_crewai_output, create_error_response
+from core.prompts import build_quality_prompt
 from utils.io_suppression import suppress_stderr, suppress_io
 
 class QualityManagerAgent:
@@ -105,24 +106,7 @@ class QualityManagerAgent:
         design_json = json.dumps(design, indent=2) if design else "No design."
         db_json = json.dumps(database_schema, indent=2) if database_schema else "No database schema."
 
-        prompt = f"""Inspect these artifacts and produce a quality gate report. Output ONLY a JSON object with no markdown.
-
-REQUIREMENTS:
-{req_json}
-
-DESIGN:
-{design_json}
-
-DATABASE SCHEMA:
-{db_json}
-
-Output JSON with:
-- gate_decision: "PASS" or "FAIL"
-- artifact_reviewed: list of strings e.g. ["Requirements", "Design", "Database"]
-- checklist: object with boolean fields: requirements_complete, design_consistent, db_matches_requirements, nfr_defined
-- issues: list of objects with severity (High/Medium/Low), item, message
-- required_fixes: list of strings
-- recommendations: list of strings (at least 2-3)"""
+        prompt = build_quality_prompt(req_json, design_json, db_json)
 
         # 1) Try CrewAI first — full orchestration with role, goal, and backstory context
         if CREWAI_AVAILABLE and self.crew:

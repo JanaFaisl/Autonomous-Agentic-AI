@@ -10,6 +10,7 @@ from core.constants import (
 from core.models import PYDANTIC_AVAILABLE, CyclePlanOutputModel
 from core.llm import CREWAI_AVAILABLE, Agent, Task, Crew, Process, get_llm
 from core.utils import parse_json_from_text, extract_crewai_output, create_error_response
+from core.prompts import build_planning_prompt
 from utils.io_suppression import suppress_stderr, suppress_io
 
 class PlanningManagerAgent:
@@ -99,18 +100,7 @@ class PlanningManagerAgent:
         req_json = json.dumps(requirements, indent=2)
         design_json = json.dumps(design, indent=2) if design else "No design provided."
 
-        prompt = f"""Create a short-term MVP execution plan. Output ONLY a JSON object with no markdown.
-
-REQUIREMENTS:
-{req_json}
-
-DESIGN:
-{design_json}
-
-Output JSON with:
-- plan_name: e.g. "MVP Plan"
-- tasks: AT LEAST 5-8 items, each with id, title, assigned_agent (Developer/Designer/DBA), priority (high or low)
-- risks: 3-5 short risk strings"""
+        prompt = build_planning_prompt(req_json, design_json)
 
         # 1) Try CrewAI first — full orchestration with role, goal, and backstory context
         if CREWAI_AVAILABLE and self.crew:
