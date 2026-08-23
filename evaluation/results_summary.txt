@@ -47,6 +47,8 @@ Healthcare                    High             285.4   2
 Education / social            Medium           284.8   2
 Retail / operations           High             318.3   2
 
+  note: 2 SBR reports found; showing run_1
+
 Scaffold Build Rate  5/5 = 100.0%
 
 ========================================================================
@@ -104,6 +106,8 @@ Productivity                  Low              218.3   2
 Healthcare                    High             280.1   2
 Education / social            Medium           284.2   2
 Retail / operations           High             322.5   2
+
+  note: 2 SBR reports found; showing run_1
 
 Scaffold Build Rate  5/5 = 100.0%
 
