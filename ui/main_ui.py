@@ -2365,7 +2365,7 @@ p, li, span, div {{ color: {text}; }}
 .stTabs [data-baseweb="tab"] {{
   flex: 1 1 0 !important;
   min-width: 0 !important;
-  border-radius: 999px;
+  border-radius: 999px !important;
   padding: 8px 12px;
   border: 1px solid {border};
   background: {card};
@@ -2380,6 +2380,17 @@ p, li, span, div {{ color: {text}; }}
 .stTabs [aria-selected="true"] {{
   background: linear-gradient(135deg, rgba(102,126,234,0.18) 0%, rgba(244,114,182,0.16) 100%);
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}}
+/* Inner label wrapper must follow the pill so nothing paints square corners. */
+.stTabs [data-baseweb="tab"] > div {{
+  border-radius: inherit;
+}}
+/* Round the selection underline and drop the flat divider under the pills. */
+.stTabs [data-baseweb="tab-highlight"] {{
+  border-radius: 999px;
+}}
+.stTabs [data-baseweb="tab-border"] {{
+  display: none;
 }}
 
 .stButton > button {{
