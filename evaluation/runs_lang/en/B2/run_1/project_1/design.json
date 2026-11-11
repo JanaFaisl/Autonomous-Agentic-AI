@@ -1,0 +1,789 @@
+{
+  "design_overview": "A warm, floral-toned mobile app for customers, couriers and admins. Six connected screens cover browsing, a 3-step checkout, live tracking, account and history, and admin management, built with cards, clear hierarchy and large touch targets.",
+  "color_scheme": {
+    "primary": "#D6336C",
+    "secondary": "#7A9E7E",
+    "accent": "#F4A261",
+    "surface": "#FFFFFF",
+    "background": "#FFF8F6",
+    "text_primary": "#2B2230",
+    "error": "#D93025",
+    "success": "#2E9E5B",
+    "warning": "#E8A317"
+  },
+  "typography": {
+    "font_family": "Inter",
+    "heading_font": "Playfair Display",
+    "body_font": "Inter",
+    "sizes": {
+      "small": "12px",
+      "medium": "15px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "700"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Shop",
+      "Cart",
+      "Orders",
+      "Account"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Flower Catalog",
+      "purpose": "Browse, search and filter bouquets by category, price and color, then open details or add to cart.",
+      "key_components": [
+        {
+          "name": "Catalog Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Soft pink gradient bar with title 'Fresh Flowers', location subtitle and bell icon at right.",
+          "interaction": "Bell opens the notifications list.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Rounded white field with shadow, placeholder 'Search roses, tulips, bouquets', search icon on left.",
+          "interaction": "Typing lists matching in-stock items within 2 seconds.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Button",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Square 48px outlined button beside search, with a small rose dot when filters are active.",
+          "interaction": "Opens the Filter bottom sheet.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Category Chips",
+          "type": "List",
+          "position": "top",
+          "size": "medium",
+          "styling": "Horizontal scroll chips: 'All', 'Birthday', 'Romance', 'Wedding', 'Sympathy'. Selected chip is filled rose.",
+          "interaction": "Tap filters the grid to that category.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Seasonal Banner",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Rounded photo card with dark overlay, text 'Mother's Day Bouquets' and a small 'Shop now' pill.",
+          "interaction": "Opens the Mother's Day category results.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Bouquet Grid Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Two-column cards with rounded photo, name, color dot, bold price like '$45.00' and a round 'Add' button.",
+          "interaction": "Card opens Bouquet Details; Add puts item in cart.",
+          "icon": "plus",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Favorite Toggle",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Circular white button on each card photo corner; heart fills rose when saved.",
+          "interaction": "Toggles saving the bouquet to favorites.",
+          "icon": "heart",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Bottom Sheet",
+          "type": "Modal",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Rounded-top sheet with price range slider, color swatches, 'Reset' text button and rose 'Show 24 results' button.",
+          "interaction": "Show results applies filters and returns to the grid.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with four tabs: Shop, Cart with count badge, Orders, Account. Active tab is rose.",
+          "interaction": "Switches between main screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1"
+      ],
+      "user_flow": "Opens after login or as guest. Leaves via Add (Cart badge, then Cart & Checkout), bottom tabs, or the bell."
+    },
+    {
+      "name": "Cart and Checkout",
+      "purpose": "Review items, set address, delivery date and card payment, then place the order in a few steps.",
+      "key_components": [
+        {
+          "name": "Checkout Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with back arrow, title 'Your Cart' and a step label 'Step 1 of 3'.",
+          "interaction": "Back returns to Flower Catalog.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cart Item List",
+          "type": "List",
+          "position": "top",
+          "size": "large",
+          "styling": "Row cards with thumbnail, bouquet name, price, quantity stepper and a trash icon at right.",
+          "interaction": "Stepper changes quantity; trash removes the item.",
+          "icon": "trash",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Address Selector",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded field showing saved address 'Home, 24 Maple St', with edit icon and 'Add new address' link.",
+          "interaction": "Opens a saved-address picker sheet.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delivery Date Picker",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Date field with placeholder 'Choose delivery date' and time-slot chips below: 'Morning', 'Afternoon', 'Evening'.",
+          "interaction": "Opens a calendar; unavailable dates are greyed.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Card Payment Fields",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Secure Stripe-style group: 'Card number', 'MM/YY', 'CVC' fields with a small 'Secured by Stripe' caption.",
+          "interaction": "Validates card format as the user types.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Order Summary",
+          "type": "Card",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Soft grey card listing 'Subtotal', 'Delivery', 'Total' with bold total in rose.",
+          "interaction": "Updates live as quantities change.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Payment Error Banner",
+          "type": "Alert",
+          "position": "top",
+          "size": "medium",
+          "styling": "Red-tinted banner with text 'Payment declined. No order was created. Try another card.' and dismiss action.",
+          "interaction": "Appears on declined payment; dismiss keeps cart intact.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Place Order Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width sticky rose gradient button, 56px tall, label 'Pay $98.00 and Place Order'.",
+          "interaction": "Submits payment and opens the confirmation modal.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Order Confirmation Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered white card with green check, 'Order confirmed', order number and primary 'Track Order' button.",
+          "interaction": "Track Order opens Order Tracking.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F2"
+      ],
+      "user_flow": "Reached from the Cart tab or Add action. Leaves to Order Tracking after payment, or back to the catalog."
+    },
+    {
+      "name": "Order Tracking",
+      "purpose": "Show live order status from preparation to doorstep, with courier details and delivery confirmation.",
+      "key_components": [
+        {
+          "name": "Tracking Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with back arrow, title 'Order #FD-1042' and a bell icon for status alerts.",
+          "interaction": "Back returns to Order History; bell opens notifications.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "ETA Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Rose gradient card with large text 'Arriving today, 2:30 to 3:00 PM' and status pill 'Out for delivery'.",
+          "interaction": "Static; refreshes automatically on status change.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Stepper",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Vertical timeline: 'Order placed', 'Preparing', 'Out for delivery', 'Delivered'. Done steps green, current step pulsing rose.",
+          "interaction": "Tap a step to see its timestamp.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Map Preview",
+          "type": "Image",
+          "position": "center",
+          "size": "large",
+          "styling": "Rounded map card with route line and courier pin, 'Open full map' pill at corner.",
+          "interaction": "Opens full-screen live map.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Courier Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Row with round avatar, 'Daniel M.', rating, and outlined 'Call' button.",
+          "interaction": "Call dials the courier.",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Delivery Address Card",
+          "type": "Card",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Light card with address '24 Maple St', recipient note and flower thumbnails.",
+          "interaction": "Tap expands order items.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Courier Status Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Courier-only full-width green button 'Mark as Delivered' with secondary link 'Report a problem'.",
+          "interaction": "Closes order with delivery timestamp and notifies customer.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Share Tracking Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Outlined pill 'Share tracking link' below the address card.",
+          "interaction": "Opens the system share sheet.",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F3"
+      ],
+      "user_flow": "Reached from the confirmation modal, Order History or a push notification. Leaves via back or bottom tabs."
+    },
+    {
+      "name": "Account",
+      "purpose": "Register or log in, and manage saved addresses and profile details for faster checkout.",
+      "key_components": [
+        {
+          "name": "Account Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Pink gradient header with title 'My Account' and settings icon at right.",
+          "interaction": "Settings opens notification and privacy preferences.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Auth Segmented Control",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Two-segment pill toggle 'Sign In' and 'Register', selected segment filled white with shadow.",
+          "interaction": "Switches between the two forms.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Email Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Rounded 52px field with label 'Email' and placeholder 'you@example.com'.",
+          "interaction": "Validates email format on blur.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Password Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Rounded field with placeholder 'At least 8 characters' and show/hide text toggle.",
+          "interaction": "Toggle reveals or hides the password.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Account Button",
+          "type": "Button",
+          "position": "center",
+          "size": "large",
+          "styling": "Full-width rose gradient button 'Create Account'; 'Forgot password?' text link beneath.",
+          "interaction": "Creates the account, logs in and opens the Shop tab.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Profile Summary Card",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "Logged-in state card with round avatar, name 'Emma Clark', email and 'Edit profile' link.",
+          "interaction": "Opens the profile edit form.",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Saved Addresses List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Cards labeled 'Home' and 'Office' with address text, default badge, and edit and trash icons.",
+          "interaction": "Edit opens address form; trash asks to confirm delete.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Add Address Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Outlined rose button 'Add new address' with plus icon.",
+          "interaction": "Opens the new address form sheet.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Log Out Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Subtle text button 'Log out' in red below a 'Delete my account' link.",
+          "interaction": "Ends session and returns to Sign In.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F4"
+      ],
+      "user_flow": "Reached from the Account tab or when checking out as a guest. Leaves to Shop after sign in, or to Order History."
+    },
+    {
+      "name": "Order History",
+      "purpose": "List past and active orders with status and totals, and allow quick reorder of favorite bouquets.",
+      "key_components": [
+        {
+          "name": "History Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with title 'My Orders' and a search icon at right.",
+          "interaction": "Search filters orders by bouquet name or number.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Filter Chips",
+          "type": "List",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal chips 'All', 'Active', 'Delivered', 'Cancelled'; selected chip filled rose.",
+          "interaction": "Filters the order list by status.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Active Order Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Highlighted card with thumbnail, '#FD-1042', amber chip 'Out for delivery', total '$98.00' and chevron.",
+          "interaction": "Opens Order Tracking for this order.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Past Order Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with thumbnail, order date, green chip 'Delivered', total, and item summary '2 bouquets'.",
+          "interaction": "Opens order details with items and delivery timestamp.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Reorder Button",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Outlined rose pill 'Reorder' at the bottom right of each past order card.",
+          "interaction": "Adds all items to cart and opens Cart and Checkout.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Favorite Bouquets Row",
+          "type": "List",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Titled 'Saved favorites' horizontal row of small photo cards with heart badge.",
+          "interaction": "Tap opens that bouquet in the catalog.",
+          "icon": "heart",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Shown when filter has no orders: soft illustration, 'No orders yet' and rose button 'Browse flowers'.",
+          "interaction": "Opens Flower Catalog.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Same four-tab bar with 'Orders' active in rose.",
+          "interaction": "Switches between main screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F4",
+        "F3"
+      ],
+      "user_flow": "Reached from the Orders tab or Account. Leaves to Order Tracking, Cart and Checkout via Reorder, or Flower Catalog."
+    },
+    {
+      "name": "Admin Panel",
+      "purpose": "Let admins manage flower inventory, prices and stock, and assign paid orders to couriers.",
+      "key_components": [
+        {
+          "name": "Admin Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Dark plum bar with title 'Admin Console', and a bell icon with a count badge for new orders.",
+          "interaction": "Bell jumps to the Orders tab.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Admin Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Segmented control 'Inventory' and 'Orders' with rose underline for the active tab.",
+          "interaction": "Switches between inventory and order lists.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Inventory Search",
+          "type": "Input",
+          "position": "top",
+          "size": "medium",
+          "styling": "Rounded field with placeholder 'Search flowers by name or SKU'.",
+          "interaction": "Filters the inventory list as you type.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Inventory Item Row",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Rows with thumbnail, name, price '$45.00', stock chip 'Stock 12' (amber when low) and edit icon.",
+          "interaction": "Edit opens the Edit Flower sheet.",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Edit Flower Sheet",
+          "type": "Modal",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Bottom sheet with inputs 'Price' and 'Stock quantity', in-stock switch and rose 'Save changes' button.",
+          "interaction": "Save updates the catalog immediately and closes the sheet.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Add Flower Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Floating rose circular button with plus icon above the bottom bar.",
+          "interaction": "Opens the new flower form with photo upload.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "New Order Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Card with '#FD-1043', green chip 'Paid', address, delivery slot and total, plus 'Unassigned' warning label.",
+          "interaction": "Tap expands order items and customer notes.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Courier Dropdown",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Select field with placeholder 'Assign courier' listing couriers with availability dots.",
+          "interaction": "Choosing a courier selects them for this order.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Assign Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rose filled button 'Assign Courier', disabled grey until a courier is chosen.",
+          "interaction": "Sends order to courier's delivery list and notifies customer.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F5"
+      ],
+      "user_flow": "Admins land here after signing in with an admin role. Leaves via edit sheets, order cards, or sign out from Account."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "56px tall, 16px radius, rose gradient, white bold label, soft shadow; pressed state darker.",
+      "interaction": "Triggers the main screen action.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": "center",
+      "size": "medium",
+      "styling": "Outlined 1.5px rose border, rose text, transparent fill, 48px tall.",
+      "interaction": "Triggers supporting actions.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input",
+      "type": "Input",
+      "position": "center",
+      "size": "large",
+      "styling": "52px rounded field, light border, floating label, rose focus ring, red border on error.",
+      "interaction": "Focus shows keyboard and validation.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Product Card",
+      "type": "Card",
+      "position": "center",
+      "size": "medium",
+      "styling": "16px radius, 4:5 photo, name, price, soft shadow, round add button.",
+      "interaction": "Opens bouquet details.",
+      "icon": "plus",
+      "has_image": true,
+      "image_type": "product"
+    },
+    {
+      "name": "Status Chip",
+      "type": "Chip",
+      "position": "center",
+      "size": "small",
+      "styling": "Pill with tinted background: green delivered, amber in progress, red failed.",
+      "interaction": "Display only.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Filter Chip",
+      "type": "Chip",
+      "position": "top",
+      "size": "small",
+      "styling": "36px pill, outlined when idle, rose filled when selected.",
+      "interaction": "Toggles a filter.",
+      "icon": "filter",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Top App Bar",
+      "type": "Header",
+      "position": "top",
+      "size": "medium",
+      "styling": "56px bar, centered serif title, back arrow left, action icon right.",
+      "interaction": "Back navigates to the previous screen.",
+      "icon": "bell",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Tab Bar",
+      "type": "Footer",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "64px white bar, top border, icon and label, rose active, count badge on Cart.",
+      "interaction": "Switches primary sections.",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Sheet",
+      "type": "Modal",
+      "position": "bottom",
+      "size": "large",
+      "styling": "24px top radius, drag handle, dimmed backdrop, sticky action button.",
+      "interaction": "Swipe down or tap backdrop to dismiss.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Alert Banner",
+      "type": "Alert",
+      "position": "top",
+      "size": "medium",
+      "styling": "Rounded tinted banner with bold message and dismiss; red, green or amber by state.",
+      "interaction": "Dismiss hides it.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "Mobile-first 360 to 430px with 16px margins and two-column grid. Tablets use three to four columns; web uses centered 1200px layout with the tab bar becoming a top nav.",
+  "accessibility": "WCAG AA contrast, 44px minimum touch targets, text labels on all icons, screen-reader labels for status and quantity, dynamic text scaling, and color never the only status indicator.",
+  "animations": "Subtle 200ms transitions: slide between screens, bottom sheets rise, cart badge bounces on add, heart pops on save, status step pulses, success check draws in.",
+  "icons": "Consistent outline icons from the set: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share. 24px, 2px stroke, no emojis."
+}

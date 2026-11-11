@@ -1,0 +1,1717 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "\u062c\u062f\u0648\u0644 \u0645\u0648\u062d\u0651\u062f \u0644\u062c\u0645\u064a\u0639 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646 (\u0627\u0644\u0639\u0645\u0644\u0627\u0621\u060c \u0645\u0646\u0627\u062f\u064a\u0628 \u0627\u0644\u062a\u0648\u0635\u064a\u0644\u060c \u0645\u062f\u064a\u0631\u0648 \u0627\u0644\u0645\u062a\u062c\u0631) \u0645\u0639 \u062a\u0645\u064a\u064a\u0632 \u0627\u0644\u062f\u0648\u0631 \u0639\u0628\u0631 \u0639\u0645\u0648\u062f role.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": "\u0627\u0644\u0645\u0639\u0631\u0651\u0641 \u0627\u0644\u0623\u0633\u0627\u0633\u064a \u0644\u0644\u0645\u0633\u062a\u062e\u062f\u0645"
+        },
+        {
+          "name": "full_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a \u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644"
+        },
+        {
+          "name": "phone",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0631\u0642\u0645 \u0627\u0644\u062c\u0648\u0627\u0644"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u062a\u062c\u0632\u0626\u0629 \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631 \u0648\u0644\u064a\u0633\u062a \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631 \u0646\u0641\u0633\u0647\u0627"
+        },
+        {
+          "name": "role",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'customer'",
+          "notes": "\u0627\u0644\u0642\u064a\u0645 \u0627\u0644\u0645\u0633\u0645\u0648\u062d\u0629: customer, courier, store_manager"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "\u062d\u0627\u0644\u0629 \u062a\u0641\u0639\u064a\u0644 \u0627\u0644\u062d\u0633\u0627\u0628"
+        },
+        {
+          "name": "is_available",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "\u062a\u0648\u0641\u0631 \u0627\u0644\u0645\u0646\u062f\u0648\u0628 \u0644\u0627\u0633\u062a\u0644\u0627\u0645 \u0637\u0644\u0628\u0627\u062a (\u064a\u064f\u0633\u062a\u062e\u062f\u0645 \u0644\u0644\u0645\u0646\u0627\u062f\u064a\u0628 \u0641\u0642\u0637)"
+        },
+        {
+          "name": "last_login_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0622\u062e\u0631 \u062a\u0633\u062c\u064a\u0644 \u062f\u062e\u0648\u0644"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "email",
+        "phone",
+        "role"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "device_tokens",
+      "purpose": "\u062a\u062e\u0632\u064a\u0646 \u0631\u0645\u0648\u0632 \u0623\u062c\u0647\u0632\u0629 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646 \u0644\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0625\u0634\u0639\u0627\u0631\u0627\u062a \u0639\u0628\u0631 Firebase Cloud Messaging.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0645\u0627\u0644\u0643 \u0627\u0644\u062c\u0647\u0627\u0632"
+        },
+        {
+          "name": "token",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0631\u0645\u0632 FCM"
+        },
+        {
+          "name": "platform",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0642\u064a\u0645 \u0627\u0644\u0645\u0633\u0645\u0648\u062d\u0629: ios, android, web"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "token"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u0635\u0627\u062d\u0628 \u0627\u0644\u062c\u0647\u0627\u0632"
+        }
+      ]
+    },
+    {
+      "name": "addresses",
+      "purpose": "\u0639\u0646\u0627\u0648\u064a\u0646 \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0627\u0644\u0645\u062d\u0641\u0648\u0638\u0629 \u0644\u0644\u0639\u0645\u0644\u0627\u0621 \u0645\u0639 \u0627\u0644\u0625\u062d\u062f\u0627\u062b\u064a\u0627\u062a \u0648\u0645\u0648\u0627\u0641\u0642\u0629 \u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0645\u0648\u0642\u0639.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0639\u0645\u064a\u0644 \u0645\u0627\u0644\u0643 \u0627\u0644\u0639\u0646\u0648\u0627\u0646"
+        },
+        {
+          "name": "label",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u062a\u0633\u0645\u064a\u0629 \u0627\u0644\u0639\u0646\u0648\u0627\u0646 \u0645\u062b\u0644 \u0627\u0644\u0645\u0646\u0632\u0644 \u0623\u0648 \u0627\u0644\u0639\u0645\u0644"
+        },
+        {
+          "name": "recipient_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0633\u0645 \u0627\u0644\u0645\u0633\u062a\u0644\u0645"
+        },
+        {
+          "name": "recipient_phone",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u062c\u0648\u0627\u0644 \u0627\u0644\u0645\u0633\u062a\u0644\u0645"
+        },
+        {
+          "name": "city",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "district",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "street",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "building_details",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0631\u0642\u0645 \u0627\u0644\u0645\u0628\u0646\u0649 \u0648\u0627\u0644\u0637\u0627\u0628\u0642 \u0648\u0645\u0644\u0627\u062d\u0638\u0627\u062a \u0627\u0644\u0648\u0635\u0648\u0644"
+        },
+        {
+          "name": "latitude",
+          "type": "decimal",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u062e\u0637 \u0627\u0644\u0639\u0631\u0636 \u0645\u0646 Google Maps"
+        },
+        {
+          "name": "longitude",
+          "type": "decimal",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u062e\u0637 \u0627\u0644\u0637\u0648\u0644 \u0645\u0646 Google Maps"
+        },
+        {
+          "name": "location_consent",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "\u0645\u0648\u0627\u0641\u0642\u0629 \u0627\u0644\u0639\u0645\u064a\u0644 \u0639\u0644\u0649 \u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0648\u0642\u0639 \u0644\u0623\u063a\u0631\u0627\u0636 \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0641\u0642\u0637"
+        },
+        {
+          "name": "is_default",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "\u0627\u0644\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "\u0627\u0644\u0639\u0645\u064a\u0644 \u0645\u0627\u0644\u0643 \u0627\u0644\u0639\u0646\u0648\u0627\u0646"
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "purpose": "\u062a\u0635\u0646\u064a\u0641\u0627\u062a \u0627\u0644\u0648\u0631\u0648\u062f \u0648\u0627\u0644\u0628\u0627\u0642\u0627\u062a (\u062d\u0633\u0628 \u0627\u0644\u0646\u0648\u0639) \u0644\u0639\u0631\u0636\u0647\u0627 \u0648\u062a\u0635\u0641\u064a\u062a\u0647\u0627 \u0641\u064a \u0627\u0644\u0643\u062a\u0627\u0644\u0648\u062c.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0627\u0633\u0645 \u0627\u0644\u062a\u0635\u0646\u064a\u0641 \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+        },
+        {
+          "name": "slug",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0645\u0639\u0631\u0651\u0641 \u0646\u0635\u064a \u0644\u0644\u0631\u0648\u0627\u0628\u0637"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "slug"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "occasions",
+      "purpose": "\u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0627\u062a (\u0632\u0641\u0627\u0641\u060c \u0639\u064a\u062f \u0645\u064a\u0644\u0627\u062f\u060c \u062a\u0647\u0646\u0626\u0629...) \u0644\u062a\u0635\u0641\u064a\u0629 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u062d\u0633\u0628 \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0627\u0633\u0645 \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629 \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+        },
+        {
+          "name": "slug",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "slug"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "colors",
+      "purpose": "\u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0627\u0644\u0645\u062a\u0627\u062d\u0629 \u0644\u0644\u0648\u0631\u0648\u062f \u0644\u062f\u0639\u0645 \u0627\u0644\u062a\u0635\u0641\u064a\u0629 \u062d\u0633\u0628 \u0627\u0644\u0644\u0648\u0646.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0627\u0633\u0645 \u0627\u0644\u0644\u0648\u0646 \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+        },
+        {
+          "name": "hex_code",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0631\u0645\u0632 \u0627\u0644\u0644\u0648\u0646 \u0645\u062b\u0644 #FF0000"
+        }
+      ],
+      "indexes": [
+        "name"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "products",
+      "purpose": "\u0643\u062a\u0627\u0644\u0648\u062c \u0627\u0644\u0648\u0631\u0648\u062f \u0648\u0627\u0644\u0628\u0627\u0642\u0627\u062a \u0645\u0639 \u0627\u0644\u0633\u0639\u0631 \u0648\u0627\u0644\u0645\u062e\u0632\u0648\u0646\u060c \u0648\u064a\u062f\u064a\u0631\u0647 \u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062a\u062c\u0631.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "category_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u062a\u0635\u0646\u064a\u0641 \u0627\u0644\u0645\u0646\u062a\u062c"
+        },
+        {
+          "name": "created_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062a\u062c\u0631 \u0627\u0644\u0630\u064a \u0623\u0636\u0627\u0641 \u0627\u0644\u0645\u0646\u062a\u062c"
+        },
+        {
+          "name": "name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0633\u0645 \u0627\u0644\u0645\u0646\u062a\u062c"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "product_type",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'bouquet'",
+          "notes": "\u0627\u0644\u0642\u064a\u0645 \u0627\u0644\u0645\u0633\u0645\u0648\u062d\u0629: flower, bouquet"
+        },
+        {
+          "name": "price",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0633\u0639\u0631 \u0627\u0644\u0648\u062d\u062f\u0629"
+        },
+        {
+          "name": "stock_quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "\u0627\u0644\u0643\u0645\u064a\u0629 \u0627\u0644\u0645\u062a\u0648\u0641\u0631\u0629 \u0641\u064a \u0627\u0644\u0645\u062e\u0632\u0648\u0646"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "\u064a\u0638\u0647\u0631 \u0644\u0644\u0639\u0645\u0644\u0627\u0621 \u0641\u0648\u0631 \u062a\u0641\u0639\u064a\u0644\u0647"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "category_id",
+        "name",
+        "price",
+        "is_active",
+        "created_by"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "categories",
+          "fk": "category_id",
+          "ref": "id",
+          "notes": "\u062a\u0635\u0646\u064a\u0641 \u0627\u0644\u0645\u0646\u062a\u062c"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "created_by",
+          "ref": "id",
+          "notes": "\u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062a\u062c\u0631 \u0645\u0646\u0634\u0626 \u0627\u0644\u0645\u0646\u062a\u062c"
+        }
+      ]
+    },
+    {
+      "name": "product_images",
+      "purpose": "\u0635\u0648\u0631 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a (\u0635\u0648\u0631\u0629 \u0623\u0648 \u0623\u0643\u062b\u0631 \u0644\u0643\u0644 \u0645\u0646\u062a\u062c).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "image_url",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0631\u0627\u0628\u0637 \u0627\u0644\u0635\u0648\u0631\u0629"
+        },
+        {
+          "name": "is_primary",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "\u0627\u0644\u0635\u0648\u0631\u0629 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629 \u0641\u064a \u0627\u0644\u0643\u062a\u0627\u0644\u0648\u062c"
+        },
+        {
+          "name": "sort_order",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "product_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": "\u0627\u0644\u0645\u0646\u062a\u062c \u0635\u0627\u062d\u0628 \u0627\u0644\u0635\u0648\u0631\u0629"
+        }
+      ]
+    },
+    {
+      "name": "product_occasions",
+      "purpose": "\u062c\u062f\u0648\u0644 \u0648\u0633\u064a\u0637 \u0644\u0639\u0644\u0627\u0642\u0629 \u0645\u062a\u0639\u062f\u062f-\u0625\u0644\u0649-\u0645\u062a\u0639\u062f\u062f \u0628\u064a\u0646 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0648\u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0627\u062a.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "occasion_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "product_id",
+        "occasion_id",
+        "UNIQUE(product_id, occasion_id)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "occasions",
+          "fk": "occasion_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "product_colors",
+      "purpose": "\u062c\u062f\u0648\u0644 \u0648\u0633\u064a\u0637 \u0644\u0639\u0644\u0627\u0642\u0629 \u0645\u062a\u0639\u062f\u062f-\u0625\u0644\u0649-\u0645\u062a\u0639\u062f\u062f \u0628\u064a\u0646 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0648\u0627\u0644\u0623\u0644\u0648\u0627\u0646.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "color_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "product_id",
+        "color_id",
+        "UNIQUE(product_id, color_id)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "colors",
+          "fk": "color_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "carts",
+      "purpose": "\u0633\u0644\u0629 \u0627\u0644\u062a\u0633\u0648\u0642 \u0627\u0644\u062d\u0627\u0644\u064a\u0629 \u0644\u0643\u0644 \u0639\u0645\u064a\u0644.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0633\u0644\u0629 \u0648\u0627\u062d\u062f\u0629 \u0646\u0634\u0637\u0629 \u0644\u0643\u0644 \u0639\u0645\u064a\u0644"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "one-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "\u0627\u0644\u0639\u0645\u064a\u0644 \u0645\u0627\u0644\u0643 \u0627\u0644\u0633\u0644\u0629"
+        }
+      ]
+    },
+    {
+      "name": "cart_items",
+      "purpose": "\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u0633\u0644\u0629 \u0645\u0639 \u0627\u0644\u0643\u0645\u064a\u0627\u062a.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "cart_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "1",
+          "notes": "\u064a\u062c\u0628 \u0623\u0646 \u062a\u0643\u0648\u0646 \u0623\u0643\u0628\u0631 \u0645\u0646 \u0635\u0641\u0631"
+        },
+        {
+          "name": "added_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "cart_id",
+        "product_id",
+        "UNIQUE(cart_id, product_id)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "carts",
+          "fk": "cart_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "purpose": "\u0627\u0644\u0637\u0644\u0628\u0627\u062a \u0627\u0644\u0645\u0642\u062f\u0651\u0645\u0629 \u0645\u0639 \u0639\u0646\u0648\u0627\u0646 \u0648\u0645\u0648\u0639\u062f \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0648\u0631\u0633\u0627\u0644\u0629 \u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u0625\u0647\u062f\u0627\u0621 \u0648\u062d\u0627\u0644\u0629 \u0627\u0644\u0637\u0644\u0628 \u0648\u0627\u0644\u0645\u0646\u062f\u0648\u0628 \u0627\u0644\u0645\u0633\u0646\u062f \u0625\u0644\u064a\u0647.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_number",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "\u0631\u0642\u0645 \u0627\u0644\u0637\u0644\u0628 \u0627\u0644\u0638\u0627\u0647\u0631 \u0644\u0644\u0639\u0645\u064a\u0644"
+        },
+        {
+          "name": "customer_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0639\u0645\u064a\u0644 \u0635\u0627\u062d\u0628 \u0627\u0644\u0637\u0644\u0628"
+        },
+        {
+          "name": "address_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0648\u064a\u062c\u0628 \u062a\u062d\u062f\u064a\u062f\u0647 \u0642\u0628\u0644 \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628"
+        },
+        {
+          "name": "courier_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0645\u0646\u062f\u0648\u0628 \u0627\u0644\u0645\u0633\u0646\u062f \u0625\u0644\u064a\u0647 \u0627\u0644\u0637\u0644\u0628"
+        },
+        {
+          "name": "assigned_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062a\u062c\u0631 \u0627\u0644\u0630\u064a \u0623\u0633\u0646\u062f \u0627\u0644\u0637\u0644\u0628"
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending_payment'",
+          "notes": "\u0627\u0644\u0642\u064a\u0645 \u0627\u0644\u0645\u0633\u0645\u0648\u062d\u0629: pending_payment, paid, assigned, out_for_delivery, delivered, cancelled"
+        },
+        {
+          "name": "subtotal",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "\u0645\u062c\u0645\u0648\u0639 \u0623\u0633\u0639\u0627\u0631 \u0627\u0644\u0639\u0646\u0627\u0635\u0631"
+        },
+        {
+          "name": "delivery_fee",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": null
+        },
+        {
+          "name": "total_amount",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "\u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u062f\u0641\u0639\u0647"
+        },
+        {
+          "name": "delivery_date",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0627\u0644\u0645\u0637\u0644\u0648\u0628"
+        },
+        {
+          "name": "delivery_time_slot",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0641\u062a\u0631\u0629 \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0645\u062b\u0644 16:00-18:00"
+        },
+        {
+          "name": "gift_card_message",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0646\u0635 \u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u0625\u0647\u062f\u0627\u0621 \u0627\u0644\u0627\u062e\u062a\u064a\u0627\u0631\u064a\u0629"
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0645\u0644\u0627\u062d\u0638\u0627\u062a \u0627\u0644\u0639\u0645\u064a\u0644"
+        },
+        {
+          "name": "placed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": "\u0648\u0642\u062a \u062a\u0642\u062f\u064a\u0645 \u0627\u0644\u0637\u0644\u0628 \u0648\u064a\u0633\u062a\u062e\u062f\u0645 \u0644\u062a\u0631\u062a\u064a\u0628 \u0627\u0644\u0633\u062c\u0644 \u0645\u0646 \u0627\u0644\u0623\u062d\u062f\u062b \u0625\u0644\u0649 \u0627\u0644\u0623\u0642\u062f\u0645"
+        },
+        {
+          "name": "assigned_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "delivered_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0648\u0642\u062a \u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062a\u0633\u0644\u064a\u0645"
+        },
+        {
+          "name": "reorder_of_order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0637\u0644\u0628 \u0627\u0644\u0633\u0627\u0628\u0642 \u0627\u0644\u0630\u064a \u0623\u064f\u0639\u064a\u062f \u0637\u0644\u0628\u0647 \u0625\u0646 \u0648\u064f\u062c\u062f"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_number",
+        "customer_id",
+        "courier_id",
+        "status",
+        "placed_at",
+        "address_id",
+        "reorder_of_order_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "customer_id",
+          "ref": "id",
+          "notes": "\u0627\u0644\u0639\u0645\u064a\u0644"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "addresses",
+          "fk": "address_id",
+          "ref": "id",
+          "notes": "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u062a\u0648\u0635\u064a\u0644"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "courier_id",
+          "ref": "id",
+          "notes": "\u0645\u0646\u062f\u0648\u0628 \u0627\u0644\u062a\u0648\u0635\u064a\u0644"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "assigned_by",
+          "ref": "id",
+          "notes": "\u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062a\u062c\u0631 \u0627\u0644\u0645\u0633\u0646\u062f"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "reorder_of_order_id",
+          "ref": "id",
+          "notes": "\u0639\u0644\u0627\u0642\u0629 \u0630\u0627\u062a\u064a\u0629 \u0644\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0637\u0644\u0628"
+        }
+      ]
+    },
+    {
+      "name": "order_items",
+      "purpose": "\u0639\u0646\u0627\u0635\u0631 \u0643\u0644 \u0637\u0644\u0628 \u0645\u0639 \u0644\u0642\u0637\u0629 \u0645\u0646 \u0627\u0644\u0627\u0633\u0645 \u0648\u0627\u0644\u0633\u0639\u0631 \u0648\u0642\u062a \u0627\u0644\u0634\u0631\u0627\u0621.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "product_name",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0633\u0645 \u0627\u0644\u0645\u0646\u062a\u062c \u0648\u0642\u062a \u0627\u0644\u0637\u0644\u0628"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "1",
+          "notes": null
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0633\u0639\u0631 \u0627\u0644\u0648\u062d\u062f\u0629 \u0648\u0642\u062a \u0627\u0644\u0637\u0644\u0628"
+        },
+        {
+          "name": "line_total",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0643\u0645\u064a\u0629 \u00d7 \u0633\u0639\u0631 \u0627\u0644\u0648\u062d\u062f\u0629"
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "product_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "payments",
+      "purpose": "\u0633\u062c\u0644 \u0639\u0645\u0644\u064a\u0627\u062a \u0627\u0644\u062f\u0641\u0639 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a \u0639\u0628\u0631 \u0627\u0644\u0628\u0648\u0627\u0628\u0629 \u062f\u0648\u0646 \u062a\u062e\u0632\u064a\u0646 \u0623\u064a \u0628\u064a\u0627\u0646\u0627\u062a \u0628\u0637\u0627\u0642\u0627\u062a \u0645\u0635\u0631\u0641\u064a\u0629.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "provider",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0633\u0645 \u0628\u0648\u0627\u0628\u0629 \u0627\u0644\u062f\u0641\u0639"
+        },
+        {
+          "name": "provider_transaction_id",
+          "type": "varchar",
+          "pk": false,
+          "nullable": true,
+          "unique": true,
+          "default": null,
+          "notes": "\u0645\u0631\u062c\u0639 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0644\u062f\u0649 \u0627\u0644\u0628\u0648\u0627\u0628\u0629"
+        },
+        {
+          "name": "amount",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "currency",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'SAR'",
+          "notes": null
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending'",
+          "notes": "\u0627\u0644\u0642\u064a\u0645 \u0627\u0644\u0645\u0633\u0645\u0648\u062d\u0629: pending, succeeded, failed, refunded"
+        },
+        {
+          "name": "failure_reason",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "paid_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "provider_transaction_id",
+        "status"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "\u0642\u062f \u064a\u0645\u0644\u0643 \u0627\u0644\u0637\u0644\u0628 \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062d\u0627\u0648\u0644\u0629 \u062f\u0641\u0639"
+        }
+      ]
+    },
+    {
+      "name": "order_status_history",
+      "purpose": "\u0633\u062c\u0644 \u062a\u063a\u064a\u0651\u0631 \u062d\u0627\u0644\u0627\u062a \u0627\u0644\u0637\u0644\u0628 \u0644\u062f\u0639\u0645 \u0627\u0644\u062a\u062a\u0628\u0639 \u0648\u0645\u0639\u0631\u0641\u0629 \u0645\u0646 \u063a\u064a\u0651\u0631 \u0627\u0644\u062d\u0627\u0644\u0629.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "changed_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u0627\u0644\u0630\u064a \u063a\u064a\u0651\u0631 \u0627\u0644\u062d\u0627\u0644\u0629 \u0648\u0642\u062f \u064a\u0643\u0648\u0646 \u0627\u0644\u0646\u0638\u0627\u0645 \u0641\u064a\u0643\u0648\u0646 \u0641\u0627\u0631\u063a\u0627\u064b"
+        },
+        {
+          "name": "status",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u062d\u0627\u0644\u0629 \u0627\u0644\u062c\u062f\u064a\u062f\u0629"
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "changed_by",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "changed_by",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "courier_locations",
+      "purpose": "\u0645\u0648\u0627\u0642\u0639 \u0627\u0644\u0645\u0646\u062f\u0648\u0628 \u0623\u062b\u0646\u0627\u0621 \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0644\u0639\u0631\u0636\u0647\u0627 \u0644\u0644\u0639\u0645\u064a\u0644 \u0648\u062a\u062d\u062f\u064a\u062b\u0647\u0627 \u0643\u0644 30 \u062b\u0627\u0646\u064a\u0629.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0645\u0639\u0631\u0651\u0641 \u062a\u0644\u0642\u0627\u0626\u064a \u0627\u0644\u062a\u0632\u0627\u064a\u062f \u0644\u0643\u062b\u0631\u0629 \u0627\u0644\u0633\u062c\u0644\u0627\u062a"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "courier_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "latitude",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "longitude",
+          "type": "decimal",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "recorded_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "courier_id",
+        "recorded_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "courier_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "stock_movements",
+      "purpose": "\u0633\u062c\u0644 \u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0645\u062e\u0632\u0648\u0646 (\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u0645\u062f\u064a\u0631 \u0623\u0648 \u062e\u0635\u0645 \u0639\u0646\u062f \u0627\u0644\u0637\u0644\u0628) \u0644\u0636\u0628\u0637 \u0627\u0644\u0643\u0645\u064a\u0627\u062a.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "changed_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0645\u062f\u064a\u0631 \u0627\u0644\u0630\u064a \u0639\u062f\u0651\u0644 \u0627\u0644\u0645\u062e\u0632\u0648\u0646"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0637\u0644\u0628 \u0627\u0644\u0645\u0631\u062a\u0628\u0637 \u0625\u0646 \u0643\u0627\u0646\u062a \u0627\u0644\u062d\u0631\u0643\u0629 \u0646\u0627\u062a\u062c\u0629 \u0639\u0646 \u0637\u0644\u0628"
+        },
+        {
+          "name": "quantity_change",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0642\u064a\u0645\u0629 \u0645\u0648\u062c\u0628\u0629 \u0644\u0644\u0625\u0636\u0627\u0641\u0629 \u0648\u0633\u0627\u0644\u0628\u0629 \u0644\u0644\u062e\u0635\u0645"
+        },
+        {
+          "name": "reason",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0642\u064a\u0645 \u0627\u0644\u0645\u0633\u0645\u0648\u062d\u0629: restock, adjustment, order, cancellation"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "product_id",
+        "changed_by",
+        "order_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "changed_by",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "purpose": "\u0627\u0644\u0625\u0634\u0639\u0627\u0631\u0627\u062a \u0627\u0644\u0645\u0631\u0633\u0644\u0629 \u0644\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646 (\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0637\u0644\u0628\u060c \u0625\u0633\u0646\u0627\u062f \u0627\u0644\u0637\u0644\u0628 \u0644\u0644\u0645\u0646\u062f\u0648\u0628\u060c \u062a\u0645 \u0627\u0644\u062a\u0633\u0644\u064a\u0645).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0645\u0633\u062a\u0644\u0645"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0637\u0644\u0628 \u0627\u0644\u0645\u0631\u062a\u0628\u0637 \u0628\u0627\u0644\u0625\u0634\u0639\u0627\u0631"
+        },
+        {
+          "name": "type",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "\u0627\u0644\u0642\u064a\u0645 \u0627\u0644\u0645\u0633\u0645\u0648\u062d\u0629: order_confirmed, order_assigned, order_delivered, status_update"
+        },
+        {
+          "name": "title",
+          "type": "varchar",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "is_read",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": null
+        },
+        {
+          "name": "sent_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "\u0648\u0642\u062a \u0627\u0644\u0625\u0631\u0633\u0627\u0644 \u0639\u0628\u0631 FCM"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "order_id",
+        "is_read",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "\u0642\u0627\u0639\u062f\u0629 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0647\u064a PostgreSQL \u0648\u064a\u064f\u0646\u0634\u0623 \u0627\u0644\u0645\u0639\u0631\u0651\u0641 uuid \u0639\u0628\u0631 \u0627\u0644\u062f\u0627\u0644\u0629 gen_random_uuid() \u0645\u0627 \u0639\u062f\u0627 \u062c\u062f\u0648\u0644 courier_locations \u0627\u0644\u0630\u064a \u064a\u0633\u062a\u062e\u062f\u0645 bigint \u062a\u0644\u0642\u0627\u0626\u064a \u0627\u0644\u062a\u0632\u0627\u064a\u062f \u0644\u0643\u062b\u0631\u0629 \u0627\u0644\u0633\u062c\u0644\u0627\u062a.",
+    "\u0643\u0644 \u062c\u062f\u0648\u0644 \u0644\u0647 \u0639\u0645\u0648\u062f \u0645\u0641\u062a\u0627\u062d \u0623\u0633\u0627\u0633\u064a \u0648\u0627\u062d\u062f \u0641\u0642\u0637\u060c \u0648\u062a\u0633\u062a\u062e\u062f\u0645 \u0627\u0644\u062c\u062f\u0627\u0648\u0644 \u0627\u0644\u0648\u0633\u064a\u0637\u0629 (product_occasions \u0648product_colors) \u0645\u0641\u062a\u0627\u062d\u0627\u064b \u0628\u062f\u064a\u0644\u0627\u064b id \u0645\u0639 \u0642\u064a\u062f \u062a\u0641\u0631\u0651\u062f \u0645\u0631\u0643\u0651\u0628 \u0639\u0644\u0649 \u0632\u0648\u062c \u0627\u0644\u0645\u0641\u062a\u0627\u062d\u064a\u0646 \u0627\u0644\u0623\u062c\u0646\u0628\u064a\u064a\u0646.",
+    "\u064a\u064f\u062f\u0627\u0631 \u0627\u0644\u062f\u0648\u0631 (\u0639\u0645\u064a\u0644\u060c \u0645\u0646\u062f\u0648\u0628 \u062a\u0648\u0635\u064a\u0644\u060c \u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062a\u062c\u0631) \u0639\u0628\u0631 \u0627\u0644\u0639\u0645\u0648\u062f users.role \u0628\u0642\u064a\u0645 customer \u0648courier \u0648store_manager \u0628\u062f\u0644\u0627\u064b \u0645\u0646 \u062c\u062f\u0648\u0644 \u0623\u062f\u0648\u0627\u0631 \u0645\u0646\u0641\u0635\u0644 \u0644\u062a\u0628\u0633\u064a\u0637 \u0627\u0644\u0645\u062e\u0637\u0637.",
+    "\u0644\u0627 \u062a\u064f\u062e\u0632\u064e\u0651\u0646 \u0623\u064a \u0628\u064a\u0627\u0646\u0627\u062a \u0628\u0637\u0627\u0642\u0627\u062a \u0645\u0635\u0631\u0641\u064a\u0629\u061b \u064a\u064f\u062d\u0641\u0638 \u0641\u0642\u0637 \u0645\u0631\u062c\u0639 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0645\u0646 \u0628\u0648\u0627\u0628\u0629 \u0627\u0644\u062f\u0641\u0639 (provider_transaction_id) \u0648\u062d\u0627\u0644\u062a\u0647\u0627 \u0648\u0641\u0642 \u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0627\u0644\u0623\u0645\u0627\u0646.",
+    "\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0639\u0646\u0627\u0648\u064a\u0646 \u0648\u0627\u0644\u0645\u0648\u0627\u0642\u0639 \u062a\u064f\u0633\u062a\u062e\u062f\u0645 \u0644\u0623\u063a\u0631\u0627\u0636 \u0627\u0644\u062a\u0648\u0635\u064a\u0644 \u0641\u0642\u0637\u060c \u0648\u064a\u064f\u0633\u062c\u064e\u0651\u0644 \u0631\u0636\u0627 \u0627\u0644\u0639\u0645\u064a\u0644 \u0641\u064a addresses.location_consent\u060c \u0648\u0644\u0627 \u064a\u064f\u0633\u062c\u064e\u0651\u0644 \u0645\u0648\u0642\u0639 \u0627\u0644\u0645\u0646\u062f\u0648\u0628 \u0625\u0644\u0627 \u0623\u062b\u0646\u0627\u0621 \u0627\u0644\u062a\u0648\u0635\u064a\u0644.",
+    "\u062a\u064f\u0646\u0634\u0623 \u0633\u062c\u0644\u0627\u062a courier_locations \u0643\u0644 30 \u062b\u0627\u0646\u064a\u0629 \u062a\u0642\u0631\u064a\u0628\u0627\u064b \u0623\u062b\u0646\u0627\u0621 \u062d\u0627\u0644\u0629 out_for_delivery\u060c \u0648\u064a\u0645\u0643\u0646 \u0623\u0631\u0634\u0641\u062a\u0647\u0627 \u0623\u0648 \u062d\u0630\u0641\u0647\u0627 \u0628\u0639\u062f \u0625\u063a\u0644\u0627\u0642 \u0627\u0644\u0637\u0644\u0628.",
+    "\u062a\u064f\u062e\u0632\u064e\u0651\u0646 \u0644\u0642\u0637\u0629 \u0627\u0633\u0645 \u0627\u0644\u0645\u0646\u062a\u062c \u0648\u0633\u0639\u0631\u0647 \u0641\u064a order_items \u062d\u062a\u0649 \u0644\u0627 \u062a\u062a\u0623\u062b\u0631 \u0627\u0644\u0637\u0644\u0628\u0627\u062a \u0627\u0644\u0633\u0627\u0628\u0642\u0629 \u0628\u062a\u063a\u064a\u0651\u0631 \u0627\u0644\u0633\u0639\u0631 \u0644\u0627\u062d\u0642\u0627\u064b\u060c \u0648\u064a\u064f\u0633\u062a\u062e\u062f\u0645 reorder_of_order_id \u0648order_items \u0644\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0637\u0644\u0628.",
+    "\u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u0625\u0647\u062f\u0627\u0621 \u0645\u0631\u062a\u0628\u0637\u0629 \u0628\u0627\u0644\u0637\u0644\u0628 \u0643\u0627\u0645\u0644\u0627\u064b \u0639\u0628\u0631 orders.gift_card_message \u0648\u0644\u0627 \u062a\u064f\u0639\u0627\u0645\u0644 \u0643\u0645\u0646\u062a\u062c \u0645\u0646\u0641\u0635\u0644.",
+    "\u0627\u0644\u062a\u0635\u0641\u064a\u0629 \u062d\u0633\u0628 \u0627\u0644\u0633\u0639\u0631 \u062a\u0639\u062a\u0645\u062f \u0639\u0644\u0649 products.price\u060c \u0648\u062d\u0633\u0628 \u0627\u0644\u0644\u0648\u0646 \u0639\u0628\u0631 product_colors\u060c \u0648\u062d\u0633\u0628 \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629 \u0639\u0628\u0631 product_occasions\u060c \u0648\u062d\u0633\u0628 \u0627\u0644\u0646\u0648\u0639 \u0639\u0628\u0631 categories \u0648products.product_type\u061b \u0648\u064a\u064f\u0646\u0635\u062d \u0628\u0625\u0636\u0627\u0641\u0629 \u0641\u0647\u0631\u0633 \u0628\u062d\u062b \u0646\u0635\u064a \u0643\u0627\u0645\u0644 \u0639\u0644\u0649 products.name \u0648products.description \u0644\u062a\u062d\u0642\u064a\u0642 \u0632\u0645\u0646 \u0628\u062d\u062b \u0623\u0642\u0644 \u0645\u0646 \u062b\u0627\u0646\u064a\u062a\u064a\u0646.",
+    "\u062a\u0631\u062a\u064a\u0628 \u0633\u062c\u0644 \u0627\u0644\u0637\u0644\u0628\u0627\u062a \u0645\u0646 \u0627\u0644\u0623\u062d\u062f\u062b \u0625\u0644\u0649 \u0627\u0644\u0623\u0642\u062f\u0645 \u064a\u0639\u062a\u0645\u062f \u0639\u0644\u0649 \u0627\u0644\u0641\u0647\u0631\u0633 \u0639\u0644\u0649 orders.placed_at.",
+    "\u0627\u0644\u0639\u0645\u0644\u0629 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a\u0629 \u0644\u0644\u0645\u062f\u0641\u0648\u0639\u0627\u062a \u0647\u064a \u0627\u0644\u0631\u064a\u0627\u0644 \u0627\u0644\u0633\u0639\u0648\u062f\u064a SAR \u0648\u064a\u0645\u0643\u0646 \u062a\u063a\u064a\u064a\u0631\u0647\u0627 \u0639\u0646\u062f \u0627\u0644\u062d\u0627\u062c\u0629.",
+    "\u0631\u0645\u0648\u0632 FCM \u062a\u064f\u062d\u0641\u0638 \u0641\u064a device_tokens \u0644\u0623\u0646 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u0642\u062f \u064a\u0645\u0644\u0643 \u0639\u062f\u0629 \u0623\u062c\u0647\u0632\u0629."
+  ]
+}

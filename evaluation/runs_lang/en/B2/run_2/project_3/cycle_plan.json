@@ -1,0 +1,235 @@
+{
+  "plan_name": "Hospital Appointment Booking MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema (users, roles, doctors, departments, availability, slots, appointments, notifications, audit log) with a unique constraint on doctor and slot time to prevent double-booking",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Set up Node.js REST API skeleton, React app shell, environment config, TLS, and migrations",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Build design system and Sign In & Register screens (teal theme, inputs, buttons, tabs, bottom nav, mobile-first)",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T4",
+      "title": "Implement registration, email verification, login, password reset with bcrypt, JWT, and role-based access control middleware",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T2"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Integrate auth UI with API (register, verify, login, reset, role-based redirect to patient or staff views)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T3",
+        "T4"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Design Find Doctors and Book Appointment screens (doctor card, chips, date strip, slot grid, modals, empty states)",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F2",
+        "F3"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Build doctor search and filter API (name, specialty, department) and weekly availability API generating open slots",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T4"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Build Find Doctors UI with live search, specialty chips, results count, and next-available badge",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T6",
+        "T7"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Implement booking, reschedule, and cancel API with transactional slot locking and 24-hour cancellation rule",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T7"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Build Book Appointment and My Appointments UI (slot selection, confirmation modal, conflict alert, cancel and reschedule flows)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2",
+        "F3"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T6",
+        "T9"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Integrate email/SMS gateway with background job queue for booking confirmations, 24-hour reminders, and doctor cancellation alerts within 5 minutes",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T9"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Build Notifications screen and reminder preference toggles (in-app feed, email/SMS settings)",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T11"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Design Admin Dashboard and Notifications screens (stat cards, chart, doctor list, availability editor, preferences card)",
+      "assigned_agent": "Designer",
+      "priority": "low",
+      "feature_ids": [
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "Build admin API and UI for doctor and department CRUD, availability editor, and date-range appointment reports (total, completed, cancelled)",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5",
+        "F2"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T7",
+        "T13"
+      ]
+    },
+    {
+      "id": "T15",
+      "title": "Add report queries and indexes, AES-256 encryption at rest, and audit logging of patient record access",
+      "assigned_agent": "DBA",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T9"
+      ]
+    },
+    {
+      "id": "T16",
+      "title": "End-to-end testing of booking flow, double-booking race conditions, load test at 500 concurrent users, and deploy MVP to staging",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T10",
+        "T12",
+        "T14",
+        "T15"
+      ]
+    }
+  ],
+  "risks": [
+    "Double-booking under concurrent requests may occur if slot locking or the unique constraint is implemented incorrectly",
+    "Email/SMS gateway approval, sender registration, and delivery delays could slow the reminder and notification features",
+    "Meeting the 500 concurrent user and 3-second booking targets may need extra tuning, caching, and indexing",
+    "Privacy requirements (AES-256 at rest, audit trail, RBAC on every endpoint) may add effort that threatens the short MVP timeline",
+    "Scope creep from the 4 user roles (receptionist views, reports) may delay core patient booking; keep receptionist features minimal"
+  ]
+}

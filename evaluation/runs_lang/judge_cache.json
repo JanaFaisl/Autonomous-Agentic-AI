@@ -1,0 +1,124 @@
+{
+ "ar/run_1/1": {
+  "faithfulness": 4.0,
+  "consistency": 4.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts cover browsing, ordering and doorstep delivery well, and the admin and courier additions are reasonable support scope, but T6 mentions login with no matching screen, there is no order-confirmation or order-history screen, and the plural for couriers alternates between 'المناديب' and 'المندوبين'."
+ },
+ "ar/run_2/4": {
+  "faithfulness": 4.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 3.0,
+  "notes": "The artifacts cover note sharing, group creation and search well, but F3 promises in-group interaction that no screen or task delivers, there is no notifications screen or saved-notes view, login has only a link rather than a screen, and moderation is awkwardly merged into the profile screen, although the Arabic is fluent apart from minor awkward phrasing such as 'معلومات الرافع'."
+ },
+ "ar/run_2/2": {
+  "faithfulness": 3.0,
+  "consistency": 4.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The core create, complete and delete features are covered well and the Arabic is fluent, but the artifacts add unrequested scope: user accounts with login (F5) for a 'simple' app, plus a search box and a 100-concurrent-user load test that no feature backs; the list screen's F5 tag is unjustified, and the flow lacks a logout and a clear path from the list to the task details screen."
+ },
+ "ar/run_1/5": {
+  "faithfulness": 5.0,
+  "consistency": 4.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts deliver real-time inventory tracking with barcode scanning for small retail stores and the Arabic is mostly fluent, but there are gaps: T4 and T2 require adding new products and logging in with no matching screens, T10 offers Excel export while the reports screen shows only PDF, and the name 'لايف' is an unnecessary transliteration."
+ },
+ "en/run_1/1": {
+  "faithfulness": 4.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 3.0,
+  "notes": "The artifacts cover the browse-order-deliver request well, but they have gaps: there is no flower detail or order detail screen and no courier-facing view despite courier status endpoints and a Courier Status Button on the customer tracking screen, favorites and map preview lack a backing feature or task, and the account deletion in T4 has no UI on the Account screen."
+ },
+ "ar/run_2/3": {
+  "faithfulness": 4.0,
+  "consistency": 4.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts cover patient booking well and use fluent Arabic, but they add unrequested specifics (a 24-hour cancellation rule, 200 concurrent users, a 3-minute target), cite 'four roles' when only patient, doctor and admin appear, show a favorites element with no feature or task behind it, report per clinic without a clinics entity in the schema, and merge the doctor and admin dashboards into one screen."
+ },
+ "ar/run_1/2": {
+  "faithfulness": 3.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts cover creating, completing and deleting tasks well, but they add scope the simple request didn't ask for: task editing, title search, a progress summary, a 'forgot password' link with no screen or task behind it, and 100-user load testing; editing and search also appear in screens and tasks without matching feature definitions, while the Arabic is fluent and professional apart from acceptable technical terms."
+ },
+ "en/run_1/3": null,
+ "en/run_1/4": {
+  "faithfulness": 5.0,
+  "consistency": 4.0,
+  "language_quality": 5.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts cover note sharing and study groups faithfully with sensible supporting features, but there are minor gaps: T11 mentions a standalone bookmarks page and T13 adds privacy/terms pages, neither of which appears as a screen, and there is no group detail screen for interacting within a group."
+ },
+ "en/run_2/5": {
+  "faithfulness": 4.0,
+  "consistency": 4.0,
+  "language_quality": 5.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts closely match the request for real-time barcode-based inventory, but there are minor scope additions and loose ends: a Supplier read-only role with no supplier screen, sales reports beyond F4's stock-report scope, dismiss vs. snooze wording that doesn't match between screen and task, and an F1 tag on Stock List that has no scan component."
+ },
+ "en/run_2/1": {
+  "faithfulness": 4.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts cover browsing, ordering and door delivery well, with plausible admin and courier scope added, but there are gaps: T14 designs screens that earlier tasks already build, no task captures courier GPS location despite the live map, and the account deletion (T4) and gift message have no matching feature or screen support."
+ },
+ "en/run_2/3": {
+  "faithfulness": 4.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts cover the core booking request well, but they add details the features don't define, such as the 24-hour cancellation rule, the Save Doctor button and doctor access to the Admin Dashboard; T13 designs the Notifications screen after T12 already builds it, and no screen supports the profile management promised in F1."
+ },
+ "en/run_1/5": {
+  "faithfulness": 5.0,
+  "consistency": 4.0,
+  "language_quality": 5.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts closely match the request for real-time barcode-based inventory and map cleanly across features, screens and tasks, but gaps remain: sales recording (needed for top sellers and turnover), supplier management and login have no screens, and there is no product catalog or browse screen for reaching Product Detail without scanning."
+ },
+ "ar/run_2/5": null,
+ "en/run_2/2": {
+  "faithfulness": 3.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The core create, complete and delete flows are well covered with a coherent screen flow, but user authentication, an Account screen, load testing and uptime monitoring inflate the 'simple' request, and Task Details offers edit/Save Changes with no matching feature or update API (PATCH only handles complete/reopen)."
+ },
+ "ar/run_2/1": {
+  "faithfulness": 5.0,
+  "consistency": 4.0,
+  "language_quality": 5.0,
+  "design_usability": 4.0,
+  "notes": "The artifacts closely cover browsing, ordering, payment and doorstep delivery with justified supporting roles (store manager and courier) in fluent Arabic, but the catalog screen's 'إضافة للمفضلة' (add to favorites) has no matching feature, task or screen, and login is folded into the account screen rather than given a clear entry flow."
+ },
+ "en/run_2/4": {
+  "faithfulness": 4.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 3.0,
+  "notes": "The features closely match the request for note sharing and study groups, but there are gaps: tasks reference Log In, Note Preview and privacy-settings screens that are not defined, the Notes Library has no rating control despite claiming rating, and placing the moderator queue on the student Profile screen weakens the flow."
+ },
+ "en/run_1/2": {
+  "faithfulness": 4.0,
+  "consistency": 3.0,
+  "language_quality": 4.0,
+  "design_usability": 4.0,
+  "notes": "The create, complete and delete features and their screens match the request well, but the tasks add user accounts, auth middleware, load testing and uptime monitoring that a simple task manager does not need and that no login screen supports, while minor drift remains (redundant add buttons, 'Keep Task' vs 'Cancel Delete', an undo toast and open-count header not shown on any screen)."
+ },
+ "ar/run_1/4": null,
+ "ar/run_1/3": {
+  "faithfulness": 4.0,
+  "consistency": 4.0,
+  "language_quality": 5.0,
+  "design_usability": 4.0,
+  "notes": "The features, screens and tasks cover the patient booking request well and stay well aligned, but there are small gaps: the 'save to favorites' item has no matching feature or task, the doctor and staff have no login entry point, and the working-hours form has a 'from' field without a 'to' field."
+ }
+}

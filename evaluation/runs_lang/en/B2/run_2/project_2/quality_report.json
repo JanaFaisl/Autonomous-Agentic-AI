@@ -1,0 +1,46 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Register screen / users table",
+      "message": "The Register screen collects a 'Full name' and the Account screen displays it, but the users table has no name column to store it."
+    },
+    {
+      "severity": "Medium",
+      "item": "Administrator role",
+      "message": "The Administrator role appears in the requirements and the users.role column, but no feature, acceptance criterion or screen defines what an administrator can do, and the 403 rule only covers per-user task isolation."
+    },
+    {
+      "severity": "Medium",
+      "item": "Description length limit",
+      "message": "The New Task screen enforces a 500-character description counter, but the requirements do not state this limit and tasks.description is unbounded text with no matching constraint."
+    },
+    {
+      "severity": "Medium",
+      "item": "Task status terminology",
+      "message": "The Task Details status badge uses 'In Progress' while the requirements, filters and schema define only 'active/incomplete' and 'completed', which implies a third state that does not exist."
+    }
+  ],
+  "required_fixes": [
+    "Add a name column (for example varchar(100)) to the users table, or remove the Full name input and the name display from the Register and Account screens.",
+    "Define the Administrator role's capabilities in the requirements, or state that it has no functionality in the first release.",
+    "Align the description limit across requirements, design and schema, for example a 500-character requirement plus a CHECK constraint or varchar(500).",
+    "Rename the 'In Progress' badge to 'Active' so the design matches the two-state status model."
+  ],
+  "recommendations": [
+    "Drop the redundant standalone email index on users, since the UNIQUE constraint already creates one.",
+    "Add API-level requirements for the 403 and 401 behaviours and for password validation rules, so the design's 8+ characters with a number rule is traceable.",
+    "Clarify the Task List default-state description on My Tasks, and use timestamptz for the UTC timestamps."
+  ]
+}

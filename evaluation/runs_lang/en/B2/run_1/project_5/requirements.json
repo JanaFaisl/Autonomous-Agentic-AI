@@ -1,0 +1,115 @@
+{
+  "project_name": "RetailSync Real-Time Inventory Manager",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Barcode Scanning",
+      "description": "Scan product barcodes with a camera or handheld scanner to look up and update stock.",
+      "priority": "High",
+      "user_stories": [
+        "As a store clerk, I can scan a barcode so that I can instantly see a product's details and stock level.",
+        "As a store clerk, I can scan items on delivery so that received stock is added to inventory quickly."
+      ],
+      "acceptance_criteria": [
+        "Given a registered product, When its barcode is scanned, Then the product details and current quantity display within 1 second.",
+        "Given an unknown barcode, When it is scanned, Then the system offers to create a new product record."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Real-Time Stock Tracking",
+      "description": "Maintain live stock counts that update immediately across all devices after every sale, receipt or adjustment.",
+      "priority": "High",
+      "user_stories": [
+        "As a store manager, I can view live stock levels so that I always know what is available on the shelves.",
+        "As a store clerk, I can adjust stock with a reason code so that damaged or lost items are recorded accurately."
+      ],
+      "acceptance_criteria": [
+        "Given a stock change on one device, When it is saved, Then all other connected devices show the new quantity within 2 seconds.",
+        "Given a stock adjustment, When it is submitted, Then the change is logged with user, timestamp and reason."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Low-Stock Alerts and Reordering",
+      "description": "Notify managers when items fall below a reorder threshold and help create purchase orders.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a store manager, I can set reorder thresholds so that I am alerted before products run out.",
+        "As a store manager, I can generate a purchase order from low-stock items so that restocking is faster."
+      ],
+      "acceptance_criteria": [
+        "Given a product with a threshold of 5, When its quantity drops below 5, Then a low-stock alert is sent to managers.",
+        "Given selected low-stock items, When I create a purchase order, Then a draft order is generated for the assigned supplier."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Inventory Reports and Dashboard",
+      "description": "Provide dashboards and exportable reports on stock value, turnover and movement history.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a store owner, I can view a dashboard of stock value and top sellers so that I can make purchasing decisions.",
+        "As a store owner, I can export inventory reports to CSV so that I can share them with my accountant."
+      ],
+      "acceptance_criteria": [
+        "Given inventory data exists, When I open the dashboard, Then total stock value and low-stock counts display accurately.",
+        "Given a chosen date range, When I click export, Then a CSV of stock movements downloads within 10 seconds."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "User and Role Management",
+      "description": "Allow owners to create staff accounts and control access based on role.",
+      "priority": "Low",
+      "user_stories": [
+        "As a store owner, I can create staff accounts with roles so that employees only access permitted functions.",
+        "As a store owner, I can deactivate a user so that former employees can no longer access the system."
+      ],
+      "acceptance_criteria": [
+        "Given a clerk account, When the clerk tries to open admin settings, Then access is denied.",
+        "Given a deactivated user, When they try to log in, Then authentication fails and the attempt is logged."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile Web (PWA)"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "WebSockets",
+      "REST API",
+      "Barcode scanning via device camera (ZXing) and USB/Bluetooth scanners"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Stock updates propagate to all connected clients within 2 seconds, and barcode lookups return within 1 second at 50 concurrent users."
+    },
+    {
+      "category": "Security",
+      "requirement": "All traffic uses TLS 1.2+, passwords are hashed with bcrypt, and role-based access control is enforced on every API endpoint."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The system achieves 99.5% monthly uptime, with daily automated backups and a recovery point objective of 24 hours."
+    },
+    {
+      "category": "Usability",
+      "requirement": "A new clerk can complete a barcode scan and stock update after under 15 minutes of training, on screens 360px wide and up."
+    }
+  ],
+  "user_roles": [
+    "Store Owner",
+    "Store Manager",
+    "Store Clerk"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:43:40"
+}

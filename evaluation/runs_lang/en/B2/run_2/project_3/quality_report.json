@@ -1,0 +1,46 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Notifications screen vs notifications table",
+      "message": "The Notifications screen shows an in-app feed with unread dots, 'Mark all read' and swipe-to-dismiss, but the notifications table only models email/sms delivery and has no read/dismissed field or in-app channel."
+    },
+    {
+      "severity": "Medium",
+      "item": "Doctor card attributes vs doctors/users tables",
+      "message": "The design shows doctor avatar, star rating, years of experience and a doctor gender filter, but neither the doctors nor the users table has photo, rating, experience or gender columns."
+    },
+    {
+      "severity": "Medium",
+      "item": "Save Doctor (favorites) feature",
+      "message": "The design includes a 'Save Doctor' heart button for favorites, but no requirement or user story covers it and the schema has no table to store saved doctors."
+    },
+    {
+      "severity": "Medium",
+      "item": "Receptionist role",
+      "message": "Receptionist is a listed user role (and the design says they see appointments only, with booked_by_user_id in the schema), but the requirements contain no feature, user story or acceptance criteria for receptionist actions such as booking on behalf of patients."
+    }
+  ],
+  "required_fixes": [
+    "Add an in-app read state (for example is_read/read_at or an 'in_app' channel) to the notifications table, or remove the unread dots, 'Mark all read' and dismiss behaviour from the Notifications screen.",
+    "Add the doctor display and filter fields the design uses (photo_url, years_of_experience, rating source, gender) to the schema, or remove them from the Find Doctors and Book Appointment screens.",
+    "Either add a favorites requirement and a saved_doctors table, or remove the Save Doctor button from the design.",
+    "Add receptionist user stories and acceptance criteria to the requirements and define the receptionist's permitted actions in the design."
+  ],
+  "recommendations": [
+    "Make the bottom navigation role-aware, so patients do not see the Dashboard tab and staff see only the tabs relevant to them.",
+    "Align the status vocabulary across artifacts: the design's Status Chip uses 'Pending', while the database uses scheduled/confirmed/no_show/rescheduled.",
+    "Add a patient-facing profile and personal-details screen to match the patients table, since the registration screen collects only name, email, phone and password."
+  ]
+}

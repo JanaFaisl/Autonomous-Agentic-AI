@@ -1,0 +1,1728 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "All system accounts (customers, couriers, admins) with role-based access.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Login identifier"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "bcrypt hash"
+        },
+        {
+          "name": "full_name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "phone",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest"
+        },
+        {
+          "name": "role",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'customer'",
+          "notes": "customer, courier, admin"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": null
+        },
+        {
+          "name": "deletion_requested_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Personal data must be purged within 30 days of this date"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "email",
+        "role",
+        "deletion_requested_at"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "device_tokens",
+      "purpose": "Firebase Cloud Messaging device tokens used for push notifications.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "token",
+          "type": "varchar(512)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "FCM registration token"
+        },
+        {
+          "name": "platform",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "web, ios, android"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "token"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Cascade delete with user"
+        }
+      ]
+    },
+    {
+      "name": "addresses",
+      "purpose": "Saved delivery addresses belonging to customers.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "label",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "e.g. Home, Office"
+        },
+        {
+          "name": "recipient_name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest"
+        },
+        {
+          "name": "recipient_phone",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest"
+        },
+        {
+          "name": "line1",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest"
+        },
+        {
+          "name": "line2",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest"
+        },
+        {
+          "name": "city",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "state",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "postal_code",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "country",
+          "type": "varchar(2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'US'",
+          "notes": "ISO 3166-1 alpha-2"
+        },
+        {
+          "name": "latitude",
+          "type": "decimal(9,6)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "From Google Maps geocoding"
+        },
+        {
+          "name": "longitude",
+          "type": "decimal(9,6)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "From Google Maps geocoding"
+        },
+        {
+          "name": "is_default",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Cascade delete with user"
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "purpose": "Product categories such as roses, bouquets, plants.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "slug",
+          "type": "varchar(120)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "slug"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "occasions",
+      "purpose": "Occasions used to filter products (birthday, anniversary, etc.).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "slug",
+          "type": "varchar(120)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "slug"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "products",
+      "purpose": "Flowers and bouquets sold in the catalog, with price and stock.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "sku",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(200)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "slug",
+          "type": "varchar(220)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "price",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Current price; order_items store a snapshot"
+        },
+        {
+          "name": "stock_quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "Product is available when is_active and stock_quantity > 0"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "False means soft-removed from catalog"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "slug",
+        "price",
+        "is_active",
+        "stock_quantity",
+        "name"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "product_categories",
+      "purpose": "Junction table: many-to-many between products and categories.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to products.id"
+        },
+        {
+          "name": "category_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to categories.id"
+        }
+      ],
+      "indexes": [
+        "product_id",
+        "category_id",
+        "product_id,category_id (unique)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "categories",
+          "fk": "category_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        }
+      ]
+    },
+    {
+      "name": "product_occasions",
+      "purpose": "Junction table: many-to-many between products and occasions.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to products.id"
+        },
+        {
+          "name": "occasion_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to occasions.id"
+        }
+      ],
+      "indexes": [
+        "product_id",
+        "occasion_id",
+        "product_id,occasion_id (unique)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "occasions",
+          "fk": "occasion_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        }
+      ]
+    },
+    {
+      "name": "product_images",
+      "purpose": "Photos for each product.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to products.id"
+        },
+        {
+          "name": "url",
+          "type": "varchar(500)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "alt_text",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "sort_order",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": null
+        },
+        {
+          "name": "is_primary",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "product_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        }
+      ]
+    },
+    {
+      "name": "inventory_adjustments",
+      "purpose": "Audit log of stock changes made by admins or by order placement.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to products.id"
+        },
+        {
+          "name": "admin_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; null for system-generated changes"
+        },
+        {
+          "name": "change_quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Positive or negative delta"
+        },
+        {
+          "name": "reason",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "product_id",
+        "admin_id",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "admin_id",
+          "ref": "id",
+          "notes": "Set null on user delete"
+        }
+      ]
+    },
+    {
+      "name": "carts",
+      "purpose": "One active shopping cart per customer with chosen delivery date and address.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "FK to users.id; one cart per user"
+        },
+        {
+          "name": "delivery_address_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to addresses.id"
+        },
+        {
+          "name": "delivery_date",
+          "type": "date",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "delivery_address_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Effectively one-to-one; cascade delete"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "addresses",
+          "fk": "delivery_address_id",
+          "ref": "id",
+          "notes": "Set null on address delete"
+        }
+      ]
+    },
+    {
+      "name": "cart_items",
+      "purpose": "Products and quantities in a cart.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "cart_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to carts.id"
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to products.id; price read live from products"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "1",
+          "notes": "Must be > 0"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "cart_id",
+        "product_id",
+        "cart_id,product_id (unique)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "carts",
+          "fk": "cart_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "purpose": "Placed and paid customer orders, including a snapshot of the delivery address.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_number",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Human-readable reference"
+        },
+        {
+          "name": "customer_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "address_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to addresses.id; may be null if saved address deleted"
+        },
+        {
+          "name": "status",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'paid'",
+          "notes": "paid, preparing, ready_for_delivery, out_for_delivery, delivered, cancelled"
+        },
+        {
+          "name": "delivery_date",
+          "type": "date",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "recipient_name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot; encrypted at rest"
+        },
+        {
+          "name": "recipient_phone",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot; encrypted at rest"
+        },
+        {
+          "name": "delivery_line1",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot; encrypted at rest"
+        },
+        {
+          "name": "delivery_line2",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot; encrypted at rest"
+        },
+        {
+          "name": "delivery_city",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot"
+        },
+        {
+          "name": "delivery_state",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot"
+        },
+        {
+          "name": "delivery_postal_code",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot"
+        },
+        {
+          "name": "delivery_country",
+          "type": "varchar(2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot"
+        },
+        {
+          "name": "delivery_latitude",
+          "type": "decimal(9,6)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "delivery_longitude",
+          "type": "decimal(9,6)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "gift_message",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "subtotal",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "delivery_fee",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": null
+        },
+        {
+          "name": "total",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "currency",
+          "type": "varchar(3)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'USD'",
+          "notes": null
+        },
+        {
+          "name": "placed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "delivered_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Set when courier marks delivered; order is then closed"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_number",
+        "customer_id",
+        "status",
+        "delivery_date",
+        "placed_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "customer_id",
+          "ref": "id",
+          "notes": "Customer who placed the order"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "addresses",
+          "fk": "address_id",
+          "ref": "id",
+          "notes": "Set null on address delete"
+        }
+      ]
+    },
+    {
+      "name": "order_items",
+      "purpose": "Line items of an order with price snapshot at purchase time.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to orders.id"
+        },
+        {
+          "name": "product_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to products.id; used for reorder"
+        },
+        {
+          "name": "product_name",
+          "type": "varchar(200)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot"
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Snapshot"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Must be > 0"
+        },
+        {
+          "name": "line_total",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "unit_price * quantity"
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "product_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "products",
+          "fk": "product_id",
+          "ref": "id",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "payments",
+      "purpose": "Stripe payment attempts; failed attempts exist without an order.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to orders.id; null until payment succeeds and order is created"
+        },
+        {
+          "name": "stripe_payment_intent_id",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "No card data stored"
+        },
+        {
+          "name": "amount",
+          "type": "decimal(10,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "currency",
+          "type": "varchar(3)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'USD'",
+          "notes": null
+        },
+        {
+          "name": "status",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending'",
+          "notes": "pending, succeeded, failed, refunded"
+        },
+        {
+          "name": "failure_message",
+          "type": "varchar(500)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "order_id",
+        "stripe_payment_intent_id",
+        "status"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": null
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Nullable"
+        }
+      ]
+    },
+    {
+      "name": "deliveries",
+      "purpose": "Courier assignment and delivery progress for an order (one delivery per order).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "FK to orders.id; one delivery per order"
+        },
+        {
+          "name": "courier_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id with role courier"
+        },
+        {
+          "name": "assigned_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id with role admin"
+        },
+        {
+          "name": "status",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'assigned'",
+          "notes": "assigned, picked_up, out_for_delivery, delivered, failed"
+        },
+        {
+          "name": "current_latitude",
+          "type": "decimal(9,6)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Latest courier position"
+        },
+        {
+          "name": "current_longitude",
+          "type": "decimal(9,6)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Latest courier position"
+        },
+        {
+          "name": "assigned_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "picked_up_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "delivered_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "courier_id",
+        "status"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Effectively one-to-one"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "courier_id",
+          "ref": "id",
+          "notes": "Assigned courier"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "assigned_by",
+          "ref": "id",
+          "notes": "Admin who assigned; set null on delete"
+        }
+      ]
+    },
+    {
+      "name": "order_status_history",
+      "purpose": "Timeline of order status changes powering real-time tracking.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to orders.id"
+        },
+        {
+          "name": "status",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Status the order moved to"
+        },
+        {
+          "name": "changed_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; null for system changes"
+        },
+        {
+          "name": "note",
+          "type": "varchar(500)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "order_id",
+        "order_id,created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "changed_by",
+          "ref": "id",
+          "notes": "Set null on user delete"
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "purpose": "Push/email notifications sent to users (order confirmation, status updates, courier assignments).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to orders.id"
+        },
+        {
+          "name": "type",
+          "type": "varchar(40)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "order_confirmation, status_update, delivered, courier_assigned"
+        },
+        {
+          "name": "channel",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'push'",
+          "notes": "push, email"
+        },
+        {
+          "name": "title",
+          "type": "varchar(200)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "is_read",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": null
+        },
+        {
+          "name": "sent_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "order_id",
+        "user_id,is_read"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Cascade delete"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "orders",
+          "fk": "order_id",
+          "ref": "id",
+          "notes": "Set null on order delete"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Primary keys are uuid surrogate keys named id; junction tables (product_categories, product_occasions) use their own surrogate id plus a unique composite index on the two FK columns so each table has exactly one primary key column.",
+    "Composite indexes are written as comma-separated column names; entries marked (unique) must be created as unique indexes.",
+    "A single users table with a role column (customer, courier, admin) models all three roles; role values are enforced by a CHECK constraint or enum in the application layer.",
+    "Orders are created only after successful Stripe payment; failed payment attempts are stored in payments with a null order_id so no order exists for them.",
+    "Card data is never stored; only the Stripe payment intent id is kept (PCI-DSS delegated to Stripe).",
+    "Orders snapshot the delivery address and item prices so history stays correct if saved addresses or product prices change; reordering reads product_id from order_items and adds items to the cart at current prices.",
+    "Product availability is derived (is_active = true and stock_quantity > 0) rather than stored; out-of-stock products cannot be added to the cart (enforced in application logic).",
+    "Each order has at most one delivery/courier assignment; reassignment updates the deliveries row, and the order_status_history table keeps the full timeline.",
+    "Address and contact fields are encrypted at rest (column-level or disk-level); on account deletion request, personal data is purged or anonymized within 30 days using deletion_requested_at, while order records are retained in anonymized form.",
+    "Passwords are stored as bcrypt hashes in users.password_hash.",
+    "Monetary amounts use decimal(10,2) with a single currency per order (default USD); timestamps are stored in UTC.",
+    "Soft removal of products uses is_active = false so historical order_items keep valid references."
+  ]
+}

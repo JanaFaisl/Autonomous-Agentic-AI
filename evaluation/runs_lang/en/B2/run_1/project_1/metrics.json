@@ -1,0 +1,21 @@
+{
+  "condition": "B2/run_1",
+  "project_id": 1,
+  "domain": "E-commerce / logistics",
+  "complexity": "Medium",
+  "user_input": "A flower delivery app where customers can browse flowers, place orders, and get them delivered to their door.",
+  "latency_s": {
+    "requirements": 11.62,
+    "database": 97.45,
+    "design": 99.73,
+    "planning": 12.5,
+    "quality": 22.39,
+    "support": 12.14
+  },
+  "fallbacks": {},
+  "errors": {},
+  "total_latency_s": 256.48,
+  "language": "en",
+  "completed": true,
+  "default_model": "claude-sonnet-5-5"
+}

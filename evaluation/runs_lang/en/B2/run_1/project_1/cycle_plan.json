@@ -1,0 +1,175 @@
+{
+  "plan_name": "Flower Delivery App MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema and migrations (users, roles, addresses, flowers, categories, stock, carts, orders, order items, payments, delivery status history, couriers, favorites) with encrypted address and contact fields",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Finalize UI kit and screen specs: color tokens, typography, buttons, inputs, cards, chips, bottom sheets, tab bar, and the 6 screens in Figma-ready form",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T3",
+      "title": "Set up Node.js/Express REST API skeleton, HTTPS config, environment config, error handling, and React and React Native app shells with shared theme and bottom navigation",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T1",
+        "T2"
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "Build user accounts: register, login, JWT sessions with bcrypt hashing, role-based access (Customer/Courier/Admin), saved address CRUD, account deletion request with 30-day purge job, and Account screen UI",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Build catalog API and UI: category list, keyword search, price and color filters, indexed queries under 2s, Flower Catalog screen with grid cards, chips, and filter bottom sheet",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Build cart and checkout: cart API and UI, address selector, delivery date and time-slot picker, Stripe PaymentIntent integration with webhook, order creation only on successful payment, declined-payment error banner, confirmation modal",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T4",
+        "T5"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Build delivery tracking: order status state machine, courier status update endpoints (including Mark as Delivered with timestamp), Order Tracking screen with status stepper, and Firebase Cloud Messaging push notifications on status change",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Build order history screen and API: list orders with status and totals, status filter chips, order details, and one-tap Reorder into cart",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4",
+        "F3"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Build admin panel (web React): flower add/edit with photo upload, price and stock updates reflected immediately in catalog, new paid order list, courier assignment that populates courier delivery list and notifies customer",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T5",
+        "T7"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Add DB indexes, seed data (flowers, categories, couriers, admin), and run load test at 200 concurrent users on catalog and checkout",
+      "assigned_agent": "DBA",
+      "priority": "low",
+      "feature_ids": [
+        "F1",
+        "F2"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "End-to-end QA of acceptance criteria for F1-F5, accessibility and checkout flow check (max 5 steps, under 3 minutes), then deploy to staging with HTTPS and uptime monitoring",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ]
+    }
+  ],
+  "risks": [
+    "Scope is large for a small team: three platforms (web, iOS, Android) plus admin; mitigate by sharing the API and logic, and shipping the customer flow first with admin as web-only.",
+    "Stripe payment and webhook handling may cause order and payment mismatches or delays in testing; mitigate by creating orders only from confirmed webhook events and using Stripe test mode early.",
+    "Push notifications and courier status flow (FCM setup, iOS APNs certificates) can slip schedule; mitigate by starting setup early and falling back to in-app polling for status.",
+    "Peak holiday load (Valentine's Day, Mother's Day) could breach the 2s and 99.5% targets; mitigate with indexes, caching of catalog queries, and an early load test.",
+    "Privacy requirements (encryption at rest, 30-day deletion) can be overlooked under time pressure; mitigate by building them into the schema and account tasks from the start."
+  ]
+}

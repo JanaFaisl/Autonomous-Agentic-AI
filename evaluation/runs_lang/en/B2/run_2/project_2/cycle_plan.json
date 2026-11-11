@@ -1,0 +1,200 @@
+{
+  "plan_name": "Simple Task Manager MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema (users, tasks with user_id FK, status, created_at, indexes) and write migrations",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Scaffold Express API and React app, set up env config, HTTPS-ready settings, linting and PostgreSQL connection",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Build auth API: register and login with bcrypt hashing, JWT issuance and verification middleware, validation and error responses",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T2"
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "Build Login and Register screens with validation, show/hide password, error banner, token storage and protected routes, plus Account screen with log out",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3",
+        "T9"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Build create-task API (POST /tasks) with title validation, optional description (max 500) and per-user ownership",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Build complete/reopen API (PATCH /tasks/:id) with ownership check returning 403 for cross-user access",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T5"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Build delete API (DELETE /tasks/:id) with permanent removal and ownership check returning 403",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T5"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Build list API (GET /tasks?status=all|active|completed) scoped to the user, newest first, with index for performance",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T5"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Create design tokens and shared UI components (buttons, inputs, task card, modal, toast, segmented filter, bottom nav) with accessibility and responsive layout",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": []
+    },
+    {
+      "id": "T10",
+      "title": "Build My Tasks screen: quick-add input, task list, status filters, progress summary, empty state, checkbox toggle and delete confirmation modal wired to the API",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T4",
+        "T6",
+        "T7",
+        "T8",
+        "T9"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Build New Task and Task Details screens: create form with validation and counter, edit mode, complete/reopen and delete actions with toasts",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T10"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Add integration tests for auth, task CRUD, filtering and 403 privacy checks; run basic load test (100 concurrent users, under 2s) and fix issues",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T11"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Deploy MVP with managed PostgreSQL, HTTPS, environment secrets and basic uptime monitoring, then run smoke tests",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T12"
+      ]
+    }
+  ],
+  "risks": [
+    "Scope creep from design extras (progress card, task stats, edit mode, Administrator role) beyond the five required features; defer non-essential items if time is short.",
+    "JWT handling mistakes (insecure storage, missing ownership checks) could break the privacy requirement; enforce ownership middleware and test 403 cases early.",
+    "Frontend work is blocked until auth and task APIs exist; agree on API contract up front and use mocks to unblock UI.",
+    "Meeting the 2-second load time at 100 concurrent users and 99.5% uptime may be hard on low-tier hosting; add DB indexes and test under load before launch.",
+    "Single-developer bottleneck on the critical path (T2 to T3 to T5 to T10 to T11) could delay delivery; keep tasks small and cut low-priority polish first."
+  ]
+}

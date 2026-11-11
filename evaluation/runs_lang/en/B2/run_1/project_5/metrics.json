@@ -1,0 +1,21 @@
+{
+  "condition": "B2/run_1",
+  "project_id": 5,
+  "domain": "Retail / operations",
+  "complexity": "High",
+  "user_input": "A real-time inventory management tool for small retail stores with barcode scanning.",
+  "latency_s": {
+    "requirements": 12.11,
+    "database": 113.22,
+    "design": 68.68,
+    "planning": 12.54,
+    "quality": 22.23,
+    "support": 14.36
+  },
+  "fallbacks": {},
+  "errors": {},
+  "total_latency_s": 243.33,
+  "language": "en",
+  "completed": true,
+  "default_model": "claude-sonnet-5-5"
+}

@@ -1,0 +1,206 @@
+{
+  "plan_name": "StudyCircle MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema (users, profiles, courses, notes, ratings, groups, memberships, join requests, messages, notifications, reports) with migrations and indexes",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Set up Express/Node project, React app shell, design tokens (indigo theme, Inter), responsive layout with bottom nav/sidebar, shared UI components (buttons, inputs, cards, sheets, toasts), and HTTPS deployment",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Build Sign Up, Log In and Profile screens in the designer's style: Sign Up, verification banner, and Profile editor (major, courses chips)",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T4",
+      "title": "Implement registration with university email domain check, bcrypt hashing, JWT auth, email verification and resend, plus profile edit API and UI",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T2",
+        "T3"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Design Notes Library, Note Preview and Upload Note screens (cards, filters, sort toggle, upload states)",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T6",
+      "title": "Implement note upload to AWS S3 (PDF/image, 20 MB limit, presigned upload) with virus scan before publish and note publish API",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T4",
+        "T5"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Implement note browse, Postgres full-text search, course/topic filters, sort by relevance/rating, ratings, bookmarks, and Notes Library UI",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Design Study Groups screens (My Groups/Discover tabs, create sheet, join requests, manage members)",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 2,
+      "depends_on": []
+    },
+    {
+      "id": "T9",
+      "title": "Implement study groups: create group (creator becomes admin), public/private join, join request approve/reject, member removal, discovery search, and UI",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T4",
+        "T8"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Design Group Feed screen (chat bubbles, attached note bubble, composer, notification panel)",
+      "assigned_agent": "Designer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 2,
+      "depends_on": []
+    },
+    {
+      "id": "T11",
+      "title": "Implement group feed with WebSocket real-time messages (under 5s), note attachments, likes, and in-app notifications with per-group toggle and unread badge",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T7",
+        "T9",
+        "T10"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Implement reporting (report sheet on notes and posts, queue API), moderator role queue UI, remove/dismiss content, hide content and notify uploader",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T7",
+        "T11"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Implement privacy and account settings: data deletion request flow (30-day SLA), terms/privacy links, and role-based access checks for Student, Group Admin, Moderator, System Admin",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F1",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T4",
+        "T12"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "Run QA and hardening: acceptance-criteria tests per feature, accessibility pass (WCAG AA), 3-click flow check, load test for 500 concurrent users, and production deploy with monitoring",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T11",
+        "T12",
+        "T13"
+      ]
+    }
+  ],
+  "risks": [
+    "Virus scanning of uploads (e.g., ClamAV or S3-triggered Lambda) may add integration time and delay note publishing; mitigate by publishing as pending until scan passes.",
+    "Real-time WebSocket messaging and notifications are the most complex pieces; fall back to short-interval polling if delivery under 5 seconds is at risk.",
+    "University email verification depends on a domain allowlist and reliable email delivery (SES/SendGrid); deliverability or domain gaps could block sign-ups.",
+    "Meeting the 500-concurrent-user performance target and 99.5% uptime on a small team may need extra tuning of search indexes and infrastructure beyond the MVP timeline.",
+    "Copyright and GDPR obligations (takedown handling, data deletion within 30 days) may require legal review and process work that could extend the schedule."
+  ]
+}

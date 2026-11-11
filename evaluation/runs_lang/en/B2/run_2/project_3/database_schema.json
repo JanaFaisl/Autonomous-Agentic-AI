@@ -1,0 +1,1397 @@
+{
+  "tables": [
+    {
+      "name": "roles",
+      "purpose": "Lookup of RBAC roles (Patient, Doctor, Receptionist, Administrator).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "patient, doctor, receptionist, administrator"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "name"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "users",
+      "purpose": "Login identity shared by all people using the system (patients, doctors, receptionists, admins).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Stored lower-cased; used as login"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "bcrypt hash"
+        },
+        {
+          "name": "first_name",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "phone",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Used for SMS notifications"
+        },
+        {
+          "name": "is_email_verified",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Set true after verification email link is used"
+        },
+        {
+          "name": "status",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'active'",
+          "notes": "active, inactive, suspended"
+        },
+        {
+          "name": "last_login_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "email",
+        "status"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "user_roles",
+      "purpose": "Junction table: many-to-many between users and roles.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": "Surrogate PK; (user_id, role_id) must be unique"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "role_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to roles.id"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "role_id",
+        "unique(user_id, role_id)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "ON DELETE CASCADE"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "roles",
+          "fk": "role_id",
+          "ref": "id",
+          "notes": "ON DELETE RESTRICT"
+        }
+      ]
+    },
+    {
+      "name": "auth_tokens",
+      "purpose": "Single-use tokens for email verification and password reset.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "token_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Hash of the token; raw token is never stored"
+        },
+        {
+          "name": "token_type",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "email_verification, password_reset"
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "used_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Null until consumed"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "token_hash",
+        "expires_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "patients",
+      "purpose": "Patient profile and personal details (one per patient user).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "FK to users.id; one-to-one"
+        },
+        {
+          "name": "date_of_birth",
+          "type": "date",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest (AES-256)"
+        },
+        {
+          "name": "gender",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest"
+        },
+        {
+          "name": "emergency_contact_name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "emergency_contact_phone",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "insurance_number",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Encrypted at rest"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Effectively one-to-one via unique constraint; ON DELETE RESTRICT"
+        }
+      ]
+    },
+    {
+      "name": "departments",
+      "purpose": "Hospital departments managed by administrators.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "name",
+        "is_active"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "specialties",
+      "purpose": "Medical specialties used for doctor search.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "name"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "doctors",
+      "purpose": "Doctor profile linked to a user account and a department.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "FK to users.id; one-to-one"
+        },
+        {
+          "name": "department_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to departments.id"
+        },
+        {
+          "name": "license_number",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "bio",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "consultation_duration_minutes",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "30",
+          "notes": "Default slot length"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Only active doctors appear in search"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "department_id",
+        "is_active"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Effectively one-to-one via unique constraint"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "departments",
+          "fk": "department_id",
+          "ref": "id",
+          "notes": "ON DELETE RESTRICT"
+        }
+      ]
+    },
+    {
+      "name": "doctor_specialties",
+      "purpose": "Junction table: many-to-many between doctors and specialties.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": "Surrogate PK; (doctor_id, specialty_id) must be unique"
+        },
+        {
+          "name": "doctor_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to doctors.id"
+        },
+        {
+          "name": "specialty_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to specialties.id"
+        }
+      ],
+      "indexes": [
+        "doctor_id",
+        "specialty_id",
+        "unique(doctor_id, specialty_id)"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "doctors",
+          "fk": "doctor_id",
+          "ref": "id",
+          "notes": "ON DELETE CASCADE"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "specialties",
+          "fk": "specialty_id",
+          "ref": "id",
+          "notes": "ON DELETE RESTRICT"
+        }
+      ]
+    },
+    {
+      "name": "doctor_availability_rules",
+      "purpose": "Recurring weekly availability set by a doctor (or admin); used to generate time slots.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "doctor_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to doctors.id"
+        },
+        {
+          "name": "day_of_week",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "0=Sunday .. 6=Saturday; CHECK between 0 and 6"
+        },
+        {
+          "name": "start_time",
+          "type": "time",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Local start of working window"
+        },
+        {
+          "name": "end_time",
+          "type": "time",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Must be after start_time"
+        },
+        {
+          "name": "slot_duration_minutes",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "30",
+          "notes": null
+        },
+        {
+          "name": "effective_from",
+          "type": "date",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "effective_to",
+          "type": "date",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Null means open-ended"
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "doctor_id",
+        "day_of_week"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "doctors",
+          "fk": "doctor_id",
+          "ref": "id",
+          "notes": "ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "time_slots",
+      "purpose": "Concrete bookable slots generated from availability rules; the unit that prevents double-booking.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "doctor_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to doctors.id"
+        },
+        {
+          "name": "availability_rule_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to doctor_availability_rules.id; null for ad-hoc slots"
+        },
+        {
+          "name": "start_time",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Stored in UTC"
+        },
+        {
+          "name": "end_time",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Stored in UTC"
+        },
+        {
+          "name": "status",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'open'",
+          "notes": "open, booked, blocked"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "doctor_id",
+        "availability_rule_id",
+        "unique(doctor_id, start_time)",
+        "status, start_time"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "doctors",
+          "fk": "doctor_id",
+          "ref": "id",
+          "notes": "ON DELETE CASCADE"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "doctor_availability_rules",
+          "fk": "availability_rule_id",
+          "ref": "id",
+          "notes": "ON DELETE SET NULL"
+        }
+      ]
+    },
+    {
+      "name": "appointments",
+      "purpose": "Booking of a patient with a doctor in a specific time slot, including lifecycle status.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "patient_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to patients.id"
+        },
+        {
+          "name": "doctor_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to doctors.id; denormalized from slot for reporting"
+        },
+        {
+          "name": "time_slot_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to time_slots.id; partial unique index on this column where status in ('scheduled','confirmed') prevents double-booking"
+        },
+        {
+          "name": "booked_by_user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; patient or receptionist who booked"
+        },
+        {
+          "name": "rescheduled_from_appointment_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Self FK to appointments.id; links to previous appointment when rescheduled"
+        },
+        {
+          "name": "status",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'scheduled'",
+          "notes": "scheduled, confirmed, completed, cancelled, no_show, rescheduled"
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Reason for visit; encrypted at rest"
+        },
+        {
+          "name": "cancelled_by_user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "cancelled_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "cancellation_reason",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "patient_id",
+        "doctor_id",
+        "time_slot_id",
+        "status",
+        "booked_by_user_id",
+        "cancelled_by_user_id",
+        "rescheduled_from_appointment_id",
+        "unique(time_slot_id) where status in ('scheduled','confirmed')",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "patients",
+          "fk": "patient_id",
+          "ref": "id",
+          "notes": "ON DELETE RESTRICT"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "doctors",
+          "fk": "doctor_id",
+          "ref": "id",
+          "notes": "ON DELETE RESTRICT"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "time_slots",
+          "fk": "time_slot_id",
+          "ref": "id",
+          "notes": "ON DELETE RESTRICT"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "booked_by_user_id",
+          "ref": "id",
+          "notes": "ON DELETE SET NULL"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "cancelled_by_user_id",
+          "ref": "id",
+          "notes": "ON DELETE SET NULL"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "appointments",
+          "fk": "rescheduled_from_appointment_id",
+          "ref": "id",
+          "notes": "Self-reference for reschedule history; ON DELETE SET NULL"
+        }
+      ]
+    },
+    {
+      "name": "notification_preferences",
+      "purpose": "Per-user channel and reminder preferences.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "FK to users.id; one-to-one"
+        },
+        {
+          "name": "email_enabled",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": null
+        },
+        {
+          "name": "sms_enabled",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": null
+        },
+        {
+          "name": "reminder_hours_before",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "24",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Effectively one-to-one via unique constraint; ON DELETE CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "purpose": "Queue and log of email/SMS confirmations, reminders and doctor alerts.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; recipient"
+        },
+        {
+          "name": "appointment_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to appointments.id"
+        },
+        {
+          "name": "channel",
+          "type": "varchar(10)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "email, sms"
+        },
+        {
+          "name": "type",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "verification, confirmation, reminder, cancellation, new_booking, reschedule"
+        },
+        {
+          "name": "subject",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "status",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending'",
+          "notes": "pending, sent, failed"
+        },
+        {
+          "name": "scheduled_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": "When the worker should send it"
+        },
+        {
+          "name": "sent_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "failure_reason",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "appointment_id",
+        "status, scheduled_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "ON DELETE CASCADE"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "appointments",
+          "fk": "appointment_id",
+          "ref": "id",
+          "notes": "ON DELETE SET NULL"
+        }
+      ]
+    },
+    {
+      "name": "audit_logs",
+      "purpose": "Audit trail of access to and changes of patient records and other sensitive actions.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "generated always as identity",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; actor, null for system actions"
+        },
+        {
+          "name": "patient_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to patients.id; patient whose record was accessed"
+        },
+        {
+          "name": "action",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "view, create, update, delete, login, export"
+        },
+        {
+          "name": "entity_type",
+          "type": "varchar(50)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "e.g. patient, appointment, doctor"
+        },
+        {
+          "name": "entity_id",
+          "type": "varchar(64)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "ip_address",
+          "type": "varchar(45)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "details",
+          "type": "json",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Changed fields; must not contain secrets"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "patient_id",
+        "entity_type, entity_id",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "ON DELETE SET NULL"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "patients",
+          "fk": "patient_id",
+          "ref": "id",
+          "notes": "ON DELETE SET NULL"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "PostgreSQL is the target database; uuid primary keys use gen_random_uuid() (pgcrypto/PG13+), except audit_logs which uses a bigint identity for high-volume append-only writes.",
+    "All table and column names use snake_case and every table has exactly one single-column primary key; junction tables (user_roles, doctor_specialties) use a surrogate id plus a composite unique constraint on their two foreign keys.",
+    "A single users table backs authentication for all roles; role-specific data lives in patients and doctors. Receptionists and administrators need no extra profile table and are identified through user_roles.",
+    "A user may hold multiple roles, hence the user_roles many-to-many table; role-based access control is enforced in the application using these roles.",
+    "Passwords are stored only as bcrypt hashes; verification and reset tokens are stored only as hashes in auth_tokens. JWTs are stateless and are not stored.",
+    "Double-booking is prevented by pre-generated time_slots (unique doctor_id + start_time) and a partial unique index on appointments.time_slot_id for active statuses (scheduled, confirmed); booking must update the slot status within the same transaction.",
+    "Weekly availability is stored as recurring rules in doctor_availability_rules and materialized into time_slots by a background job; patients search only slots with status 'open', and rule changes regenerate future open slots so changes appear within 1 minute.",
+    "Cancelling an appointment sets its status to 'cancelled' and the slot back to 'open'; the 24-hour cancellation policy is enforced in application logic using time_slots.start_time. Rescheduling creates a new appointment linked via rescheduled_from_appointment_id and marks the old one 'rescheduled'.",
+    "Doctor search by name uses users.first_name/last_name, by specialty uses doctor_specialties, and by department uses doctors.department_id; no-show and utilization reports are derived from appointments.status joined to time_slots by date range, so no separate report tables are needed.",
+    "Each doctor belongs to exactly one department; specialties are many-to-many with doctors.",
+    "Timestamps are stored in UTC; time-of-day values in availability rules are interpreted in the hospital's local time zone.",
+    "Fields marked as encrypted at rest (e.g. date_of_birth, address, insurance_number, appointment reason) are encrypted via disk/column-level AES-256; the schema types remain as shown and application-level encryption may require text/bytea storage.",
+    "Notifications are queued in the notifications table and sent by a worker through the email/SMS gateway; reminders are created with scheduled_at set to the appointment start minus the user's reminder_hours_before.",
+    "Soft deletion is handled by status/is_active flags rather than physical deletes, to preserve appointment history and audit integrity."
+  ]
+}

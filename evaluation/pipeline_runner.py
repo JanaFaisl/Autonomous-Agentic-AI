@@ -72,6 +72,7 @@ class PipelineResult:
     fallbacks: Dict[str, int] = field(default_factory=dict)
     errors: Dict[str, str] = field(default_factory=dict)
     total_latency_s: float = 0.0
+    language: str = "en"
 
     @property
     def completed(self) -> bool:
@@ -464,6 +465,8 @@ def main() -> int:
                         help="Where to save runs (default: evaluation/runs_new, not the "
                              "paper's evaluation/runs). Pass evaluation/runs only to "
                              "deliberately reproduce the paper's data.")
+    parser.add_argument("--language", choices=["en", "ar"], default="en",
+                        help="Output language of the agents. 'ar' also feeds each project's Arabic input.")
     parser.add_argument("--repeats", type=int, default=1,
                         help="Runs per project. Use >=3 for the mean+/-SD the paper needs.")
     args = parser.parse_args()
@@ -476,6 +479,8 @@ def main() -> int:
         return 1
 
     from evaluation.projects import PROJECTS
+    from core.language import set_language
+    set_language(args.language)
 
     selected = [p for p in PROJECTS if not args.projects or p["id"] in args.projects]
     completed = 0
@@ -485,6 +490,8 @@ def main() -> int:
     for repeat in range(args.repeats):
         for project in selected:
             total += 1
+            if args.language == "ar":
+                project = {**project, "input": project["input_ar"]}
             label = f"{args.condition} project_{project['id']}"
             if args.repeats > 1:
                 label += f" run_{repeat + 1}"
@@ -499,6 +506,7 @@ def main() -> int:
 
             if args.repeats > 1:
                 result.condition = f"{args.condition}/run_{repeat + 1}"
+            result.language = args.language
             out = result.save(args.runs_dir)
 
             status = "COMPLETE" if result.completed else "INCOMPLETE"

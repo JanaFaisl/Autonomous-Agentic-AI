@@ -1,0 +1,188 @@
+{
+  "plan_name": "Simple Task Manager MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema for users and tasks (id, user_id, title, description, completed, created_at) with indexes on user_id and completed, plus migration scripts",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 2,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Scaffold Node/Express REST API and React app, with environment config, HTTPS setup, and user-scoped auth middleware so users only access their own tasks",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Prepare design tokens (colors, Inter typography, spacing) and shared UI components: buttons, inputs, task card, checkbox, filter chips, status badge, modal, toast",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T4",
+      "title": "Build Create Task API (POST /tasks) with title validation (required, max 100 chars) and optional description",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T2"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Build New Task screen: title and description inputs, character counter, inline validation error, Save/Cancel, success toast",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T3",
+        "T4"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Build View Task List API (GET /tasks with status filter all/active/completed) and Task Details endpoint (GET /tasks/:id)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T2"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Build Task List screen: header with open count, filter tabs, task cards, status badges, floating add button, and Empty State variants",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F4",
+        "F1"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3",
+        "T6"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Build Complete Task API (PATCH /tasks/:id status toggle) and UI: list checkbox with optimistic update, Task Details toggle button, undo toast",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T6",
+        "T7"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Build Task Details screen with summary card, description block, created date, and navigation from list",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2",
+        "F3"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T3",
+        "T6"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Build Delete Task API (DELETE /tasks/:id) and Delete Confirmation dialog with Delete/Keep Task actions, list collapse animation, and toast",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T9"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Apply accessibility and responsive polish: focus rings, aria-live errors, 44px touch targets, keyboard support, 720px centered layout on desktop, empty state illustration",
+      "assigned_agent": "Designer",
+      "priority": "low",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 2,
+      "depends_on": [
+        "T7",
+        "T10"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "End-to-end testing of all acceptance criteria, basic load test at 100 concurrent users (<2s list load), and HTTPS deployment with uptime monitoring",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T5",
+        "T8",
+        "T10"
+      ]
+    }
+  ],
+  "risks": [
+    "Authentication and per-user data isolation are required by security NFRs but no auth feature is specified, so scope creep or delay is possible; use a minimal token-based login or seeded user for MVP.",
+    "Database schema was not provided in requirements, so late schema changes could force rework of API and UI.",
+    "Task Details screen, undo toast, and character counter appear in the design but not in the acceptance criteria, risking over-building; keep them minimal.",
+    "Meeting the 99.5% uptime and 100-concurrent-user performance targets may need hosting, connection pooling, and monitoring work beyond the MVP timeline.",
+    "Delete is permanent while the undo toast applies only to status changes, so confirmation flow bugs could cause accidental data loss; cover with tests."
+  ]
+}

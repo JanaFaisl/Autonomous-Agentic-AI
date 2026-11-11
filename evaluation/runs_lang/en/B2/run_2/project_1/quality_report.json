@@ -1,0 +1,46 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Product size options (Design: Product Details / Cart & Checkout vs Database)",
+      "message": "The design offers Classic/Deluxe/Grand size options with price deltas and shows size in cart lines, but the schema has no product variants table and no size column in cart_items or order_items, so the chosen size and price cannot be stored or reordered."
+    },
+    {
+      "severity": "Medium",
+      "item": "Checkout data not persisted (Design: Cart & Checkout vs Database carts/orders)",
+      "message": "The design collects a delivery time window, shows Tax and a promo code in the order summary, and takes a gift message before the order exists, but carts has no time-slot or gift_message column and orders has no delivery time window, tax or discount column, so the summary total cannot be reproduced."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design features lacking requirements and data support",
+      "message": "The design includes saved favorites (heart), product and courier star ratings, and courier 'Message' chat, none of which appear in the requirements or have tables in the database schema."
+    },
+    {
+      "severity": "Medium",
+      "item": "Navigation flow (Design: Orders tab / Order Tracking / Account & Order History)",
+      "message": "The Orders tab opens a single Order Tracking screen while Order Tracking's back action returns to an 'Orders list' that exists only inside the Profile-tab screen, leaving no clear order list destination for the Orders tab."
+    }
+  ],
+  "required_fixes": [
+    "Either remove the size selector from the design or add a product variant/size model (e.g., product_variants table with price delta, plus variant reference and size snapshot in cart_items and order_items).",
+    "Add the missing checkout fields to the schema (delivery time window on carts and orders, tax_amount and discount/promo fields on orders, gift_message on carts) or remove the time slot, tax, promo code and pre-order gift message from the design.",
+    "Reconcile design-only features: add requirements and tables for favorites, ratings and courier messaging, or remove the heart-save, star-rating and Message chat elements from the design.",
+    "Define the Orders tab destination as an order list screen (active and past orders) that links to Order Tracking, and make Order Tracking's back action return to it."
+  ],
+  "recommendations": [
+    "Define a single source of truth for order status by documenting how orders.status, deliveries.status and order_status_history stay in sync (e.g., a transition map and a transaction that writes all three), and map the design's 'Order placed' step to the 'paid' status.",
+    "Add a stock-reservation or row-locking strategy at order placement to prevent overselling under 200 concurrent users, and add a CHECK constraint on stock_quantity >= 0.",
+    "Clarify the encryption approach for users.email (a login identifier that cannot be encrypted at the column level without a blind index) and add DB-level CHECK constraints for role and status values."
+  ]
+}

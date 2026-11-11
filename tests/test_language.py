@@ -52,3 +52,16 @@ def test_arabic_component_type_words_are_stripped():
     assert _clean("زر تسجيل الدخول") == "تسجيل الدخول"
     assert _clean("حقل إدخال البريد الإلكتروني") == "البريد الإلكتروني"
     assert _clean("زر") == "زر"  # never empties the label
+
+
+def test_scaffold_with_arabic_screen_names_has_distinct_pages_and_routes():
+    from utils.code_scaffold import build_scaffold_files
+    design = {"screens": [{"name": "الرئيسية", "purpose": "", "key_components": []},
+                          {"name": "الطلبات", "purpose": "", "key_components": []},
+                          {"name": "الحساب", "purpose": "", "key_components": []}]}
+    files = build_scaffold_files({"project_name": "تطبيق"}, design, None)
+    pages = sorted(p for p in files if p.startswith("frontend/src/pages/"))
+    assert pages == ["frontend/src/pages/Screen1.jsx", "frontend/src/pages/Screen2.jsx", "frontend/src/pages/Screen3.jsx"]
+    app = files["frontend/src/App.jsx"]
+    assert 'path="/screen-2"' in app.replace("'", '"') or '"/screen-2"' in app
+    assert app.count("./pages/Screen") == 3

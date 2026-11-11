@@ -1,0 +1,122 @@
+{
+  "project_name": "StudyCircle",
+  "features": [
+    {
+      "id": "F1",
+      "name": "User Registration and Profiles",
+      "description": "Students sign up with a university email and manage a profile with their courses and major.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can register with my university email so that only verified students join the platform.",
+        "As a student, I can edit my profile with my courses and major so that peers can find me."
+      ],
+      "acceptance_criteria": [
+        "Given a valid university email, When I submit the registration form, Then a verification email is sent and my account is created.",
+        "Given I am logged in, When I update my profile and save, Then the changes appear on my public profile immediately."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Study Notes Sharing",
+      "description": "Students upload, browse, search, and rate study notes organized by university, course, and topic.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can upload notes in PDF or image format so that classmates can use them.",
+        "As a student, I can search and filter notes by course and topic so that I quickly find relevant material."
+      ],
+      "acceptance_criteria": [
+        "Given I am logged in, When I upload a supported file under 20 MB with a title and course, Then the note is published and listed.",
+        "Given notes exist, When I search by course or keyword, Then matching notes are returned sorted by relevance or rating."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Study Groups",
+      "description": "Students create, discover, and join study groups for specific courses with group membership management.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can create a study group for a course so that I can collaborate with classmates.",
+        "As a group admin, I can approve or remove members so that the group stays focused and safe."
+      ],
+      "acceptance_criteria": [
+        "Given I am logged in, When I create a group with a name and course, Then the group is created and I become its admin.",
+        "Given a private group, When a student requests to join, Then the admin sees the request and can approve or reject it."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Group Discussion and Messaging",
+      "description": "Group members post messages, share notes, and discuss topics within a group feed with notifications.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a group member, I can post messages and attach notes so that the group can discuss study material.",
+        "As a student, I can receive notifications about new group activity so that I do not miss important updates."
+      ],
+      "acceptance_criteria": [
+        "Given I am a group member, When I post a message, Then all members see it in the group feed within 5 seconds.",
+        "Given I enabled notifications, When a new post is made in my group, Then I receive an in-app notification."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Moderation and Reporting",
+      "description": "Users report inappropriate or copyrighted content and moderators review and remove it.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a student, I can report a note or post so that inappropriate content is reviewed.",
+        "As a moderator, I can review reports and remove content so that the platform remains safe and compliant."
+      ],
+      "acceptance_criteria": [
+        "Given I view a note or post, When I submit a report with a reason, Then the report is queued for moderator review.",
+        "Given a pending report, When a moderator removes the content, Then it is hidden from users and the uploader is notified."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile Web (responsive)"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "REST API",
+      "WebSocket",
+      "AWS S3",
+      "JWT Authentication"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Pages load in under 2 seconds and search returns results in under 1 second at 500 concurrent users."
+    },
+    {
+      "category": "Security",
+      "requirement": "All traffic uses HTTPS, passwords are hashed with bcrypt, and uploaded files are virus-scanned before publishing."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The platform achieves 99.5% monthly uptime excluding scheduled maintenance."
+    },
+    {
+      "category": "Privacy",
+      "requirement": "User data is deletable on request within 30 days, in line with GDPR principles."
+    },
+    {
+      "category": "Usability",
+      "requirement": "Core flows such as upload note and join group are completable in 3 clicks or fewer on mobile and desktop."
+    }
+  ],
+  "user_roles": [
+    "Student",
+    "Group Admin",
+    "Moderator",
+    "System Administrator"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:57:07"
+}

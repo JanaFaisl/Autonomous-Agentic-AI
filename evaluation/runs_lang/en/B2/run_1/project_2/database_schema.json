@@ -1,0 +1,173 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Stores application users so that each task can be owned by exactly one user and users can only access their own tasks.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Login identifier; store lowercased"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Hashed password (e.g. bcrypt/argon2); never store plain text"
+        },
+        {
+          "name": "display_name",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Optional name shown in the UI"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Creation time (UTC)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Last update time (UTC); maintained by application or trigger"
+        }
+      ],
+      "indexes": [
+        "email"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "tasks",
+      "purpose": "Stores tasks created by users, including title, optional description and completion status (supports create, complete/uncomplete, delete, and list/filter features).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; ON DELETE CASCADE so removing a user removes their tasks"
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Required; must be non-empty after trimming (enforce with CHECK (length(btrim(title)) > 0) and API validation)"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Optional task details"
+        },
+        {
+          "name": "is_completed",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "Completion status; new tasks start incomplete; can be toggled back to false"
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Set when marked complete; set to NULL when unmarked"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Creation time (UTC); used for default list ordering"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Last update time (UTC)"
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "user_id, is_completed",
+        "user_id, created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each task belongs to exactly one user; ON DELETE CASCADE. Inverse side (one user owns many tasks) is represented by this relationship."
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "PostgreSQL is the target database, so gen_random_uuid() (pgcrypto or PostgreSQL 13+) is used for uuid primary keys.",
+    "The single role 'User' is represented by the users table; no roles table is needed because there is only one role.",
+    "Every task belongs to exactly one user, satisfying the requirement that users can only access their own tasks; the API must filter all queries by the authenticated user_id.",
+    "The one-to-many relationship between users and tasks is modeled only once, on the tasks table via the user_id foreign key, since the FK column resides in tasks.",
+    "No many-to-many relationships exist in the requirements, so no junction tables are required.",
+    "Deletion is permanent (hard delete) as per F3, so no soft-delete column (deleted_at) is included.",
+    "Task status is modeled as a boolean is_completed (complete/incomplete only), with completed_at as an optional timestamp for when it was completed.",
+    "Task titles are required and non-empty; a CHECK constraint and application validation enforce this. Description is optional (nullable).",
+    "Authentication uses email and password hash; session/token storage is handled outside the database (e.g. stateless JWT) and is not modeled.",
+    "All timestamps are stored in UTC; updated_at is maintained by the application or a database trigger.",
+    "The composite indexes on tasks (user_id, is_completed) and (user_id, created_at) support filtering by status and ordered list views within the 2-second performance target."
+  ]
+}

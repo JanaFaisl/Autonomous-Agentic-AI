@@ -1,0 +1,46 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Design vs Database: doctor profile data",
+      "message": "The Doctor Result Card, Doctor Profile Card, Booking Summary and filter sheet show photo, star rating, consultation fee, years of experience, gender filter and a favorites heart, but the doctors/users tables have no columns for these and there is no favorites table."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design vs Database: notification inbox",
+      "message": "The patient Inbox shows unread dots and in-app items, but the notifications table has no read/unread field (e.g. read_at) and only email/sms channels, so unread state cannot be stored."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design vs Database: Add Doctor flow",
+      "message": "The Add Doctor form collects only name, specialty and department, yet the doctors table requires a linked users account (email, password_hash) and a unique license_number, and the console has no department management UI despite F5 listing departments."
+    },
+    {
+      "severity": "Medium",
+      "item": "Receptionist walk-in booking",
+      "message": "The Book for Patient tab only searches existing patients, while the schema requires every patient to have a users row with email and password_hash, so walk-in or phone patients without an account cannot be created or booked."
+    }
+  ],
+  "required_fixes": [
+    "Add the doctor fields the design uses (photo_url, consultation_fee, years_of_experience, rating or a reviews source, gender) and a favorites table, or remove these elements from the design.",
+    "Add read_at (or is_read) to notifications, and an in_app channel if the Inbox is meant to be in-app.",
+    "Align the Add Doctor form with the schema (email or invite, license number) and add department management to the Staff Console.",
+    "Define a walk-in patient path: a 'New Patient' form in the Staff Console, plus schema support for patients created by staff (nullable password_hash with an invite or activation flow)."
+  ],
+  "recommendations": [
+    "Define the time slot generation horizon (e.g. 60 to 90 days ahead) and the job that materialises slots, so the 1-minute availability update is testable.",
+    "Record in the schema or requirements how doctors view their own appointments and how deactivating a doctor with future appointments is handled.",
+    "Add a concrete cancellation policy outcome for appointments less than 24 hours away (e.g. phone the clinic) and a no-show marking flow so the report stat cards are traceable to data."
+  ]
+}

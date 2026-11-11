@@ -1,0 +1,122 @@
+{
+  "project_name": "Flower Delivery App",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Flower Catalog Browsing",
+      "description": "Customers can browse, search, and filter flowers and bouquets with photos and prices.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can browse flowers by category so that I can find bouquets that suit my occasion.",
+        "As a customer, I can search and filter by price and color so that I can quickly find what I want."
+      ],
+      "acceptance_criteria": [
+        "Given the catalog page, When I select a category, Then only flowers in that category are displayed with price and photo.",
+        "Given the search box, When I enter a keyword, Then matching in-stock items are listed within 2 seconds."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Cart and Order Placement",
+      "description": "Customers can add flowers to a cart, choose a delivery date and address, and pay online.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can add items to a cart so that I can order several bouquets at once.",
+        "As a customer, I can pay securely and choose a delivery date so that my flowers arrive when I need them."
+      ],
+      "acceptance_criteria": [
+        "Given items in my cart, When I submit a valid address, date, and payment, Then an order is created and a confirmation is shown.",
+        "Given a failed payment, When the payment is declined, Then no order is created and I see a clear error message."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Delivery Tracking",
+      "description": "Customers can follow the status of their order from preparation to doorstep delivery.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can track my order status so that I know when my flowers will arrive.",
+        "As a courier, I can update delivery status so that customers see accurate progress."
+      ],
+      "acceptance_criteria": [
+        "Given a placed order, When its status changes, Then the customer sees the new status and receives a notification.",
+        "Given an assigned delivery, When the courier marks it delivered, Then the order is closed with a delivery timestamp."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "User Accounts and Order History",
+      "description": "Customers can register, log in, manage saved addresses, and view past orders.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a customer, I can create an account so that I can save my addresses and details for faster checkout.",
+        "As a customer, I can view past orders so that I can easily reorder my favorite bouquets."
+      ],
+      "acceptance_criteria": [
+        "Given a new visitor, When I register with a valid email and password, Then my account is created and I am logged in.",
+        "Given a logged-in customer, When I open order history, Then all my previous orders are listed with status and totals."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Admin Catalog and Order Management",
+      "description": "Administrators manage flower inventory, pricing, and incoming orders and assign couriers.",
+      "priority": "Medium",
+      "user_stories": [
+        "As an admin, I can add and edit flowers and stock levels so that the catalog stays accurate.",
+        "As an admin, I can view and assign orders to couriers so that deliveries are fulfilled on time."
+      ],
+      "acceptance_criteria": [
+        "Given the admin panel, When I update a flower's price or stock, Then the change appears in the catalog immediately.",
+        "Given a new paid order, When I assign a courier, Then the courier sees the order in their delivery list."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "iOS",
+      "Android"
+    ],
+    "technologies": [
+      "React",
+      "React Native",
+      "Node.js",
+      "Express",
+      "Stripe",
+      "REST API",
+      "Firebase Cloud Messaging"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Catalog and checkout pages load in under 2 seconds at 200 concurrent users."
+    },
+    {
+      "category": "Security",
+      "requirement": "All traffic uses HTTPS; passwords are hashed with bcrypt; card data is handled only by a PCI DSS compliant provider."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The system achieves 99.5% monthly uptime, especially around peak holidays such as Valentine's Day and Mother's Day."
+    },
+    {
+      "category": "Usability",
+      "requirement": "A first-time customer can complete an order in under 3 minutes with no more than 5 checkout steps."
+    },
+    {
+      "category": "Privacy",
+      "requirement": "Customer addresses and contact data are encrypted at rest and deleted within 30 days of an account deletion request."
+    }
+  ],
+  "user_roles": [
+    "Customer",
+    "Courier",
+    "Admin"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:28:58"
+}

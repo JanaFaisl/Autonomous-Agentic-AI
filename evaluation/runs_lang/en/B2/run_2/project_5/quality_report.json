@@ -1,0 +1,46 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Low-Stock Alerts screen vs low_stock_alerts / user settings",
+      "message": "The design offers 'Snooze 24h' and notification settings (push toggle, default threshold), but the schema has no snoozed_until field, no 'snoozed' alert status and no table or columns for per-user or store-level notification preferences and default threshold."
+    },
+    {
+      "severity": "Medium",
+      "item": "Sales recording vs sales / sale_items tables",
+      "message": "The schema has sales and sale_items and the Sales report depends on them, but the design has no screen or flow to record a sale with line items; the only path is a 'Sale' reason chip on stock updates, so stock_movements would not link to a sales row and sales reports would be empty."
+    },
+    {
+      "severity": "Medium",
+      "item": "New Product Form vs products.sku",
+      "message": "products.sku is NOT NULL and UNIQUE with no default, but the New Product form (name, category, price, starting quantity) does not capture a SKU and no auto-generation rule is defined, so scan-to-create cannot reliably save a product."
+    },
+    {
+      "severity": "Medium",
+      "item": "Reason Chips vs stock_movements.movement_type",
+      "message": "The design's reason chips (Sale, Receipt, Adjustment, Damaged) do not map cleanly to the movement_type values (sale, receipt, adjustment, return, initial, correction); 'Damaged' has no type, and the reason column is free text, so the selected reason is not stored in a consistent, reportable form."
+    }
+  ],
+  "required_fixes": [
+    "Add alert snooze support (e.g. snoozed_until column or 'snoozed' status) and a store-level or per-user notification settings structure (push enabled, default reorder threshold) to the schema, or remove them from the design.",
+    "Define how sales are recorded: add a sale entry flow to the design that creates sales and sale_items and links the stock_movements row, or state that sales reports derive from stock_movements of type 'sale'.",
+    "Specify SKU handling for new products: auto-generate the SKU on save or add a SKU field to the New Product form.",
+    "Align reason chips with the schema by adding a 'damaged' movement_type or a reason_code column and documenting the chip-to-movement_type mapping."
+  ],
+  "recommendations": [
+    "Add a CHECK constraint (quantity_on_hand >= 0 or an explicit negative-stock policy) and a CHECK on sale_items.quantity > 0 to protect data integrity under concurrent updates.",
+    "Use timestamptz instead of timestamp for time columns, and add a partial index on low_stock_alerts(status) WHERE status = 'active' to speed up dashboard alert queries.",
+    "Provide a minimal read-only supplier view or document that supplier accounts are out of scope for the MVP, since the design has no supplier-facing screen."
+  ]
+}

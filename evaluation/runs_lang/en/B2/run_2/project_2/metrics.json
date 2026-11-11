@@ -1,0 +1,23 @@
+{
+  "condition": "B2/run_2",
+  "project_id": 2,
+  "domain": "Productivity",
+  "complexity": "Low",
+  "user_input": "A simple task manager app where users can create, complete, and delete tasks.",
+  "latency_s": {
+    "requirements": 9.32,
+    "database": 23.59,
+    "design": 57.86,
+    "planning": 11.81,
+    "quality": 13.61,
+    "support": 11.49
+  },
+  "fallbacks": {
+    "database": 1
+  },
+  "errors": {},
+  "total_latency_s": 127.85,
+  "language": "en",
+  "completed": true,
+  "default_model": "claude-sonnet-5-5"
+}

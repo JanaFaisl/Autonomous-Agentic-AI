@@ -1,0 +1,117 @@
+{
+  "project_name": "Simple Task Manager",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Create Tasks",
+      "description": "Users can add new tasks with a title and optional description.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can create a task with a title so that I can record work I need to do.",
+        "As a user, I can add an optional description so that I can capture task details."
+      ],
+      "acceptance_criteria": [
+        "Given I am on the task list, When I submit a valid title, Then the new task appears in my list as incomplete.",
+        "Given I submit an empty title, When I try to save, Then the system shows a validation error and creates no task."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Complete Tasks",
+      "description": "Users can mark tasks as complete or reopen them.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can mark a task as complete so that I can track my progress.",
+        "As a user, I can reopen a completed task so that I can correct mistakes."
+      ],
+      "acceptance_criteria": [
+        "Given an incomplete task, When I mark it complete, Then it is shown as completed and the change persists after reload.",
+        "Given a completed task, When I reopen it, Then it returns to the incomplete state."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Delete Tasks",
+      "description": "Users can permanently delete tasks they no longer need.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can delete a task so that my list contains only relevant items.",
+        "As a user, I am asked to confirm deletion so that I do not remove tasks by accident."
+      ],
+      "acceptance_criteria": [
+        "Given an existing task, When I confirm deletion, Then the task is removed from my list and the database.",
+        "Given I cancel the delete confirmation, When the dialog closes, Then the task remains unchanged."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "View and Filter Tasks",
+      "description": "Users can view their task list and filter by status.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a user, I can view all my tasks so that I know what needs attention.",
+        "As a user, I can filter by active or completed so that I can focus on relevant tasks."
+      ],
+      "acceptance_criteria": [
+        "Given I have tasks, When I open the app, Then I see only my own tasks sorted by newest first.",
+        "Given I select the Completed filter, When the list refreshes, Then only completed tasks are displayed."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "User Authentication",
+      "description": "Users can register and log in so that their tasks remain private.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a visitor, I can register an account so that I can store my tasks securely.",
+        "As a user, I can log in and out so that only I can access my task list."
+      ],
+      "acceptance_criteria": [
+        "Given valid registration details, When I submit the form, Then an account is created and I am logged in.",
+        "Given incorrect credentials, When I attempt to log in, Then access is denied and an error message is shown."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "REST API",
+      "JWT"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Task list pages load in under 2 seconds with 100 concurrent users."
+    },
+    {
+      "category": "Security",
+      "requirement": "Passwords are hashed with bcrypt and all traffic is served over HTTPS."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The service maintains 99.5% monthly uptime."
+    },
+    {
+      "category": "Usability",
+      "requirement": "Users can create a task in no more than 2 interactions from the main screen."
+    },
+    {
+      "category": "Privacy",
+      "requirement": "Each user can access only their own tasks; cross-user access attempts return HTTP 403."
+    }
+  ],
+  "user_roles": [
+    "User",
+    "Administrator"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:51:13"
+}

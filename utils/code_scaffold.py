@@ -27,6 +27,15 @@ def _pascal(text: str, fallback: str = "Item") -> str:
     return name or fallback
 
 
+def _component_name(screen: Dict[str, Any], index: int) -> str:
+    """React component/file name of a screen; names with no ASCII letters (e.g. Arabic) fall back to Screen<N>."""
+    return _pascal(screen.get("name", ""), f"Screen{index + 1}")
+
+
+def _route_slug(screen: Dict[str, Any], index: int) -> str:
+    return _slug(screen.get("name", ""), f"screen-{index + 1}")
+
+
 def _camel(text: str, fallback: str = "item") -> str:
     pascal = _pascal(text, fallback[:1].upper() + fallback[1:])
     return pascal[:1].lower() + pascal[1:] if pascal else fallback
@@ -303,7 +312,7 @@ def _screen_path(name: str, screens: List[Dict[str, Any]]) -> str:
     """Map a screen name to its route path — first screen is "/", matching App.jsx's routing."""
     for i, s in enumerate(screens):
         if s.get("name") == name:
-            return "/" if i == 0 else f"/{_slug(name)}"
+            return "/" if i == 0 else f"/{_route_slug(s, i)}"
     return f"/{_slug(name)}"
 
 
@@ -452,7 +461,7 @@ def _render_component_jsx(comp: Dict[str, Any], screens: List[Dict[str, Any]], s
 
 def _render_page_jsx(screen: Dict[str, Any], screens: List[Dict[str, Any]]) -> str:
     name = screen.get("name", "Screen")
-    component_name = _pascal(name, "Screen")
+    component_name = _component_name(screen, screens.index(screen) if screen in screens else 0)
     components = screen.get("key_components", []) or []
     seen_types: set = set()
     rendered = "\n".join(_render_component_jsx(c, screens, seen_types) for c in components if isinstance(c, dict))
@@ -493,8 +502,8 @@ def _render_app_jsx(project_name: str, screens: List[Dict[str, Any]]) -> str:
     nav_items = []
     for i, screen in enumerate(screens):
         name = screen.get("name", f"Screen {i+1}")
-        component_name = _pascal(name, f"Screen{i+1}")
-        path = "/" if i == 0 else f"/{_slug(name)}"
+        component_name = _component_name(screen, i)
+        path = "/" if i == 0 else f"/{_route_slug(screen, i)}"
         imports.append(f'import {component_name} from "./pages/{component_name}.jsx";')
         routes.append(f'          <Route path={json.dumps(path)} element={{<{component_name} />}} />')
         if i < 4:  # bottom nav shows at most 4 items, matching build_device_html
@@ -854,8 +863,8 @@ def build_scaffold_files(
         files["frontend/src/index.css"] = _render_index_css(color_scheme)
         pages = screens or [{"name": "Home", "purpose": "Landing screen", "key_components": []}]
         files["frontend/src/App.jsx"] = _render_app_jsx(project_name, pages)
-        for screen in pages:
-            component_name = _pascal(screen.get("name", "Screen"))
+        for i, screen in enumerate(pages):
+            component_name = _component_name(screen, i)
             files[f"frontend/src/pages/{component_name}.jsx"] = _render_page_jsx(screen, pages)
 
     files["README.md"] = _render_readme(requirements, tables, screens, has_backend, has_frontend)

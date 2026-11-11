@@ -1,0 +1,737 @@
+{
+  "design_overview": "RetailSync is a mobile-first PWA built for fast, one-handed use on the shop floor. Clerks get a camera-first scan flow, managers get alerts and reorder tools, and owners get dashboards and team controls. Role-aware bottom navigation keeps each role to its permitted screens.",
+  "color_scheme": {
+    "primary": "#1F5EFF",
+    "secondary": "#0F2A5C",
+    "accent": "#00B8A9",
+    "surface": "#FFFFFF",
+    "background": "#F4F6FA",
+    "text_primary": "#14213D",
+    "error": "#D93025",
+    "success": "#1E9E5A",
+    "warning": "#F29900"
+  },
+  "typography": {
+    "font_family": "Inter, Roboto, system-ui, sans-serif",
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "sizes": {
+      "small": "12px",
+      "medium": "15px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "700"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Dashboard",
+      "Scan",
+      "Alerts",
+      "Reports",
+      "Team"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Dashboard",
+      "purpose": "Give owners and managers a live overview of stock value, low-stock counts, top sellers and recent stock movements.",
+      "key_components": [
+        {
+          "name": "Dashboard Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Deep blue gradient header with greeting 'Good morning, Dana', store name, and a live 'Synced' green dot.",
+          "interaction": "Bell icon opens Low-Stock Alerts screen.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Stock Value Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "White rounded card with large '$128,450' total stock value, '+2.4% this week' in green, and a small sparkline.",
+          "interaction": "Tap opens Reports screen.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Low-Stock Count Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Amber-tinted card showing '12 items low' with a count badge and a 'Review' link.",
+          "interaction": "Tap opens Low-Stock Alerts screen.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Out-of-Stock Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Red-tinted card beside Low-Stock, showing '3 out of stock' with a bold number.",
+          "interaction": "Tap opens Low-Stock Alerts filtered to out of stock.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Top Sellers List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Card list of 5 rows with product thumbnail, name, units sold, and a rank number. Dividers are subtle.",
+          "interaction": "Tap a row opens Product Detail.",
+          "icon": "heart",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Live Activity Feed",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Rows such as 'Sam sold 2 x Oat Milk, now 14', each with a timestamp. New rows highlight briefly.",
+          "interaction": "Tap a row opens Product Detail.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Scan FAB",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Circular primary-blue floating button above the nav bar, white search icon and 'Scan' label, soft shadow.",
+          "interaction": "Opens Scan and Lookup screen.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with 5 icon-and-label tabs; active tab is blue with a pill indicator.",
+          "interaction": "Tap switches between main screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F2",
+        "F4"
+      ],
+      "user_flow": "Entered after login or from any bottom tab. Leads to Product Detail, Low-Stock Alerts, Reports or Scan."
+    },
+    {
+      "name": "Scan and Lookup",
+      "purpose": "Scan barcodes by camera or handheld scanner to look up products, receive deliveries, or create unknown products.",
+      "key_components": [
+        {
+          "name": "Scan Top Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Dark translucent bar titled 'Scan Item' with a back arrow and a 'Camera / Scanner' toggle.",
+          "interaction": "Toggle switches camera or handheld input; back returns to Dashboard.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Camera Viewfinder",
+          "type": "Image",
+          "position": "top",
+          "size": "large",
+          "styling": "Full-width live camera preview with a rounded teal corner frame, an animated scan line and hint 'Align barcode within frame'.",
+          "interaction": "Detected barcode opens the result card within 1 second.",
+          "icon": "search",
+          "has_image": true,
+          "image_type": "background"
+        },
+        {
+          "name": "Mode Segmented Control",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Pill segmented control with 'Look Up' and 'Receive Delivery'. Active segment is filled blue with white text.",
+          "interaction": "Switches scan mode; Receive mode adds each scan to a batch.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Manual Barcode Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded 48px input with placeholder 'Type or paste barcode' and a blue 'Find' button.",
+          "interaction": "Submit looks up the product and shows the result card.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Product Result Card",
+          "type": "Card",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Bottom sheet with product photo, name, SKU, big '24 in stock' badge and a green 'In stock' chip.",
+          "interaction": "Tap opens Product Detail and Adjust Stock screen.",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Add to Stock Stepper",
+          "type": "Input",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Quantity stepper with large minus and plus buttons and a numeric field, shown in Receive mode.",
+          "interaction": "Adjusts the quantity to receive for the scanned item.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Unknown Barcode Prompt",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded modal reading 'Barcode not found', with primary 'Create New Product' and secondary 'Rescan' buttons.",
+          "interaction": "Create opens a new product form; Rescan closes the modal.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirm Receipt Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width primary blue button 'Confirm Received (6 items)' with a teal count badge.",
+          "interaction": "Adds scanned stock, shows success toast, returns to Dashboard.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1"
+      ],
+      "user_flow": "Reached from the Scan tab or FAB. Leads to Product Detail for a known item, a create-product form for an unknown one, or back to Dashboard after receiving."
+    },
+    {
+      "name": "Product Detail and Adjust Stock",
+      "purpose": "Show live stock and history for a product, adjust quantity with a reason code, and set its reorder threshold.",
+      "key_components": [
+        {
+          "name": "Product Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White top bar with back arrow, title 'Oat Milk 1L', and an edit icon on the right.",
+          "interaction": "Back returns to previous screen; edit opens product fields.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Product Hero Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Rounded card with product photo, SKU 'OM-1001', supplier name, price, and shelf location chip 'Aisle 4'.",
+          "interaction": "Tap photo enlarges the image.",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Live Stock Counter",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Large '24' quantity in bold blue, 'On hand' label and a pulsing 'Live' chip. Turns amber when below threshold.",
+          "interaction": "Updates in place when another device changes stock.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Adjustment Stepper",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Large minus and plus buttons around a numeric input with placeholder 'Enter quantity change'.",
+          "interaction": "Sets the quantity change before saving.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reason Code Selector",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Dropdown with placeholder 'Select reason', options: Damaged, Lost, Received, Sold, Correction. Required marker shown.",
+          "interaction": "Opens reason list; selection enables the Save button.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reorder Threshold Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Labeled number field 'Alert me below' with placeholder '5' and a helper line about manager alerts.",
+          "interaction": "Saves threshold used for low-stock alerts.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Save Adjustment Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width blue gradient button 'Save Adjustment', disabled grey until reason selected.",
+          "interaction": "Logs user, time and reason; shows success toast and updates count.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Movement History List",
+          "type": "List",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Timeline rows with +/- quantity in green or red, reason, user name, and relative timestamp.",
+          "interaction": "Tap row expands details inline.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "user_flow": "Opened from a scan result, Dashboard list or alert item. Save returns to the previous screen with confirmation."
+    },
+    {
+      "name": "Low-Stock Alerts",
+      "purpose": "Let managers review items below threshold, select them and generate a draft purchase order per supplier.",
+      "key_components": [
+        {
+          "name": "Alerts Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White header titled 'Low Stock' with count badge '12' and a filter icon on the right.",
+          "interaction": "Filter opens supplier and severity options.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Severity Filter Chips",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal rounded chips 'All', 'Low', 'Out of stock'; the active chip is filled blue.",
+          "interaction": "Filters the alert list by severity.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Low-Stock Item Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Selectable row card with checkbox, thumbnail, name, red '3 left' chip and 'Threshold 5' caption.",
+          "interaction": "Checkbox selects item; tapping the card opens Product Detail.",
+          "icon": "bell",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Supplier Group Header",
+          "type": "Header",
+          "position": "center",
+          "size": "small",
+          "styling": "Grey section label such as 'FreshDairy Co. (4 items)' with a 'Select all' text link.",
+          "interaction": "Select all checks every item for that supplier.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Set Thresholds Link",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Secondary outlined button 'Edit Thresholds' with a settings icon, placed under the list heading.",
+          "interaction": "Opens per-product threshold editing, as in Product Detail.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Purchase Order Bar",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Sticky full-width blue button 'Create Purchase Order (4)' above the nav bar; hidden until items are selected.",
+          "interaction": "Opens the draft purchase order modal.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Draft Purchase Order Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "large",
+          "styling": "Full-height sheet with supplier name, editable quantity rows, total cost, and 'Save Draft' primary and 'Cancel' secondary buttons.",
+          "interaction": "Save Draft creates the order and shows a success toast.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Shown when no alerts: soft green circle, heading 'All stocked up', text 'No items below threshold'.",
+          "interaction": "None; informational only.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F3"
+      ],
+      "user_flow": "Reached from the Alerts tab, the Dashboard card or a push notification. Ends on a draft order confirmation, then back to the list."
+    },
+    {
+      "name": "Reports and Export",
+      "purpose": "Let owners review stock value, turnover and movement history for a date range and export it to CSV.",
+      "key_components": [
+        {
+          "name": "Reports Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White header titled 'Reports' with a share icon on the right.",
+          "interaction": "Share opens export options for the current range.",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Date Range Picker",
+          "type": "Input",
+          "position": "top",
+          "size": "medium",
+          "styling": "Rounded field showing 'Oct 1 - Oct 31' with a calendar-style chevron and quick chips 7D, 30D, 90D.",
+          "interaction": "Opens a calendar sheet to pick start and end dates.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Stock Value Trend Chart",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Card with a smooth blue line chart of stock value over time, labeled axes and a tooltip on touch.",
+          "interaction": "Touch a point to see the value for that day.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "KPI Row",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Three compact tiles: 'Stock Value', 'Turnover 4.2x', 'Low Items 12', each with a bold figure.",
+          "interaction": "Tap a tile to filter the report below.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Top Sellers Bar List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Rows with product name, horizontal teal bars proportional to units sold, and unit counts at right.",
+          "interaction": "Tap a row opens Product Detail.",
+          "icon": "heart",
+          "has_image": true,
+          "image_type": "product"
+        },
+        {
+          "name": "Movement History Table",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Scrollable rows with date, product, +/- quantity colored green or red, reason and user.",
+          "interaction": "Tap a row opens Product Detail.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Export CSV Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width primary button 'Export CSV' with a share icon, sticky above the nav bar.",
+          "interaction": "Downloads the CSV; shows a progress bar then 'Export ready' toast.",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F4"
+      ],
+      "user_flow": "Reached from the Reports tab or the Dashboard stock value card. Export downloads a file and keeps the user on this screen."
+    },
+    {
+      "name": "Team and Roles",
+      "purpose": "Let owners create staff accounts, assign roles and deactivate users, with access denied for clerks.",
+      "key_components": [
+        {
+          "name": "Team Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White header titled 'Team' with a plus icon button on the right.",
+          "interaction": "Plus opens the Add Staff form sheet.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Staff Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "medium",
+          "styling": "Rounded search field with placeholder 'Search staff by name or email'.",
+          "interaction": "Filters the staff list as you type.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Staff Member Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Row card with avatar, name, email, a role chip 'Store Clerk' in blue, and a green 'Active' status dot.",
+          "interaction": "Tap opens edit sheet for role and status.",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Add Staff Form",
+          "type": "Modal",
+          "position": "center",
+          "size": "large",
+          "styling": "Bottom sheet with inputs 'Full name', 'Email address', 'Temporary password', and a primary 'Create Account' button.",
+          "interaction": "Create Account saves the user and closes the sheet.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Role Selector",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Three radio cards: 'Store Owner', 'Store Manager', 'Store Clerk', each with a one-line permission summary.",
+          "interaction": "Selecting a card sets the permissions for the account.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Active Toggle",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Switch labeled 'Account active'; turns grey when off, with red helper text 'User can no longer sign in'.",
+          "interaction": "Toggling opens a confirmation, then deactivates or reactivates the user.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Deactivate Confirmation",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered dialog 'Deactivate Sam?' with red 'Deactivate' primary and grey 'Cancel' button.",
+          "interaction": "Confirm blocks login and logs future attempts; Cancel closes dialog.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Access Denied State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Shown to clerks: lock-style panel with 'Admin access required' and a 'Back to Dashboard' outlined button.",
+          "interaction": "Returns the clerk to the Dashboard.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F5"
+      ],
+      "user_flow": "Reached from the Team tab by owners only; clerks see the access-denied state. Saving returns to the staff list."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "52px tall, 12px radius, blue gradient, white bold label; disabled state is grey.",
+      "interaction": "Triggers the main screen action with a press scale.",
+      "icon": "plus",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "Outlined with a 1.5px blue border, blue label, white fill, 12px radius.",
+      "interaction": "Triggers an alternative or cancel action.",
+      "icon": "edit",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input",
+      "type": "Input",
+      "position": "center",
+      "size": "medium",
+      "styling": "48px height, 12px radius, light grey border, blue focus ring, grey placeholder text.",
+      "interaction": "Focus shows the keyboard and the focus ring.",
+      "icon": "edit",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Info Card",
+      "type": "Card",
+      "position": "center",
+      "size": "medium",
+      "styling": "White surface, 16px radius, subtle 1px border and soft shadow, 16px padding.",
+      "interaction": "Tap navigates to the related detail screen.",
+      "icon": "bookmark",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Stock Status Chip",
+      "type": "Badge",
+      "position": "center",
+      "size": "small",
+      "styling": "Pill chip: green 'In stock', amber 'Low', red 'Out'; tinted background with bold text.",
+      "interaction": "Display only.",
+      "icon": "bell",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Top App Bar",
+      "type": "Header",
+      "position": "top",
+      "size": "medium",
+      "styling": "56px bar with back arrow, bold title, and a single action icon on the right.",
+      "interaction": "Back returns; action icon performs a screen action.",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Navigation Bar",
+      "type": "Footer",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "64px white bar, 5 tabs with icon and label; active tab blue.",
+      "interaction": "Tap switches the main section.",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Sheet",
+      "type": "Modal",
+      "position": "bottom",
+      "size": "large",
+      "styling": "White sheet with 24px top radius, drag handle and dimmed backdrop.",
+      "interaction": "Swipe down or tap the backdrop to dismiss.",
+      "icon": "plus",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toast Message",
+      "type": "Toast",
+      "position": "bottom",
+      "size": "small",
+      "styling": "Dark rounded snackbar with white text and a colored status stripe; auto-dismisses.",
+      "interaction": "Appears after saves and disappears after 3 seconds.",
+      "icon": "bell",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "List Row",
+      "type": "List",
+      "position": "center",
+      "size": "medium",
+      "styling": "64px row with thumbnail, two text lines, right-aligned value and a chevron.",
+      "interaction": "Tap opens the related detail screen.",
+      "icon": "bookmark",
+      "has_image": true,
+      "image_type": "product"
+    }
+  ],
+  "responsive_design": "Mobile-first from 360px wide. Cards stack in one column on phones, two columns on tablets, and the bottom nav becomes a left rail at 1024px and up. Touch targets are at least 48px.",
+  "accessibility": "WCAG AA contrast, 48px touch targets, visible focus rings, text labels beside icons, status never shown by color alone, screen-reader labels on scan and stock changes, and a live-region announcement for stock updates.",
+  "animations": "Scan line loops at 1.5s. Live stock counts crossfade over 200ms when updated. Sheets slide up in 250ms. Buttons scale to 0.97 on press. Toasts fade in and out. Reduced-motion setting is respected.",
+  "icons": "Only the approved outline icon set: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share. 24px size, 2px stroke, always paired with labels. Search doubles as the scan action."
+}

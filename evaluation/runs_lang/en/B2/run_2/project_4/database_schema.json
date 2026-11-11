@@ -1,0 +1,1656 @@
+{
+  "tables": [
+    {
+      "name": "universities",
+      "purpose": "Universities that students belong to; used to validate email domains and organize courses.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "email_domain",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Allowed university email domain, e.g. uni.edu; used to verify registrations"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "name",
+        "email_domain"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "users",
+      "purpose": "Registered accounts (students, moderators, system administrators) and their profile data.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "university_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to universities.id"
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "University email; stored lowercase"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "bcrypt hash"
+        },
+        {
+          "name": "display_name",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "major",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Profile major"
+        },
+        {
+          "name": "bio",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "avatar_url",
+          "type": "varchar(500)",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "platform_role",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'student'",
+          "notes": "student | moderator | system_admin. Group Admin is a per-group role in group_members"
+        },
+        {
+          "name": "status",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending_verification'",
+          "notes": "pending_verification | active | suspended | deleted"
+        },
+        {
+          "name": "email_verified_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Null until the email is verified"
+        },
+        {
+          "name": "notifications_enabled",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Global in-app notification opt-in"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Soft delete before hard purge (GDPR)"
+        }
+      ],
+      "indexes": [
+        "email",
+        "university_id",
+        "platform_role",
+        "status"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "universities",
+          "fk": "university_id",
+          "ref": "id",
+          "notes": "User's university"
+        }
+      ]
+    },
+    {
+      "name": "email_verification_tokens",
+      "purpose": "Single-use tokens sent by email to verify university email addresses.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "token_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Hash of the emailed token"
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "used_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "token_hash",
+        "expires_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Token owner"
+        }
+      ]
+    },
+    {
+      "name": "courses",
+      "purpose": "Courses offered by a university; used for profiles, notes and groups.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "university_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to universities.id"
+        },
+        {
+          "name": "code",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Course code, e.g. CS101; unique per university (composite unique university_id+code)"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "university_id",
+        "code",
+        "name",
+        "university_id,code"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "universities",
+          "fk": "university_id",
+          "ref": "id",
+          "notes": "Owning university"
+        }
+      ]
+    },
+    {
+      "name": "user_courses",
+      "purpose": "Junction table: many-to-many between users and courses (courses on a student's profile).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "course_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to courses.id; composite unique (user_id, course_id)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "course_id",
+        "user_id,course_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Student"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "courses",
+          "fk": "course_id",
+          "ref": "id",
+          "notes": "Course taken"
+        }
+      ]
+    },
+    {
+      "name": "topics",
+      "purpose": "Topics within a course used to organize and filter notes.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "course_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to courses.id"
+        },
+        {
+          "name": "name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Unique per course (composite unique course_id+name)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "course_id",
+        "course_id,name"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "courses",
+          "fk": "course_id",
+          "ref": "id",
+          "notes": "Parent course"
+        }
+      ]
+    },
+    {
+      "name": "notes",
+      "purpose": "Uploaded study notes (PDF/image) stored in S3, with metadata, scan and moderation status.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "uploader_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "course_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to courses.id; university is derived via course"
+        },
+        {
+          "name": "topic_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to topics.id"
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Included in keyword search"
+        },
+        {
+          "name": "file_key",
+          "type": "varchar(500)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "AWS S3 object key"
+        },
+        {
+          "name": "file_name",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Original file name"
+        },
+        {
+          "name": "file_mime_type",
+          "type": "varchar(100)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "application/pdf, image/png, image/jpeg, etc."
+        },
+        {
+          "name": "file_size_bytes",
+          "type": "bigint",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Application enforces max 20 MB (20971520)"
+        },
+        {
+          "name": "scan_status",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending'",
+          "notes": "pending | clean | infected"
+        },
+        {
+          "name": "status",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending_scan'",
+          "notes": "pending_scan | published | removed | rejected"
+        },
+        {
+          "name": "average_rating",
+          "type": "numeric(3,2)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "Denormalized from note_ratings for fast sorting"
+        },
+        {
+          "name": "rating_count",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "0",
+          "notes": "Denormalized count"
+        },
+        {
+          "name": "published_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Set when scan is clean and note is published"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Soft delete"
+        }
+      ],
+      "indexes": [
+        "uploader_id",
+        "course_id",
+        "topic_id",
+        "status",
+        "average_rating",
+        "created_at",
+        "title"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "uploader_id",
+          "ref": "id",
+          "notes": "Uploader"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "courses",
+          "fk": "course_id",
+          "ref": "id",
+          "notes": "Course the note belongs to"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "topics",
+          "fk": "topic_id",
+          "ref": "id",
+          "notes": "Optional topic"
+        }
+      ]
+    },
+    {
+      "name": "note_ratings",
+      "purpose": "Ratings (and optional comments) left by students on notes; one rating per user per note.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "note_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to notes.id; composite unique (note_id, user_id)"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "rating",
+          "type": "int",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "CHECK 1..5"
+        },
+        {
+          "name": "comment",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "note_id",
+        "user_id",
+        "note_id,user_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "notes",
+          "fk": "note_id",
+          "ref": "id",
+          "notes": "Rated note"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Rater"
+        }
+      ]
+    },
+    {
+      "name": "study_groups",
+      "purpose": "Study groups created for a specific course.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "course_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to courses.id"
+        },
+        {
+          "name": "created_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; creator becomes admin via group_members"
+        },
+        {
+          "name": "name",
+          "type": "varchar(150)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "visibility",
+          "type": "varchar(10)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'public'",
+          "notes": "public | private; private groups require admin approval to join"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Soft delete"
+        }
+      ],
+      "indexes": [
+        "course_id",
+        "created_by",
+        "visibility",
+        "name"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "courses",
+          "fk": "course_id",
+          "ref": "id",
+          "notes": "Group's course"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "created_by",
+          "ref": "id",
+          "notes": "Creator"
+        }
+      ]
+    },
+    {
+      "name": "group_members",
+      "purpose": "Junction table: many-to-many between users and study groups, holding membership role, join request status and per-group notification preference.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "group_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to study_groups.id; composite unique (group_id, user_id)"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "role",
+          "type": "varchar(10)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'member'",
+          "notes": "member | admin"
+        },
+        {
+          "name": "status",
+          "type": "varchar(10)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending'",
+          "notes": "pending | active | rejected | removed"
+        },
+        {
+          "name": "notifications_enabled",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "true",
+          "notes": "Per-group notification opt-in"
+        },
+        {
+          "name": "decided_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; admin who approved/rejected/removed"
+        },
+        {
+          "name": "requested_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "joined_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Set when status becomes active"
+        },
+        {
+          "name": "decided_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "group_id",
+        "user_id",
+        "group_id,user_id",
+        "group_id,status",
+        "decided_by"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "study_groups",
+          "fk": "group_id",
+          "ref": "id",
+          "notes": "Group"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Member or requester"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "decided_by",
+          "ref": "id",
+          "notes": "Admin who decided on the request"
+        }
+      ]
+    },
+    {
+      "name": "group_messages",
+      "purpose": "Messages posted in a group feed (delivered over WebSocket).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "group_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to study_groups.id"
+        },
+        {
+          "name": "author_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "parent_message_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to group_messages.id for threaded replies"
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "status",
+          "type": "varchar(10)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'visible'",
+          "notes": "visible | removed"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "edited_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Soft delete"
+        }
+      ],
+      "indexes": [
+        "group_id,created_at",
+        "author_id",
+        "parent_message_id",
+        "status"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "study_groups",
+          "fk": "group_id",
+          "ref": "id",
+          "notes": "Group feed"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "author_id",
+          "ref": "id",
+          "notes": "Author"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "group_messages",
+          "fk": "parent_message_id",
+          "ref": "id",
+          "notes": "Parent message for replies"
+        }
+      ]
+    },
+    {
+      "name": "message_notes",
+      "purpose": "Junction table: many-to-many between group messages and notes attached to them.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "message_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to group_messages.id; composite unique (message_id, note_id)"
+        },
+        {
+          "name": "note_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to notes.id"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "message_id",
+        "note_id",
+        "message_id,note_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "group_messages",
+          "fk": "message_id",
+          "ref": "id",
+          "notes": "Message"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "notes",
+          "fk": "note_id",
+          "ref": "id",
+          "notes": "Attached note"
+        }
+      ]
+    },
+    {
+      "name": "notifications",
+      "purpose": "In-app notifications for users (new group activity, join request outcomes, content removal).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; recipient"
+        },
+        {
+          "name": "type",
+          "type": "varchar(40)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "new_group_message | join_request | join_approved | join_rejected | content_removed | report_update"
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "group_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to study_groups.id"
+        },
+        {
+          "name": "message_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to group_messages.id"
+        },
+        {
+          "name": "note_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to notes.id"
+        },
+        {
+          "name": "is_read",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "read_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id,is_read,created_at",
+        "group_id",
+        "message_id",
+        "note_id"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Recipient"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "study_groups",
+          "fk": "group_id",
+          "ref": "id",
+          "notes": "Related group (optional)"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "group_messages",
+          "fk": "message_id",
+          "ref": "id",
+          "notes": "Related message (optional)"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "notes",
+          "fk": "note_id",
+          "ref": "id",
+          "notes": "Related note (optional)"
+        }
+      ]
+    },
+    {
+      "name": "reports",
+      "purpose": "User reports of inappropriate or copyrighted notes or messages, queued for moderator review.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "reporter_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "target_type",
+          "type": "varchar(10)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "note | message"
+        },
+        {
+          "name": "note_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to notes.id; set when target_type = note"
+        },
+        {
+          "name": "message_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to group_messages.id; set when target_type = message. CHECK exactly one of note_id/message_id is non-null"
+        },
+        {
+          "name": "reason",
+          "type": "varchar(30)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "inappropriate | copyright | spam | harassment | other"
+        },
+        {
+          "name": "details",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "status",
+          "type": "varchar(15)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending'",
+          "notes": "pending | in_review | resolved_removed | dismissed"
+        },
+        {
+          "name": "reviewed_by",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; moderator"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "resolved_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "status,created_at",
+        "reporter_id",
+        "note_id",
+        "message_id",
+        "reviewed_by"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "reporter_id",
+          "ref": "id",
+          "notes": "Reporting user"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "notes",
+          "fk": "note_id",
+          "ref": "id",
+          "notes": "Reported note"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "group_messages",
+          "fk": "message_id",
+          "ref": "id",
+          "notes": "Reported message"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "reviewed_by",
+          "ref": "id",
+          "notes": "Reviewing moderator"
+        }
+      ]
+    },
+    {
+      "name": "moderation_actions",
+      "purpose": "Audit log of moderator decisions such as removing or restoring content.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "report_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to reports.id"
+        },
+        {
+          "name": "moderator_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "note_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to notes.id"
+        },
+        {
+          "name": "message_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "FK to group_messages.id"
+        },
+        {
+          "name": "action",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "remove | restore | dismiss | warn_user"
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "report_id",
+        "moderator_id",
+        "note_id",
+        "message_id",
+        "created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "reports",
+          "fk": "report_id",
+          "ref": "id",
+          "notes": "Originating report"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "moderator_id",
+          "ref": "id",
+          "notes": "Acting moderator"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "notes",
+          "fk": "note_id",
+          "ref": "id",
+          "notes": "Affected note"
+        },
+        {
+          "type": "many-to-one",
+          "to_table": "group_messages",
+          "fk": "message_id",
+          "ref": "id",
+          "notes": "Affected message"
+        }
+      ]
+    },
+    {
+      "name": "data_deletion_requests",
+      "purpose": "Tracks GDPR-style user data deletion requests, to be completed within 30 days.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": false,
+          "default": "gen_random_uuid()",
+          "notes": null
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id"
+        },
+        {
+          "name": "status",
+          "type": "varchar(15)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'pending'",
+          "notes": "pending | processing | completed"
+        },
+        {
+          "name": "requested_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "now()",
+          "notes": null
+        },
+        {
+          "name": "due_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "requested_at + 30 days"
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": null
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "status,due_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "User requesting deletion"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "PostgreSQL is the target database; uuid primary keys use gen_random_uuid() (pgcrypto/pg13+). Types such as numeric(3,2) and varchar(n) are standard PostgreSQL types.",
+    "Every table has exactly one primary key column (id). Junction tables (user_courses, group_members, message_notes) use a surrogate id PK plus a composite unique constraint on their two FK columns, listed in indexes as comma-separated column names.",
+    "Composite entries in indexes (e.g. 'group_id,status') denote multi-column indexes; the ones noted as unique (user_courses, note_ratings, group_members, message_notes, courses university_id+code, topics course_id+name) must be created as UNIQUE indexes.",
+    "Platform-wide roles (student, moderator, system_admin) are stored in users.platform_role; the Group Admin role is contextual and stored in group_members.role, with the group creator inserted as an active admin member at creation.",
+    "Registration is restricted to emails whose domain matches universities.email_domain; accounts stay in pending_verification until a token in email_verification_tokens is consumed.",
+    "Passwords are stored only as bcrypt hashes; JWT access tokens are stateless, so no session table is included.",
+    "Files are stored in AWS S3; only the object key and metadata are stored in the database. notes.scan_status and notes.status support the virus-scan-before-publish requirement, and the 20 MB limit and PDF/image types are enforced in the application (and optionally by CHECK constraints).",
+    "Full-text search over notes.title and notes.description is expected to use a PostgreSQL GIN index on a tsvector expression (generated column or expression index); the plain 'title' index supports prefix and filter queries.",
+    "notes.average_rating and rating_count are denormalized and updated by the application or a trigger when note_ratings change, to meet the 1-second search target.",
+    "Reports and moderation_actions reference either a note or a message through two nullable FKs; a CHECK constraint should ensure exactly one is set in reports.",
+    "Removing moderated content sets status='removed' (soft removal) so it is hidden from users, and a notifications row of type content_removed is created for the uploader/author.",
+    "User deletion requests are handled by soft-deleting users (deleted_at) and then anonymizing or purging personal data and S3 files within 30 days; data_deletion_requests tracks this workflow.",
+    "The major is stored as free text in users.major for simplicity; it can be normalized into a majors table later if needed.",
+    "Notification delivery is in-app only; users.notifications_enabled is the global opt-in and group_members.notifications_enabled is the per-group opt-in."
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "project_name": "Simple Task Manager",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Create Task",
+      "description": "Users can add a new task with a title and optional description.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can create a task with a title so that I can record work I need to do.",
+        "As a user, I can add an optional description so that I can capture task details."
+      ],
+      "acceptance_criteria": [
+        "Given I am on the task list, When I submit a valid title, Then the new task appears in my list as incomplete.",
+        "Given I am creating a task, When I submit an empty title, Then I see a validation error and no task is created."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Complete Task",
+      "description": "Users can mark a task as complete or revert it to incomplete.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can mark a task as complete so that I can track my progress.",
+        "As a user, I can unmark a completed task so that I can correct mistakes."
+      ],
+      "acceptance_criteria": [
+        "Given an incomplete task, When I mark it complete, Then it is shown as completed and the status is saved.",
+        "Given a completed task, When I unmark it, Then it returns to incomplete status and the change persists after reload."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Delete Task",
+      "description": "Users can permanently delete tasks they no longer need.",
+      "priority": "High",
+      "user_stories": [
+        "As a user, I can delete a task so that my list only contains relevant items.",
+        "As a user, I can confirm before deleting so that I avoid removing tasks by accident."
+      ],
+      "acceptance_criteria": [
+        "Given an existing task, When I confirm deletion, Then the task is removed from my list and the database.",
+        "Given a deletion prompt, When I cancel, Then the task remains unchanged in my list."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "View Task List",
+      "description": "Users can view all their tasks and filter by completion status.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a user, I can view all my tasks so that I know what is pending.",
+        "As a user, I can filter tasks by status so that I can focus on open or finished items."
+      ],
+      "acceptance_criteria": [
+        "Given I have tasks, When I open the app, Then I see my tasks listed with title and status.",
+        "Given I select the Completed filter, When the list refreshes, Then only completed tasks are displayed."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "Express",
+      "REST API"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Task list pages load in under 2 seconds at 100 concurrent users."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The service maintains at least 99.5% monthly uptime."
+    },
+    {
+      "category": "Usability",
+      "requirement": "A new user can create and complete a task within 1 minute without instructions."
+    },
+    {
+      "category": "Security",
+      "requirement": "All traffic uses HTTPS and users can only access their own tasks."
+    }
+  ],
+  "user_roles": [
+    "User"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:33:11"
+}

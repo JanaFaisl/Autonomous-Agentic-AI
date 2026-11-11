@@ -1,0 +1,226 @@
+{
+  "plan_name": "RetailSync MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema and migrations (users, roles, products, stock, movements, suppliers, thresholds, purchase orders)",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Set up Node.js REST API, React PWA shell, TLS config, CI and role-aware bottom navigation",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Build login, JWT auth with bcrypt, and RBAC middleware on every endpoint",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T2"
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "Create UI kit and mobile-first screen designs (Scan, Product Detail, Alerts, Dashboard, Reports, Team) at 360px with accessibility",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T5",
+      "title": "Implement product lookup and create endpoints with indexed barcode search (under 1 second)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Build Scan and Lookup screen with ZXing camera scanning, handheld scanner input, manual entry, unknown barcode prompt and Receive Delivery batch mode",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T4",
+        "T5"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Implement stock adjustment API with reason codes, transactional audit log (user, timestamp, reason) and receive-delivery endpoint",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T5"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Add WebSocket broadcast of stock changes and live-updating Product Detail and Dashboard counters (under 2 seconds)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T7"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Build Product Detail and Adjust Stock screen with stepper, reason selector, movement history and threshold input",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2",
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T4",
+        "T7"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Implement threshold-based low-stock detection and in-app alerts pushed to managers via WebSocket",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T8"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Build Low-Stock Alerts screen with supplier grouping and draft purchase order generation API and modal",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T4",
+        "T10"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Implement dashboard and report aggregation queries (stock value, low-stock counts, top sellers, turnover) and CSV export endpoint",
+      "assigned_agent": "DBA",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T7"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Build Dashboard and Reports screens with date range picker, charts and CSV download",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T4",
+        "T8",
+        "T12"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "Build Team and Roles screens: create staff, role assignment, deactivate user, failed-login logging and access-denied state",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3",
+        "T4"
+      ]
+    },
+    {
+      "id": "T15",
+      "title": "Run load test for 50 concurrent users, configure daily automated backups, PWA install check and end-to-end acceptance tests",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T6",
+        "T9",
+        "T11",
+        "T13",
+        "T14"
+      ]
+    }
+  ],
+  "risks": [
+    "Camera barcode scanning (ZXing) may be slow or unreliable on low-end phones or in poor lighting, threatening the 1-second lookup target; mitigate with manual entry and handheld scanner fallback.",
+    "Real-time WebSocket sync within 2 seconds can break under flaky store Wi-Fi or concurrent edits; mitigate with reconnect logic, transactional updates and server-authoritative counts.",
+    "Scope is large for a small team; F3 purchase orders and F4 reports are lower priority and should be cut to basic versions if the schedule slips.",
+    "No offline support in the MVP means scans during connectivity loss may be lost; mitigate with clear sync status and retry queue if time allows.",
+    "Security and RBAC gaps (endpoint coverage, deactivated-user sessions) could slip through under time pressure; mitigate with centralized middleware and automated permission tests."
+  ]
+}

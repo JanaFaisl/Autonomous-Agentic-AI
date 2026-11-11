@@ -1,0 +1,56 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Design vs Requirements (F3/F5 courier workflow)",
+      "message": "The design has no courier delivery-list screen or courier navigation, and the courier can only tap 'Mark as Delivered', so the F5 criterion 'courier sees the order in their delivery list' and the F3 story 'courier can update delivery status' are not fully covered by any screen."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design vs Database (guest checkout)",
+      "message": "The design lets users browse and check out as a guest, but carts.user_id, orders.user_id and payments.user_id are NOT NULL and the requirements never define guest checkout, so the guest flow cannot be stored."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design vs Database (favorites)",
+      "message": "The design includes a Favorite Toggle and a 'Saved favorites' row, but the schema has no favorites table to persist saved bouquets."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design vs Database (courier rating, live map, ETA)",
+      "message": "The Order Tracking screen shows a courier rating, a live courier map pin and an ETA window, but the schema stores no courier ratings, no courier location data and no ETA field, and the requirements only call for status tracking."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design navigation vs user roles",
+      "message": "The bottom navigation (Shop, Cart, Orders, Account) is customer-only, and the design does not say how Courier and Admin users reach the Admin Panel or their courier views, beyond 'land here after signing in with an admin role'."
+    },
+    {
+      "severity": "Medium",
+      "item": "Database vs Privacy NFR",
+      "message": "The privacy NFR requires contact data to be encrypted at rest, but users.email is not marked for encryption, and city and postal_code in addresses and orders are also not marked, while name, phone and address lines are."
+    }
+  ],
+  "required_fixes": [
+    "Add a courier delivery-list screen (assigned deliveries with status updates such as picked up, out for delivery, delivered) and role-based navigation for Courier and Admin.",
+    "Resolve guest checkout: either remove the guest flow from the design (require login or registration before checkout) or make the schema support guest orders and carts.",
+    "Add a favorites table (user_id, product_id, unique pair), or remove the favorites UI from the design.",
+    "Remove the courier rating, live map and ETA elements from the design, or add the supporting data (courier location, ETA, rating) and requirements for them."
+  ],
+  "recommendations": [
+    "Add a Bouquet Details screen, since the catalog cards open it but it is not defined, and document how it shows photos and the stock state.",
+    "Define how orders.status and deliveries.status stay synchronized, and add CHECK constraints for status values, price >= 0 and stock_quantity >= 0.",
+    "Clarify the email encryption approach (for example a blind index for login lookup) and the anonymization of orders when an account is purged."
+  ]
+}

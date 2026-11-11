@@ -1,0 +1,121 @@
+{
+  "project_name": "Hospital Appointment Booking System",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Patient Registration and Authentication",
+      "description": "Patients create accounts and securely log in to manage their profile and appointments.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can register with my email and phone so that I can book appointments online.",
+        "As a patient, I can reset my password so that I can regain access to my account."
+      ],
+      "acceptance_criteria": [
+        "Given a new visitor, When they submit valid registration details, Then an account is created and a verification email is sent.",
+        "Given a registered patient, When they enter valid credentials, Then they are logged in and see their dashboard."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Doctor Search and Availability",
+      "description": "Patients search doctors by name, specialty or department and view available time slots.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can search doctors by specialty so that I can find the right care provider.",
+        "As a doctor, I can set my weekly availability so that patients only book times I can attend."
+      ],
+      "acceptance_criteria": [
+        "Given a specialty filter, When the patient searches, Then only matching doctors with open slots are listed.",
+        "Given a doctor updates availability, When a patient views the calendar, Then the new slots are shown within 1 minute."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Appointment Booking and Management",
+      "description": "Patients book, reschedule and cancel appointments, with conflicts prevented automatically.",
+      "priority": "High",
+      "user_stories": [
+        "As a patient, I can book an available slot with a doctor so that I secure a visit time.",
+        "As a patient, I can reschedule or cancel an appointment so that I can adapt to changes in my plans."
+      ],
+      "acceptance_criteria": [
+        "Given an open slot, When a patient confirms the booking, Then the slot is reserved and no other patient can book it.",
+        "Given an upcoming appointment, When the patient cancels at least 24 hours ahead, Then the slot is released and a confirmation is sent."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Notifications and Reminders",
+      "description": "The system sends email and SMS confirmations and reminders for upcoming appointments.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a patient, I can receive a reminder before my visit so that I do not miss my appointment.",
+        "As a receptionist, I can see reminder delivery status so that I can follow up on failed notifications."
+      ],
+      "acceptance_criteria": [
+        "Given a confirmed appointment, When it is 24 hours away, Then a reminder is sent to the patient by email or SMS.",
+        "Given a booking, reschedule or cancellation, When it is saved, Then the patient receives a notification within 1 minute."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Admin and Staff Management",
+      "description": "Administrators manage doctors, departments, schedules and view appointment reports.",
+      "priority": "Medium",
+      "user_stories": [
+        "As an administrator, I can add and deactivate doctor profiles so that listings stay accurate.",
+        "As a receptionist, I can book appointments on behalf of patients so that walk-in and phone requests are handled."
+      ],
+      "acceptance_criteria": [
+        "Given an admin is logged in, When they create a doctor profile, Then the doctor appears in patient search results.",
+        "Given a receptionist is logged in, When they book for a patient, Then the appointment appears in that patient's account."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile Web"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "REST API",
+      "JWT Authentication",
+      "Twilio SMS",
+      "SMTP Email"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Pages load in under 2 seconds and booking requests complete in under 3 seconds at 200 concurrent users."
+    },
+    {
+      "category": "Security",
+      "requirement": "All data is encrypted with TLS 1.2+ in transit and AES-256 at rest; passwords are hashed with bcrypt."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The system maintains 99.9% monthly uptime, excluding scheduled maintenance windows."
+    },
+    {
+      "category": "Privacy",
+      "requirement": "Patient data handling complies with HIPAA/GDPR, with audit logs of all access to patient records retained for 6 years."
+    },
+    {
+      "category": "Usability",
+      "requirement": "A patient can complete a booking in under 2 minutes and the UI meets WCAG 2.1 AA accessibility."
+    }
+  ],
+  "user_roles": [
+    "Patient",
+    "Doctor",
+    "Receptionist",
+    "Administrator"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:34:57"
+}

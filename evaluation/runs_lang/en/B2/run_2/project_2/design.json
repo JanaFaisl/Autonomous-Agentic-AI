@@ -1,0 +1,748 @@
+{
+  "design_overview": "A clean, touch-friendly task manager with a calm indigo palette. Card-based lists, a persistent quick-add field and status filters keep common actions within two interactions. Authentication, task CRUD and delete confirmation flow logically across six connected screens.",
+  "color_scheme": {
+    "primary": "#4F46E5",
+    "secondary": "#6B7280",
+    "accent": "#06B6D4",
+    "surface": "#FFFFFF",
+    "background": "#F5F7FB",
+    "text_primary": "#111827",
+    "error": "#DC2626",
+    "success": "#16A34A",
+    "warning": "#F59E0B"
+  },
+  "typography": {
+    "font_family": "Inter, system-ui, sans-serif",
+    "heading_font": "Inter, system-ui, sans-serif",
+    "body_font": "Inter, system-ui, sans-serif",
+    "sizes": {
+      "small": "12px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "700"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Tasks",
+      "New Task",
+      "Account"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Login",
+      "purpose": "Let returning users sign in securely to reach their private task list.",
+      "key_components": [
+        {
+          "name": "Brand Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Subtle indigo gradient banner with white app name 'Simple Task Manager' and tagline 'Stay on top of your day'.",
+          "interaction": "Static; no action.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "background"
+        },
+        {
+          "name": "Welcome Title",
+          "type": "Text",
+          "position": "top",
+          "size": "medium",
+          "styling": "Bold 28px heading 'Welcome back' with gray subtitle 'Sign in to see your tasks'.",
+          "interaction": "Static; no action.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Error Banner",
+          "type": "Alert",
+          "position": "center",
+          "size": "medium",
+          "styling": "Red-tinted rounded banner with text 'Incorrect email or password'; hidden until failed login.",
+          "interaction": "Appears on failed sign in; dismisses when typing resumes.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Email Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "48px rounded field, light border, placeholder 'Email address', indigo focus ring.",
+          "interaction": "Tap to type email; validated on blur.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Password Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "48px rounded masked field, placeholder 'Password', 'Show' text toggle at right.",
+          "interaction": "Tap to type password; Show reveals characters.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Sign In Button",
+          "type": "Button",
+          "position": "center",
+          "size": "large",
+          "styling": "Full-width indigo filled button, white bold text 'Sign In', 12px radius, soft shadow.",
+          "interaction": "Submits credentials; opens My Tasks on success.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Register Link",
+          "type": "Button",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Text link 'New here? Create an account' with indigo bold link portion.",
+          "interaction": "Opens Register screen.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F5"
+      ],
+      "user_flow": "App launch when logged out lands here. Successful sign in opens My Tasks; 'Create an account' opens Register."
+    },
+    {
+      "name": "Register",
+      "purpose": "Allow visitors to create an account and be signed in immediately.",
+      "key_components": [
+        {
+          "name": "Top Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with 'Back' text button at left and centered title 'Create Account'.",
+          "interaction": "Back returns to Login screen.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Name Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "48px rounded field with placeholder 'Full name' and light gray border.",
+          "interaction": "Tap to type name.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Email Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "48px rounded field, placeholder 'Email address'; red helper text 'Enter a valid email' on error.",
+          "interaction": "Tap to type; validates format on blur.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Password Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Masked 48px field, placeholder 'Password (min 8 characters)', 'Show' toggle at right.",
+          "interaction": "Tap to type; strength hint updates live.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirm Password Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Masked 48px field with placeholder 'Confirm password'; error text 'Passwords do not match'.",
+          "interaction": "Tap to type; compares with password.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Password Strength Hint",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "12px gray helper text 'Use 8+ characters with a number'; turns green when satisfied.",
+          "interaction": "Updates as user types.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Account Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width indigo filled button with white bold text 'Create Account'.",
+          "interaction": "Submits form; opens My Tasks on success.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Login Link",
+          "type": "Button",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Centered text link 'Already have an account? Sign in'.",
+          "interaction": "Opens Login screen.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F5"
+      ],
+      "user_flow": "Reached from Login via 'Create an account'. Success signs the user in and opens My Tasks; Back returns to Login."
+    },
+    {
+      "name": "My Tasks",
+      "purpose": "Main screen to view, quick-add, filter, complete and delete tasks.",
+      "key_components": [
+        {
+          "name": "App Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Indigo gradient header with white title 'My Tasks' and today's date; user avatar icon at right.",
+          "interaction": "Avatar icon opens Account screen.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Progress Summary Card",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "White rounded card, soft shadow, text '3 of 8 completed' with thin green progress bar.",
+          "interaction": "Static summary; updates when tasks change.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Add Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "White rounded 48px field, placeholder 'Add a new task...', indigo circular 'Add' button at right.",
+          "interaction": "Type title and tap Add; task appears on top as incomplete.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Tabs",
+          "type": "Segmented Control",
+          "position": "top",
+          "size": "medium",
+          "styling": "Pill segmented control 'All', 'Active', 'Completed'; selected segment indigo filled, white text.",
+          "interaction": "Tap segment to refresh list by status.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Vertically scrolling cards with 12px gaps, sorted newest first, 'Active' list by default state 'All'.",
+          "interaction": "Scroll; tap a card to open Task Details.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Row Checkbox",
+          "type": "Checkbox",
+          "position": "center",
+          "size": "small",
+          "styling": "24px round checkbox at card left; green with white check when done, title struck through gray.",
+          "interaction": "Tap to toggle complete or reopen; persists immediately.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Row Delete Button",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "44px ghost icon button at card right, red icon, subtle hover tint.",
+          "interaction": "Opens Delete Confirmation dialog for that task.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered illustration, heading 'No tasks here', helper 'Add your first task above'; shown when filter is empty.",
+          "interaction": "Tap 'Add a task' to focus quick add input.",
+          "icon": "plus",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Delete Confirmation Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered white dialog over dim scrim: 'Delete this task?', red 'Delete' button, gray 'Cancel' button.",
+          "interaction": "Delete removes task permanently; Cancel closes dialog unchanged.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Add Task FAB",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "56px indigo circular floating button with white plus icon, bottom right above nav bar, shadow.",
+          "interaction": "Opens New Task screen.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with 'Tasks', 'New Task', 'Account'; active item indigo, others gray.",
+          "interaction": "Tap item to switch screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "user_flow": "Entered after login or register. Tap a card for Task Details, FAB for New Task, avatar or nav for Account."
+    },
+    {
+      "name": "New Task",
+      "purpose": "Create a task with a required title and optional description.",
+      "key_components": [
+        {
+          "name": "Top Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with 'Close' text button at left and centered title 'New Task'.",
+          "interaction": "Close returns to My Tasks without saving.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Title Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Autofocused 52px rounded field, label 'Title', placeholder 'What needs to be done?', red border on error.",
+          "interaction": "Tap to type title; required.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Title Error Message",
+          "type": "Text",
+          "position": "top",
+          "size": "small",
+          "styling": "12px red text 'Title is required' under title field; visible only on empty submit.",
+          "interaction": "Appears on empty save; clears when typing.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Multi-line 120px rounded textarea, label 'Description (optional)', placeholder 'Add notes or details'.",
+          "interaction": "Tap to type optional details.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Character Counter",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Right-aligned 12px gray text '0 / 500' under description.",
+          "interaction": "Updates as user types.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Save Task Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width indigo filled button with white bold text 'Save Task', 12px radius, shadow.",
+          "interaction": "Validates title; saves and returns to My Tasks with new task on top.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width outlined gray button 'Cancel', transparent background.",
+          "interaction": "Discards input and returns to My Tasks.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1"
+      ],
+      "user_flow": "Opened from the FAB or bottom nav 'New Task'. Save or Cancel returns to My Tasks."
+    },
+    {
+      "name": "Task Details",
+      "purpose": "Review, edit, complete, reopen or delete a single task.",
+      "key_components": [
+        {
+          "name": "Top Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with 'Back' text button, centered title 'Task Details', edit icon at right.",
+          "interaction": "Back returns to My Tasks; edit icon makes fields editable.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Badge",
+          "type": "Chip",
+          "position": "top",
+          "size": "small",
+          "styling": "Rounded pill 'In Progress' in amber tint, or 'Completed' in green tint.",
+          "interaction": "Static; reflects current status.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Title",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Bold 20px title text; becomes bordered editable field with placeholder 'Task title' in edit mode.",
+          "interaction": "Editable after tapping edit icon.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White rounded card with soft shadow, label 'Description', body text or gray 'No description added'.",
+          "interaction": "Editable textarea in edit mode.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Created Date Row",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "12px gray metadata 'Created Nov 11, 2026'.",
+          "interaction": "Static; no action.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Save Changes Button",
+          "type": "Button",
+          "position": "center",
+          "size": "large",
+          "styling": "Indigo filled 'Save Changes' button, shown only in edit mode; validates non-empty title.",
+          "interaction": "Saves edits and exits edit mode.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Complete Toggle Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width green filled button 'Mark as Complete'; becomes outlined 'Reopen Task' when completed.",
+          "interaction": "Toggles status and shows confirmation toast.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delete Task Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width outlined red button 'Delete Task' with red text and border.",
+          "interaction": "Opens Delete Confirmation dialog.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delete Confirmation Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered white dialog: 'Delete this task?', 'This cannot be undone.', red 'Delete', gray 'Cancel'.",
+          "interaction": "Delete removes task, returns to My Tasks; Cancel closes dialog.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "user_flow": "Opened by tapping a task card in My Tasks. Delete, Back or status change returns to My Tasks."
+    },
+    {
+      "name": "Account",
+      "purpose": "Show signed-in user info, privacy note and allow logging out.",
+      "key_components": [
+        {
+          "name": "App Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Indigo gradient header with white title 'Account'.",
+          "interaction": "Static header.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Profile Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "White rounded card with circular avatar, bold name 'Alex Morgan', gray email 'alex@example.com'.",
+          "interaction": "Static; displays account identity.",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Task Stats Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Two-column card: 'Active 5' and 'Completed 3' with bold numbers and gray labels.",
+          "interaction": "Tap column to open My Tasks with matching filter.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Privacy Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Soft cyan-tinted card with text 'Your tasks are private and visible only to you.'",
+          "interaction": "Static informational card.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Log Out Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width outlined red button with bold text 'Log Out', 12px radius.",
+          "interaction": "Ends session and opens Login screen.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with 'Tasks', 'New Task', 'Account'; 'Account' highlighted indigo.",
+          "interaction": "Tap item to switch screens.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F5"
+      ],
+      "user_flow": "Reached from the bottom nav or the avatar on My Tasks. Log Out opens Login."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "48px indigo filled, white bold text, 12px radius, soft shadow, darker pressed state.",
+      "interaction": "Triggers main screen action.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "48px outlined gray or red, transparent fill, bold text.",
+      "interaction": "Triggers secondary or destructive action.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input",
+      "type": "Input",
+      "position": "center",
+      "size": "large",
+      "styling": "48px white field, 1px gray border, 12px radius, indigo focus ring, red on error.",
+      "interaction": "Tap to type text.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Task Card",
+      "type": "Card",
+      "position": "center",
+      "size": "large",
+      "styling": "White 16px-radius card, soft shadow, checkbox left, title and meta center, delete icon right.",
+      "interaction": "Tap opens Task Details.",
+      "icon": "trash",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Segmented Filter",
+      "type": "Segmented Control",
+      "position": "top",
+      "size": "medium",
+      "styling": "Pill container with three segments; active segment indigo filled.",
+      "interaction": "Tap to filter tasks.",
+      "icon": "filter",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Status Chip",
+      "type": "Chip",
+      "position": "top",
+      "size": "small",
+      "styling": "Small rounded pill, amber tint for active, green tint for completed.",
+      "interaction": "Static status indicator.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Confirmation Modal",
+      "type": "Modal",
+      "position": "center",
+      "size": "medium",
+      "styling": "White 16px-radius dialog, dim scrim, two stacked or side-by-side buttons.",
+      "interaction": "Confirm executes action; Cancel closes.",
+      "icon": "trash",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Floating Action Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "56px indigo circle with white plus icon and shadow.",
+      "interaction": "Opens New Task screen.",
+      "icon": "plus",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Navigation Bar",
+      "type": "Footer",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "64px white bar, top border, three labeled items; active indigo.",
+      "interaction": "Switches top-level screens.",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toast Message",
+      "type": "Alert",
+      "position": "bottom",
+      "size": "small",
+      "styling": "Dark rounded snackbar with white text such as 'Task completed'.",
+      "interaction": "Auto-dismisses after three seconds.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "Mobile-first single column. On tablet and desktop the content is centered at max 640px with bottom nav becoming a left rail; touch targets stay at least 44px.",
+  "accessibility": "Text meets WCAG AA contrast. Controls have visible focus rings and ARIA labels. Status uses text plus color. Dialogs trap focus and support Escape to cancel. Errors are announced to screen readers.",
+  "animations": "Checkbox fill with 150ms check animation, list items fade and slide on add or remove, modal scale-in 200ms, tab filter crossfade, button press scale to 0.97.",
+  "icons": "Only the approved set is used: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share. Outline style, 24px, consistent stroke, always paired with a purpose or label."
+}

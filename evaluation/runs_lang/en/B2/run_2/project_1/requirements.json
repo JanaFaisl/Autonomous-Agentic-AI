@@ -1,0 +1,122 @@
+{
+  "project_name": "BloomDash Flower Delivery App",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Flower Catalog Browsing",
+      "description": "Customers can browse, search, and filter flowers and bouquets with photos, prices, and availability.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can browse and filter flowers by category, price, and occasion so that I find the right bouquet quickly.",
+        "As a customer, I can view a flower's details, photos, and availability so that I can decide confidently."
+      ],
+      "acceptance_criteria": [
+        "Given the catalog page, When I apply a category or price filter, Then only matching items are displayed.",
+        "Given a product is out of stock, When I view it, Then it is marked unavailable and cannot be added to the cart."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Cart and Order Placement",
+      "description": "Customers can add items to a cart, choose a delivery date and address, and place an order with online payment.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can add flowers to a cart and set a delivery date and address so that I can schedule my delivery.",
+        "As a customer, I can pay securely online and receive an order confirmation so that I know my order was accepted."
+      ],
+      "acceptance_criteria": [
+        "Given items in my cart, When I submit a valid address, date, and payment, Then an order is created and a confirmation is sent.",
+        "Given a payment fails, When I submit the order, Then no order is created and I see an error message with a retry option."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "Delivery Tracking",
+      "description": "Customers can track order status from preparation through delivery to their door.",
+      "priority": "High",
+      "user_stories": [
+        "As a customer, I can see my order status in real time so that I know when to expect my flowers.",
+        "As a courier, I can update delivery status and mark orders delivered so that customers stay informed."
+      ],
+      "acceptance_criteria": [
+        "Given an active order, When its status changes, Then the customer sees the update within 30 seconds.",
+        "Given a courier marks an order delivered, When the update is saved, Then the customer is notified and the order is closed."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "User Accounts and Order History",
+      "description": "Customers can register, log in, manage saved addresses, and view past orders for easy reordering.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a customer, I can register and log in so that my details and orders are saved.",
+        "As a customer, I can view past orders and reorder them so that I can send flowers again quickly."
+      ],
+      "acceptance_criteria": [
+        "Given valid details, When I register, Then my account is created and I am logged in.",
+        "Given a past order, When I select reorder, Then its items are added to my cart at current prices."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Admin Catalog and Order Management",
+      "description": "Florist staff can manage flower inventory, prices, and incoming orders and assign deliveries to couriers.",
+      "priority": "Medium",
+      "user_stories": [
+        "As an admin, I can add, edit, and remove flower products and stock levels so that the catalog stays accurate.",
+        "As an admin, I can view incoming orders and assign them to couriers so that deliveries are fulfilled on time."
+      ],
+      "acceptance_criteria": [
+        "Given I update a product's price or stock, When I save, Then the catalog reflects the change immediately.",
+        "Given a new paid order, When I assign a courier, Then the courier sees it in their delivery list."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "iOS",
+      "Android"
+    ],
+    "technologies": [
+      "React",
+      "React Native",
+      "Node.js",
+      "REST API",
+      "Stripe",
+      "Google Maps API",
+      "Firebase Cloud Messaging"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Catalog pages load in under 2 seconds at 200 concurrent users."
+    },
+    {
+      "category": "Security",
+      "requirement": "All traffic uses HTTPS; passwords are hashed with bcrypt; card data is handled via PCI-DSS compliant Stripe."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The system achieves 99.5% monthly uptime, excluding scheduled maintenance."
+    },
+    {
+      "category": "Usability",
+      "requirement": "A first-time customer can complete an order in under 5 minutes in 90% of usability tests."
+    },
+    {
+      "category": "Privacy",
+      "requirement": "Customer addresses and contact data are encrypted at rest and deleted within 30 days of an account deletion request."
+    }
+  ],
+  "user_roles": [
+    "Customer",
+    "Courier",
+    "Admin"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:47:43"
+}

@@ -1,0 +1,40 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Adjustment reason codes",
+      "message": "The design's Reason Code Selector offers Damaged, Lost, Received, Sold and Correction, but the adjustment_reasons table is seeded with damaged, lost, theft, miscount and found, and 'Received' and 'Sold' are movement types rather than adjustment reasons."
+    },
+    {
+      "severity": "Medium",
+      "item": "Product images and shelf location",
+      "message": "The design shows product photos (result card, hero card, top sellers, alert cards), a shelf location chip ('Aisle 4') and user avatars, but the products and users tables have no image_url, shelf_location or avatar columns."
+    },
+    {
+      "severity": "Medium",
+      "item": "Sales data source",
+      "message": "F2 and F4 depend on stock changing after every sale and on top-seller and turnover figures, but neither the requirements nor the design provide a sale-recording flow or POS integration, so the 'sale' movements the database assumes have no defined source."
+    }
+  ],
+  "required_fixes": [
+    "Align the design's reason code list with the adjustment_reasons seed data: either add Correction and similar codes to the database, or remove 'Received' and 'Sold' from the dropdown because they are handled as receipt and sale movement types.",
+    "Add image_url and shelf_location columns to products, and either an avatar_url column on users or initials-based avatars in the design.",
+    "Define how sales are recorded, for example a POS or API integration endpoint or a simple 'Record Sale' flow, so that top sellers, turnover and live activity have data."
+  ],
+  "recommendations": [
+    "Add a purchase order receiving flow, so deliveries scanned in Receive mode update purchase_order_items.quantity_received and the PO status, and add CHECK constraints for status and movement_type.",
+    "Add a must_change_password flag for accounts created with a temporary password, and de-duplicate open low_stock_alerts per product.",
+    "Document which roles can see each bottom-navigation tab (for example Alerts for managers and owners, Team for owners only) and map them to the seeded permissions."
+  ]
+}

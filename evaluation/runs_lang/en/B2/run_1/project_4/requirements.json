@@ -1,0 +1,116 @@
+{
+  "project_name": "StudyCircle",
+  "features": [
+    {
+      "id": "F1",
+      "name": "Study Note Sharing",
+      "description": "Students upload, browse, and download study notes organized by university, course, and topic.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can upload notes with course and topic tags so that peers can find them.",
+        "As a student, I can search and filter notes by course so that I find relevant material quickly."
+      ],
+      "acceptance_criteria": [
+        "Given I am logged in, When I upload a PDF or image note with a title and course, Then it appears in the course note list.",
+        "Given notes exist, When I search by keyword or course filter, Then matching notes are returned sorted by relevance."
+      ]
+    },
+    {
+      "id": "F2",
+      "name": "Study Groups",
+      "description": "Students create, join, and manage study groups around courses or subjects.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can create a public or private study group so that I can study with classmates.",
+        "As a group admin, I can approve or remove members so that the group stays focused and safe."
+      ],
+      "acceptance_criteria": [
+        "Given I am logged in, When I create a group with a name and course, Then I become its admin and the group is listed.",
+        "Given a private group, When a student requests to join, Then the admin sees the request and can approve or reject it."
+      ]
+    },
+    {
+      "id": "F3",
+      "name": "User Authentication and Profiles",
+      "description": "Students register with a university email and maintain a profile with their courses and interests.",
+      "priority": "High",
+      "user_stories": [
+        "As a student, I can sign up with my university email so that my student status is verified.",
+        "As a student, I can edit my profile and courses so that others can find me for study groups."
+      ],
+      "acceptance_criteria": [
+        "Given a valid university email, When I register and confirm the verification link, Then my account is activated.",
+        "Given I am logged in, When I update my profile, Then the changes are saved and visible to other users."
+      ]
+    },
+    {
+      "id": "F4",
+      "name": "Note Interaction and Feedback",
+      "description": "Students rate, comment on, and bookmark notes to surface quality content.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a student, I can rate and comment on notes so that I give feedback to the author.",
+        "As a student, I can bookmark notes so that I can revisit them later."
+      ],
+      "acceptance_criteria": [
+        "Given I view a note, When I submit a 1-5 star rating, Then the note's average rating updates immediately.",
+        "Given I bookmark a note, When I open my bookmarks page, Then the note is listed there."
+      ]
+    },
+    {
+      "id": "F5",
+      "name": "Moderation and Reporting",
+      "description": "Users report inappropriate or copyrighted content and moderators review and act on reports.",
+      "priority": "Medium",
+      "user_stories": [
+        "As a student, I can report a note or comment so that inappropriate content is reviewed.",
+        "As a moderator, I can remove content and suspend users so that the platform remains safe."
+      ],
+      "acceptance_criteria": [
+        "Given I view a note, When I submit a report with a reason, Then the report appears in the moderator queue.",
+        "Given a reported note, When a moderator removes it, Then it is hidden from all users and the author is notified."
+      ]
+    }
+  ],
+  "technical_requirements": {
+    "platform": [
+      "Web",
+      "Mobile Web (responsive)"
+    ],
+    "technologies": [
+      "React",
+      "Node.js",
+      "REST API",
+      "JWT Authentication",
+      "AWS S3 for file storage"
+    ],
+    "database": "PostgreSQL"
+  },
+  "non_functional_requirements": [
+    {
+      "category": "Performance",
+      "requirement": "Pages load in under 2 seconds and search returns results in under 1 second at 500 concurrent users."
+    },
+    {
+      "category": "Security",
+      "requirement": "All traffic uses HTTPS, passwords are hashed with bcrypt, and uploaded files are scanned for malware."
+    },
+    {
+      "category": "Availability",
+      "requirement": "The platform maintains 99.5% monthly uptime excluding scheduled maintenance."
+    },
+    {
+      "category": "Privacy",
+      "requirement": "Users can delete their account and personal data within 30 days, in line with GDPR."
+    }
+  ],
+  "user_roles": [
+    "Student",
+    "Group Admin",
+    "Moderator",
+    "Platform Administrator"
+  ],
+  "database_schema": null,
+  "model_used": "CrewAI",
+  "timestamp": "2026-11-11 15:39:23"
+}

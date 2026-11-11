@@ -1,0 +1,901 @@
+{
+  "design_overview": "StudyCircle is a clean, card-based mobile-first web app. An indigo header and primary actions give strong hierarchy, and a four-tab bottom bar leads users through the core flow of finding notes, joining groups, contributing, and managing their profile. Moderation tools appear only for moderators.",
+  "color_scheme": {
+    "primary": "#4F46E5",
+    "secondary": "#0EA5E9",
+    "accent": "#F59E0B",
+    "surface": "#FFFFFF",
+    "background": "#F5F6FA",
+    "text_primary": "#1F2937",
+    "error": "#DC2626",
+    "success": "#16A34A",
+    "warning": "#D97706"
+  },
+  "typography": {
+    "font_family": "Inter, -apple-system, Roboto, sans-serif",
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "sizes": {
+      "small": "12px",
+      "medium": "15px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "700"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Home",
+      "Groups",
+      "Upload",
+      "Profile"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Sign Up / Log In",
+      "purpose": "Let students register with a university email, verify it, and log in.",
+      "key_components": [
+        {
+          "name": "Brand Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Indigo gradient banner with white logo and tagline 'Study smarter, together'; rounded bottom corners.",
+          "interaction": "Static branding; no action.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "background"
+        },
+        {
+          "name": "Auth Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Segmented control with 'Sign Up' and 'Log In'; active tab filled indigo, inactive grey text.",
+          "interaction": "Switches the form between sign up and log in.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Full Name Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "52px rounded field with light border, user icon, placeholder 'Full name'.",
+          "interaction": "Tap to type name.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "University Email Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded field with placeholder 'name@university.edu'; shows green helper text when domain is valid.",
+          "interaction": "Validates university domain as the user types.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Password Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Masked field with placeholder 'Password (min 8 characters)' and a show/hide toggle.",
+          "interaction": "Toggle reveals or hides the password.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Account Button",
+          "type": "Button",
+          "position": "center",
+          "size": "large",
+          "styling": "Full-width indigo pill button, white bold text 'Create Account', soft shadow.",
+          "interaction": "Submits form; opens Verify Email state.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Verification Banner",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Light green card: 'Check your inbox. Tap the verification link to activate your account.' with 'Resend email' link.",
+          "interaction": "Resend sends a new link; confirmed link opens Home.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Privacy Note",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Small grey text: 'By continuing you agree to our Terms and Privacy Policy (GDPR compliant).'",
+          "interaction": "Links open policy pages.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F3"
+      ],
+      "user_flow": "App launch \u2192 Sign Up or Log In \u2192 verify email \u2192 Home. Returning users log in and go straight to Home."
+    },
+    {
+      "name": "Home - Browse Notes",
+      "purpose": "Search, filter, and browse study notes by course and topic.",
+      "key_components": [
+        {
+          "name": "Top Bar",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Indigo header with greeting 'Hi, Maya' and a notification bell with red dot.",
+          "interaction": "Bell opens the notifications list.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "White rounded search bar with shadow, placeholder 'Search notes, courses, topics'.",
+          "interaction": "Typing returns matching notes sorted by relevance.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Button",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "Square outlined button beside search bar; indigo badge shows active filter count.",
+          "interaction": "Opens filter sheet: university, course, topic, rating.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Course Chips",
+          "type": "List",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal scrolling pills: 'All', 'CS101', 'BIO204', 'ECON110'; selected chip filled indigo.",
+          "interaction": "Filters the note list by course.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Note Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White rounded card with PDF thumbnail, bold title, 'CS101 \u00b7 Algorithms', author, 4.6 star rating, download count.",
+          "interaction": "Opens Note Detail screen.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Bookmark Toggle",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Round icon button at card top-right; outlined grey, filled amber when saved.",
+          "interaction": "Saves note to Bookmarks without leaving the list.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Sort Control",
+          "type": "Dropdown",
+          "position": "center",
+          "size": "small",
+          "styling": "Text link 'Sort: Relevance' with a chevron above the list.",
+          "interaction": "Opens options: Relevance, Newest, Top rated.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty Results State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered message 'No notes found' with outlined button 'Upload the first note'.",
+          "interaction": "Button opens Upload Note screen.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with four tabs: Home, Groups, Upload, Profile. Active tab indigo with label.",
+          "interaction": "Switches between main screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1",
+        "F4"
+      ],
+      "user_flow": "Arrives from login or the Home tab. Tap a note card to open Note Detail, the Upload tab to share notes, or Groups to study together."
+    },
+    {
+      "name": "Note Detail",
+      "purpose": "View, download, rate, comment on, bookmark, and report a note.",
+      "key_components": [
+        {
+          "name": "Detail Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Transparent top bar with back arrow, title 'Note' and a share icon.",
+          "interaction": "Back returns to Home; share copies the note link.",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Note Preview",
+          "type": "Image",
+          "position": "top",
+          "size": "large",
+          "styling": "Large rounded first-page preview with a page counter '1 / 12'.",
+          "interaction": "Tap opens full-screen viewer.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Note Info",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Title 'Sorting Algorithms Summary', tags 'CS101' and 'Algorithms', author avatar, upload date, average rating 4.6.",
+          "interaction": "Author name opens their profile.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Download Button",
+          "type": "Button",
+          "position": "center",
+          "size": "large",
+          "styling": "Full-width indigo button 'Download PDF' with file size '2.4 MB'.",
+          "interaction": "Downloads the file and shows a success toast.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bookmark Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Outlined secondary button 'Bookmark'; becomes amber-filled 'Saved' after tapping.",
+          "interaction": "Adds note to the Bookmarks list in Profile.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Star Rating Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Five tappable amber stars with the label 'Rate this note'.",
+          "interaction": "Submits 1-5 rating; average updates instantly.",
+          "icon": "heart",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Comment Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded multiline field with placeholder 'Write a helpful comment' and an indigo 'Post' button.",
+          "interaction": "Posts comment to the list below.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Comments List",
+          "type": "List",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Rows with avatar, name, comment text, time, and a small 'Report' text link.",
+          "interaction": "Report opens the report sheet for that comment.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Report Modal",
+          "type": "Modal",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Bottom sheet 'Report content' with radio reasons (Inappropriate, Copyright, Spam), optional details field, red 'Submit Report' button.",
+          "interaction": "Sends report to moderator queue; shows confirmation toast.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1",
+        "F4",
+        "F5"
+      ],
+      "user_flow": "Opened from a Note Card or a bookmark. Back returns to the list; Report sends the item to the Moderation Queue."
+    },
+    {
+      "name": "Upload Note",
+      "purpose": "Upload a PDF or image note with title, course, and topic tags.",
+      "key_components": [
+        {
+          "name": "Upload Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White top bar with close icon, title 'Upload Note', and a 'Cancel' text action.",
+          "interaction": "Cancel discards the form and returns to Home.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "File Dropzone",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "Dashed indigo border card with the text 'Tap to choose a PDF or image' and 'Max 20 MB'.",
+          "interaction": "Opens file picker; selected file shows name and a remove icon.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Title Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded field with label 'Title' and placeholder 'e.g. Sorting Algorithms Summary'.",
+          "interaction": "Tap to type the title.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "University Select",
+          "type": "Dropdown",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded select field with placeholder 'Select university' and a chevron.",
+          "interaction": "Opens searchable list of universities.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Course Select",
+          "type": "Dropdown",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded select field, required, placeholder 'Select course (e.g. CS101)'.",
+          "interaction": "Opens searchable course list.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Topic Tags Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Field with placeholder 'Add topic tags' and removable indigo-tint chips.",
+          "interaction": "Enter adds a tag chip.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Multiline field, placeholder 'Describe what this note covers (optional)'.",
+          "interaction": "Tap to type description.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Security Notice",
+          "type": "Card",
+          "position": "center",
+          "size": "small",
+          "styling": "Light amber strip: 'Files are scanned for malware before publishing.'",
+          "interaction": "Informational only.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Publish Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Sticky full-width indigo button 'Publish Note'; disabled grey until file, title, and course are filled.",
+          "interaction": "Uploads file with progress bar; opens the new Note Detail.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1"
+      ],
+      "user_flow": "Reached from the Upload tab or the Home empty state. After publishing, the note appears in the course list and its Note Detail opens."
+    },
+    {
+      "name": "Study Groups",
+      "purpose": "Discover, create, join, and manage study groups, including approving requests as admin.",
+      "key_components": [
+        {
+          "name": "Groups Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Indigo header titled 'Study Groups' with a search icon button.",
+          "interaction": "Search icon opens group search by course.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Group Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Segmented tabs 'Discover', 'My Groups', 'Requests (3)'; active tab has indigo underline.",
+          "interaction": "Switches the list below.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Group Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Rounded card with group image, name 'CS101 Finals Crew', course tag, '12 members', a Public or Private badge.",
+          "interaction": "Opens group details sheet with members and notes.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Join Button",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Indigo pill on each card: 'Join' for public groups, 'Request to Join' for private groups.",
+          "interaction": "Joins instantly or sends request; button becomes 'Requested'.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Join Request Row",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Row with avatar, name, course, green 'Approve' and outlined red 'Reject' buttons.",
+          "interaction": "Approve adds member; Reject removes the request.",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Member Row",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Member list for admins with avatar, name, role label, and a trash icon button.",
+          "interaction": "Trash opens confirm dialog to remove member.",
+          "icon": "trash",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Create Group Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Floating amber circular button with plus icon, shadow, above bottom navigation.",
+          "interaction": "Opens Create Group modal.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create Group Modal",
+          "type": "Modal",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Bottom sheet with 'Group name' and 'Course' inputs, Public/Private toggle, and indigo 'Create Group' button.",
+          "interaction": "Creates group, makes user admin, adds it to My Groups.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with four tabs; 'Groups' is active in indigo.",
+          "interaction": "Switches between main screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F2"
+      ],
+      "user_flow": "Opened from the Groups tab. Users browse, join, or create groups; admins handle requests and members in the same screen."
+    },
+    {
+      "name": "Profile",
+      "purpose": "View and edit profile and courses, access bookmarks, and manage account and privacy.",
+      "key_components": [
+        {
+          "name": "Profile Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Indigo gradient header with a round avatar, name 'Maya Chen', 'Verified student' badge, and university.",
+          "interaction": "Avatar tap changes the profile photo.",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Edit Profile Button",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "White outlined pill 'Edit Profile' on the header, right-aligned.",
+          "interaction": "Switches the fields below to editable mode.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bio Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded multiline field with placeholder 'Tell peers about your study interests'.",
+          "interaction": "Tap to edit bio.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "My Courses Chips",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Wrap of indigo-tint chips like 'CS101' and 'BIO204' with an 'Add course' dashed chip.",
+          "interaction": "Add chip opens course picker; tap chip to remove.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Save Changes Button",
+          "type": "Button",
+          "position": "center",
+          "size": "large",
+          "styling": "Full-width indigo button 'Save Changes', visible in edit mode.",
+          "interaction": "Saves profile and shows a success toast.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Content Tabs",
+          "type": "Tabs",
+          "position": "center",
+          "size": "medium",
+          "styling": "Tabs 'Bookmarks' and 'My Uploads' with indigo underline on the active tab.",
+          "interaction": "Switches the note list below.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bookmarked Note Row",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Compact rows with thumbnail, title, course, rating, and a filled amber bookmark icon.",
+          "interaction": "Opens Note Detail; bookmark icon removes it from list.",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Moderation Queue Link",
+          "type": "List",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Settings row 'Moderation Queue' with a red count badge '5'; visible to moderators only.",
+          "interaction": "Opens Moderation Queue screen.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delete Account Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Red outlined button 'Delete Account and Data' with a note about the 30-day GDPR deletion window.",
+          "interaction": "Opens confirmation dialog before deleting.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F3",
+        "F4"
+      ],
+      "user_flow": "Opened from the Profile tab. Users edit details, revisit bookmarks, and delete their account; moderators continue to the Moderation Queue."
+    },
+    {
+      "name": "Moderation Queue",
+      "purpose": "Let moderators review reports, remove content, and suspend users.",
+      "key_components": [
+        {
+          "name": "Queue Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Indigo top bar with back arrow, title 'Moderation Queue', and a filter icon.",
+          "interaction": "Back returns to Profile; filter opens type options.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Tabs 'Open (5)', 'Resolved'; active tab has indigo underline and bold text.",
+          "interaction": "Switches between open and resolved reports.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Report Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Card with reported note thumbnail, title, reason badge 'Copyright', reporter, time, and a 'Review' link.",
+          "interaction": "Expands to show full report details.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Reason Details",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Grey inset panel with the reporter's comment and the author's name and past violation count.",
+          "interaction": "Author name opens their profile.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Remove Content Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Red filled button 'Remove Content' with trash icon.",
+          "interaction": "Hides note from users and notifies the author.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Suspend User Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Red outlined button 'Suspend User' beside Remove Content.",
+          "interaction": "Opens duration picker then confirm dialog.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Dismiss Report Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Grey text button 'Dismiss Report'.",
+          "interaction": "Marks report resolved with no action.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Action Confirmation Toast",
+          "type": "Modal",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Dark snackbar: 'Note removed. Author notified.' with an 'Undo' action.",
+          "interaction": "Undo restores the item within 5 seconds.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F5"
+      ],
+      "user_flow": "Moderators arrive from the Profile moderation link. They review each report, act or dismiss, and return to Profile."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "Indigo fill, white bold text, 14px radius, 52px height, soft shadow.",
+      "interaction": "Press scales slightly; loading shows spinner.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": "center",
+      "size": "medium",
+      "styling": "White fill, indigo 1.5px border and text, 12px radius.",
+      "interaction": "Press tints background light indigo.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Danger Button",
+      "type": "Button",
+      "position": "center",
+      "size": "medium",
+      "styling": "Red fill or outline for destructive actions like remove or delete.",
+      "interaction": "Always opens a confirmation before acting.",
+      "icon": "trash",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input",
+      "type": "Input",
+      "position": "center",
+      "size": "medium",
+      "styling": "52px height, 12px radius, light grey border; indigo focus ring; red border with helper text on error.",
+      "interaction": "Focus shows ring and keyboard.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Note Card",
+      "type": "Card",
+      "position": "center",
+      "size": "large",
+      "styling": "White, 16px radius, subtle shadow, thumbnail, title, tags, rating row.",
+      "interaction": "Tap opens detail.",
+      "icon": "bookmark",
+      "has_image": true,
+      "image_type": "content"
+    },
+    {
+      "name": "Chip",
+      "type": "Chip",
+      "position": "top",
+      "size": "small",
+      "styling": "Pill shape, light indigo fill with indigo text; selected state solid indigo with white text.",
+      "interaction": "Tap toggles filter or removes tag.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Top App Bar",
+      "type": "Header",
+      "position": "top",
+      "size": "medium",
+      "styling": "56px bar, indigo or white, centered title, back arrow, optional action icon.",
+      "interaction": "Back navigates to previous screen.",
+      "icon": "search",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Navigation Bar",
+      "type": "Footer",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "64px white bar, top border, four icon-label tabs, indigo active state.",
+      "interaction": "Tap switches tab.",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Sheet",
+      "type": "Modal",
+      "position": "bottom",
+      "size": "large",
+      "styling": "White sheet with 24px top radius, drag handle, dimmed backdrop.",
+      "interaction": "Swipe down or tap backdrop to dismiss.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toast",
+      "type": "Modal",
+      "position": "bottom",
+      "size": "small",
+      "styling": "Dark rounded snackbar with white text; green accent for success, red for errors.",
+      "interaction": "Auto-dismisses after 4 seconds.",
+      "icon": "bell",
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "Mobile-first single column at 360px+. Tablets use a two-column note grid. Desktop uses a left sidebar instead of the bottom bar, with content capped at 1100px. Touch targets are at least 44px.",
+  "accessibility": "WCAG AA contrast, visible focus rings, labels on all inputs and icon buttons, rating stars operable by keyboard, status shown with text as well as color, and support for 200% text zoom.",
+  "animations": "Screen transitions slide 250ms. Bottom sheets slide up with a fading backdrop. Buttons press-scale to 0.97. Bookmark toggles pop. Rating stars fill in sequence. Toasts fade. Reduced-motion is respected.",
+  "icons": "Outline icons only from the set: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share. 24px, 2px stroke, with a filled style for active or selected states. No emojis."
+}

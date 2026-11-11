@@ -1,0 +1,217 @@
+{
+  "plan_name": "Hospital Appointment Booking System MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema (users, roles, doctors, departments, availability, appointments with unique slot constraint, notifications, audit log) and migrations",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Create design system and UI kit in React (teal theme, Inter typography, buttons, inputs, cards, chips, tabs, modals, bottom navigation, WCAG 2.1 AA basics)",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T3",
+      "title": "Set up Node.js REST API project, environment config, TLS, role-based access middleware and audit logging",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "Implement registration, email verification, login (JWT, bcrypt) and password reset API",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Build Welcome and Sign In screen with register, verify email modal and reset password sheet",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T2",
+        "T4"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Implement doctor search API (name, specialty, department filters, open-slot filtering) and doctor availability API with weekly schedule slot generation",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Build Find a Doctor screen (search, specialty chips, doctor cards, empty state, next appointment card)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T2",
+        "T6"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Implement booking, reschedule and cancel API with transactional conflict prevention and 24-hour cancellation rule",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T4",
+        "T6"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Build Doctor Profile and Booking screen (date selector, slot grid, summary, confirm, conflict toast) and My Appointments screen (tabs, reschedule, cancel modal)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2",
+        "F3"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T2",
+        "T7",
+        "T8"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Integrate SMTP email and Twilio SMS with queue worker for booking confirmations, 24-hour reminders, retries and delivery status tracking",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T8"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Build Notifications screen (inbox, channel preferences, receptionist delivery status log with resend)",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T2",
+        "T10"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Implement admin APIs: add/edit/deactivate doctors, departments, schedules, appointment report stats, and receptionist book-on-behalf endpoint",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T6",
+        "T8"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Build Staff Console screen (doctor management, add doctor form, weekly availability editor, patient lookup and book for patient, report cards) with role-based visibility",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F2",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T2",
+        "T9",
+        "T12"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "End-to-end testing of core flows, load test at 200 concurrent users, accessibility check, security review and deployment with backups and encryption at rest",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T5",
+        "T9",
+        "T11",
+        "T13"
+      ]
+    }
+  ],
+  "risks": [
+    "Double-booking under concurrent load if slot reservation is not enforced with database transactions and unique constraints.",
+    "HIPAA/GDPR, audit log retention and encryption requirements could expand scope beyond MVP timeline.",
+    "Twilio SMS and SMTP delivery issues, approval delays or costs could delay reminders and delivery status features.",
+    "Meeting 99.9% uptime and 200-concurrent-user performance targets may need infrastructure effort beyond a small team's capacity.",
+    "Wide scope of five features and a staff console may slip; defer medium-priority F4 and F5 extras if time runs short."
+  ]
+}

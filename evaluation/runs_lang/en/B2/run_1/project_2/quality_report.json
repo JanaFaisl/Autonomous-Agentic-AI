@@ -1,0 +1,34 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Authentication / user accounts",
+      "message": "The Security NFR (users only access their own tasks) and the database users table with email and password_hash imply sign-up and login, but no requirements feature, user story, or design screen covers registration, login, or logout."
+    },
+    {
+      "severity": "Medium",
+      "item": "Title length limit",
+      "message": "The New Task design shows a title character counter of '0 / 100' while the tasks.title column is varchar(255) and the requirements state no maximum, so the limit is inconsistent across artifacts."
+    }
+  ],
+  "required_fixes": [
+    "Add an authentication feature (register, login, logout) to the requirements and matching screens to the design, or explicitly document how users are identified and authenticated, so per-user task isolation can work.",
+    "Align the title maximum length across the design counter (100), the database column (varchar(255)), and the API validation, and state the chosen limit in the requirements."
+  ],
+  "recommendations": [
+    "Make the empty-state copy depend on the active filter (for example 'No active tasks' for Active) instead of only 'No completed tasks yet', and add a delete-success toast to the design.",
+    "Use consistent status terminology ('Open' vs 'Active') across badges, filter chips, and requirements, and use a dedicated back-arrow icon instead of the 'home' icon for Back.",
+    "Drop the redundant plain index on users.email, since the UNIQUE constraint already creates one, and add a database or API rule that completed_at is set only when is_completed is true."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Design vs Database: bookmarks, message likes, pinned notes",
+      "message": "The design includes a Bookmark Action (saved notes), a heart Reaction Button on messages, and a Pinned Note Card in Group Feed, but the schema has no bookmarks, message reactions, or pinned-note storage, and the requirements do not list these features."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design vs Database: topic tagging on Upload Note",
+      "message": "The Upload Note screen lets users add multiple free-text topic tags, but notes has only a single optional topic_id referencing a per-course topics table, so multiple or new tags cannot be stored."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design vs Requirements: email verification gating",
+      "message": "The Sign Up screen lets users tap 'Open app' and continue to the Notes Library right after the verification email is sent, which conflicts with the F1 goal that only verified students join, while the schema keeps accounts in pending_verification status."
+    }
+  ],
+  "required_fixes": [
+    "Either add schema support (note_bookmarks, message_reactions, pinned note on study_groups or messages) or remove Bookmark, Reaction and Pinned Note from the design, or add them as requirements.",
+    "Align topic handling: add a note_topics junction table (many-to-many) with topic creation rules, or restrict the Upload Note topic input to a single selection from existing topics.",
+    "Define post-registration access in the design: block or limit access to Notes Library, uploads and groups until email_verified_at is set, and show a 'verify your email' state after login."
+  ],
+  "recommendations": [
+    "Add a tsvector GIN index on notes title and description explicitly to the schema indexes so the under-1-second search target at 500 concurrent users is met.",
+    "Add explicit CHECK constraints (exactly one target in reports, rating 1-5, file size limit, allowed MIME types) and the composite unique indexes to the DDL.",
+    "Add a short design note or screen for the note preview and rating submission flow, and for the System Administrator role, since these are referenced but not specified."
+  ]
+}

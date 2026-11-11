@@ -1,0 +1,216 @@
+{
+  "plan_name": "QuickStock MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema (users, roles, products, stock levels, stock_changes audit log, thresholds, alerts, reorder list) with indexes on barcode and SKU, plus seed data and migrations",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Set up Node.js REST API skeleton, React PWA shell, HTTPS config, JWT auth with hashed passwords and role-based permissions (Owner, Manager, Clerk, Supplier read-only)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Build design system and app shell: color tokens, Inter typography, bottom navigation, primary/secondary buttons, inputs, stock badges, bottom sheet, toast, live sync indicator, 48px touch targets",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T4",
+      "title": "Implement product API: lookup by barcode, create product, search/list with filters (name, SKU, barcode, status)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T2"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Build Scan Barcode screen: ZXing camera scanning, handheld scanner mode, manual entry, Product Found sheet, Unknown Barcode dialog, New Product form, recent scans (lookup under 1 second)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T3",
+        "T4"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Implement stock update API with transactional quantity changes (sale, receipt, adjustment, damaged), concurrency-safe updates, and automatic audit history record per change (user, time, item, delta, reason)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2",
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T2",
+        "T4"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Add WebSocket server and client for real-time stock broadcast (under 2 seconds at 50 concurrent users), reconnect handling, live sync indicator and teal highlight on remote updates",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Build Product Detail and Stock Update screen, Stock List screen and Dashboard (stat cards, recent activity, live stock display, quantity stepper, reason chips, save in 3 taps)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2",
+        "F1"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T3",
+        "T6",
+        "T7"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Implement low-stock alert engine: configurable thresholds and suggested reorder quantities, alert generation within 1 minute via background job, snooze, alerts API",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Build Low-Stock Alerts screen: alert cards, severity filters, reorder list, share with supplier, notification settings, dashboard low-stock card and threshold input on Product Detail",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T8",
+        "T9"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Implement reports API and optimized queries: stock report, sales report, audit history with user and date filters, CSV export (under 5 seconds)",
+      "assigned_agent": "DBA",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Build Reports and Audit History screen: tabs, date range, summary cards, trend chart, user filter, audit list, Export CSV",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T8",
+        "T11"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Configure PWA manifest and service worker, deployment with HTTPS/TLS 1.2+, daily automated backups with 30-day retention, and uptime monitoring",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F2",
+        "F4"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T2"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "End-to-end testing and load test (50 concurrent users, sync latency, scan speed, 3-tap flow), accessibility check, bug fixes and MVP release",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T5",
+        "T8",
+        "T10",
+        "T12",
+        "T13"
+      ]
+    }
+  ],
+  "risks": [
+    "Camera barcode scanning accuracy and speed vary across devices, lighting and browsers (especially iOS Safari PWA), risking the 1-second lookup target; mitigate with manual entry and handheld scanner fallback.",
+    "Concurrent stock updates from multiple devices may cause race conditions or lost updates; mitigate with transactional DB updates and server-authoritative quantities.",
+    "WebSocket reliability on poor store Wi-Fi may break the 2-second sync target; mitigate with auto-reconnect, state resync on reconnect and a visible sync indicator.",
+    "Scope is large for a small team on a short timeline; reports and alerts are lower priority and may be trimmed to basic versions if High-priority work slips.",
+    "Push notifications in a PWA have limited platform support (notably iOS); mitigate with in-app alerts first and push as an optional enhancement."
+  ]
+}

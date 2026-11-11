@@ -1,0 +1,23 @@
+Arabic vs English (B2, runs: en=10, ar=10; means over repeats, paired by project)
+
+metric                               English          Arabic     AR-EN       p
+Completion rate                  1.00±0.00      1.00±0.00      +0.00       -
+Latency (s)                    214.07±49.29   231.84±34.79    +17.76   0.099
+Language purity                  1.00±0.00      0.96±0.01      -0.04   0.002
+Purity excl. story/Gherkin words     1.00±0.00      0.97±0.01      -0.03   0.001
+Identifier integrity             1.00±0.00      1.00±0.00      +0.00       -
+Features                         4.80±0.24      4.80±0.24      +0.00   1.000
+Screens                          6.00±0.32      5.90±0.20      -0.10   0.374
+Components / screen              8.49±0.58      8.32±0.56      -0.17   0.149
+Tables                          14.80±6.60     13.50±6.22      -1.30   0.271
+Tasks                           13.80±0.93     13.40±1.07      -0.40   0.614
+Test cases                       9.60±0.49      9.60±0.49      +0.00   1.000
+Design feature coverage          1.00±0.00      1.00±0.00      +0.00       -
+Traceability coverage            1.00±0.00      0.97±0.05      -0.03   0.374
+Schema problems                  0.00±0.00      0.00±0.00      +0.00       -
+Scaffold problems                0.00±0.00      0.00±0.00      +0.00       -
+Scaffold pages = screens         1.00±0.00      1.00±0.00      +0.00       -
+Judge: faithfulness              4.10±0.37      4.10±0.66      +0.00   1.000
+Judge: consistency               3.30±0.40      3.70±0.40      +0.40   0.242
+Judge: language quality          4.30±0.40      4.20±0.24      -0.10   0.749
+Judge: design usability          3.80±0.24      3.80±0.40      +0.00   1.000

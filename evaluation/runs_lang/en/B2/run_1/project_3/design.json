@@ -1,0 +1,824 @@
+{
+  "design_overview": "CareSlot is a calm, trustworthy mobile-first hospital booking app. Patients register, find doctors, book, reschedule or cancel, and track reminders in under two minutes. Staff get a role-based console for doctors, availability, walk-in bookings and delivery status.",
+  "color_scheme": {
+    "primary": "#0E7490",
+    "secondary": "#E0F2FE",
+    "accent": "#14B8A6",
+    "surface": "#FFFFFF",
+    "background": "#F4F8FB",
+    "text_primary": "#0F172A",
+    "error": "#DC2626",
+    "success": "#16A34A",
+    "warning": "#D97706"
+  },
+  "typography": {
+    "font_family": "Inter, system-ui, sans-serif",
+    "heading_font": "Inter SemiBold",
+    "body_font": "Inter Regular",
+    "sizes": {
+      "small": "13px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "600"
+    }
+  },
+  "navigation": {
+    "type": "bottom",
+    "items": [
+      "Home",
+      "Appointments",
+      "Notifications",
+      "Staff Console"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Welcome and Sign In",
+      "purpose": "Let patients register, verify email, log in and reset a forgotten password.",
+      "key_components": [
+        {
+          "name": "Brand Header",
+          "type": "Header",
+          "position": "top",
+          "size": "large",
+          "styling": "Subtle teal gradient with rounded bottom corners, white 'CareSlot' wordmark and tagline 'Book care in minutes'.",
+          "interaction": "Static; no action.",
+          "icon": "home",
+          "has_image": true,
+          "image_type": "background"
+        },
+        {
+          "name": "Auth Mode Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Pill segmented control with 'Sign In' and 'Register'; the active tab is solid teal with white text.",
+          "interaction": "Switches the form between sign-in and registration fields.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Full Name Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "56px rounded input with a light border and placeholder 'Full name'. Shown in Register mode only.",
+          "interaction": "Tap to type; inline validation on blur.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Email Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded white input with teal focus ring and placeholder 'Email address'.",
+          "interaction": "Tap to type; shows an error message if the format is invalid.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Phone Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded input with country code prefix and placeholder 'Mobile number for SMS reminders'. Register mode only.",
+          "interaction": "Tap to type digits; used for SMS reminders.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Password Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded masked input with placeholder 'Password (8+ characters)' and a show/hide text toggle.",
+          "interaction": "Tap to type; the toggle reveals the password.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Forgot Password Link",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Right-aligned teal text link 'Forgot password?'.",
+          "interaction": "Opens the Reset Password sheet.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Primary Auth Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width 56px teal gradient button, white bold label 'Sign In' (becomes 'Create Account' in Register mode).",
+          "interaction": "Sign In opens Find a Doctor; Register opens the verification modal.",
+          "icon": "user",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Verify Email Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "White rounded sheet with a teal check badge, 'Check your email' and a primary 'Open Sign In' button.",
+          "interaction": "Confirms the verification email was sent; button returns to Sign In.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reset Password Sheet",
+          "type": "Modal",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Bottom sheet with an email input 'Registered email' and a primary 'Send Reset Link' button.",
+          "interaction": "Sends the reset link and shows a success toast.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1"
+      ],
+      "user_flow": "App launch opens here. Successful sign-in leads to Find a Doctor. Registration shows the verification modal, then Sign In."
+    },
+    {
+      "name": "Find a Doctor",
+      "purpose": "Search doctors by name, specialty or department and see who has open slots.",
+      "key_components": [
+        {
+          "name": "Greeting Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Teal gradient header with 'Hello, Sarah' and a white bell icon with a red unread dot.",
+          "interaction": "Bell opens Notifications.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Floating white rounded search bar with shadow and placeholder 'Search doctor, specialty or department'.",
+          "interaction": "Typing filters the doctor list live.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Specialty Chips",
+          "type": "Chips",
+          "position": "top",
+          "size": "small",
+          "styling": "Horizontal scroll of pill chips: 'All', 'Cardiology', 'Dermatology', 'Pediatrics', 'Orthopedics'. The selected chip is teal.",
+          "interaction": "Tap a chip to list only matching doctors with open slots.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Filter Button",
+          "type": "Button",
+          "position": "top",
+          "size": "small",
+          "styling": "48px square outlined button beside the search bar with a filter icon.",
+          "interaction": "Opens a filter sheet for date, department and gender.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Next Appointment Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Light blue card: 'Next visit: Dr. Chen, Tue 10:30 AM' with a small 'View' link.",
+          "interaction": "Opens My Appointments.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Doctor Result Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White rounded card with a circular photo, name, specialty, star rating, fee and green badge 'Next: Today 2:30 PM'.",
+          "interaction": "Opens Doctor Profile and Booking.",
+          "icon": "user",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Favorite Button",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Round 40px icon button at the top-right of each doctor card, outlined heart.",
+          "interaction": "Toggles saving the doctor to favorites.",
+          "icon": "heart",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty Results State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered text 'No doctors with open slots' and an outlined 'Clear Filters' button.",
+          "interaction": "Clear Filters resets the chips and search.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with top border: Home (active teal), Appointments, Notifications, Staff Console (staff only).",
+          "interaction": "Tap a tab to switch screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F2"
+      ],
+      "user_flow": "Reached after sign-in or from the Home tab. Tapping a doctor opens Doctor Profile and Booking. The bell opens Notifications."
+    },
+    {
+      "name": "Doctor Profile and Booking",
+      "purpose": "View a doctor's availability, pick a slot and confirm a booking that no one else can take.",
+      "key_components": [
+        {
+          "name": "Back Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Transparent top bar with a back arrow, title 'Book Appointment' and a share icon.",
+          "interaction": "Back returns to Find a Doctor; share sends the profile link.",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Doctor Profile Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "White card with a large circular photo, 'Dr. Emily Chen', 'Cardiologist, 12 yrs', rating and a saved heart.",
+          "interaction": "Heart toggles favorite.",
+          "icon": "heart",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Date Selector",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Horizontal strip of rounded day tiles (Mon 12, Tue 13). The selected tile is teal; days without slots are greyed.",
+          "interaction": "Tap a day to reload that day's slots.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Time Slot Grid",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Three-column grid of 44px outlined pills like '09:30 AM'. Selected is teal and filled; booked slots are grey with strikethrough.",
+          "interaction": "Tap an open slot to select it; booked slots are disabled.",
+          "icon": "none",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Visit Reason Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Multi-line rounded input with placeholder 'Reason for visit (optional)'.",
+          "interaction": "Tap to type notes for the doctor.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Booking Summary Strip",
+          "type": "Card",
+          "position": "bottom",
+          "size": "small",
+          "styling": "Light blue strip: 'Tue, Mar 13 at 09:30 AM, Consultation $60'.",
+          "interaction": "Updates live as the date and slot change.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirm Booking Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Sticky full-width teal gradient button 'Confirm Booking'; disabled grey until a slot is chosen.",
+          "interaction": "Reserves the slot and opens the confirmation modal.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Booking Confirmed Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded sheet with a green check, 'Booking Confirmed', an email/SMS sent note and a 'View My Appointments' button.",
+          "interaction": "Opens My Appointments.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Slot Conflict Toast",
+          "type": "Modal",
+          "position": "top",
+          "size": "small",
+          "styling": "Red-tinted toast: 'That slot was just taken. Pick another time.' with a 'Refresh' action.",
+          "interaction": "Refresh reloads the slots; the toast auto-dismisses after 5 seconds.",
+          "icon": "none",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F2",
+        "F3"
+      ],
+      "user_flow": "Opened from a doctor card or from Reschedule. Confirm leads to the confirmation modal, then My Appointments. Back returns to search."
+    },
+    {
+      "name": "My Appointments",
+      "purpose": "Let patients view, reschedule or cancel appointments, with the 24-hour cancellation rule enforced.",
+      "key_components": [
+        {
+          "name": "Screen Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Clean white header with the bold title 'My Appointments' and a teal 'Book New' icon button.",
+          "interaction": "Plus opens Find a Doctor.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Segmented pills: 'Upcoming', 'Past', 'Cancelled'. The active tab is teal with white text.",
+          "interaction": "Switches the list between the three statuses.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Appointment Card",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "White card with doctor photo, 'Dr. Emily Chen', 'Tue, Mar 13, 09:30 AM', and a green 'Confirmed' chip.",
+          "interaction": "Opens appointment details.",
+          "icon": "bookmark",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Reminder Status Chip",
+          "type": "Chip",
+          "position": "center",
+          "size": "small",
+          "styling": "Small outlined chip on each card: 'Reminder: SMS in 24h' with a bell icon.",
+          "interaction": "Tap to open Notifications settings.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reschedule Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Outlined teal button 'Reschedule' with an edit icon, on the left of the card actions.",
+          "interaction": "Opens Doctor Profile and Booking with the same doctor.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "position": "center",
+          "size": "medium",
+          "styling": "Text button 'Cancel' in red with a trash icon; disabled with 'Less than 24h' when too late.",
+          "interaction": "Opens the cancel confirmation modal.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Confirmation Modal",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded dialog 'Cancel this appointment?' with a policy note, a red 'Yes, Cancel' button and a 'Keep Appointment' link.",
+          "interaction": "Yes releases the slot, sends confirmation and shows a toast.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty State",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "Centered text 'No upcoming appointments' with a primary 'Find a Doctor' button.",
+          "interaction": "Opens Find a Doctor.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with Appointments active in teal; other tabs grey.",
+          "interaction": "Tap a tab to switch screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F3",
+        "F4"
+      ],
+      "user_flow": "Reached from the Appointments tab or after booking. Reschedule opens Doctor Profile and Booking. Cancel returns to this list with a success toast."
+    },
+    {
+      "name": "Notifications and Reminders",
+      "purpose": "Show patient confirmations and reminders, manage channels, and let receptionists track delivery status.",
+      "key_components": [
+        {
+          "name": "Screen Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White header with the title 'Notifications' and a settings icon on the right.",
+          "interaction": "Scrolls to the reminder preferences card.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "View Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Segmented control 'Inbox' and 'Delivery Status'. Delivery Status is visible to receptionists only.",
+          "interaction": "Switches between patient inbox and staff delivery log.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Notification Item",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Rows with a teal bell badge, bold 'Reminder: Dr. Chen tomorrow 9:30 AM', a timestamp and an unread dot.",
+          "interaction": "Opens the related appointment in My Appointments.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirmation Item",
+          "type": "List",
+          "position": "center",
+          "size": "medium",
+          "styling": "Row with a green accent: 'Booking confirmed' or 'Appointment rescheduled' and a small email/SMS label.",
+          "interaction": "Opens the appointment details.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Reminder Preferences Card",
+          "type": "Card",
+          "position": "center",
+          "size": "medium",
+          "styling": "White card titled 'Reminder channels' with two toggles, 'Email' and 'SMS', both teal when on.",
+          "interaction": "Toggles update how reminders are delivered.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delivery Search Input",
+          "type": "Input",
+          "position": "top",
+          "size": "medium",
+          "styling": "Rounded input with placeholder 'Search patient or appointment'. Delivery Status tab only.",
+          "interaction": "Filters the delivery log as you type.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delivery Status Row",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Row with patient name, appointment time, channel label and a status chip: green 'Delivered', amber 'Pending' or red 'Failed'.",
+          "interaction": "Opens the delivery details.",
+          "icon": "bell",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Resend Button",
+          "type": "Button",
+          "position": "center",
+          "size": "small",
+          "styling": "Small outlined teal button 'Resend' shown on failed rows.",
+          "interaction": "Retries the notification and updates the status chip.",
+          "icon": "share",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Bottom Navigation",
+          "type": "Footer",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "White bar with Notifications active in teal.",
+          "interaction": "Tap a tab to switch screens.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F4"
+      ],
+      "user_flow": "Reached from the bell icon or the Notifications tab. Tapping an item opens My Appointments. Receptionists use Delivery Status to resend failures."
+    },
+    {
+      "name": "Staff Console",
+      "purpose": "Let admins manage doctors, doctors set weekly availability, and receptionists book for walk-in patients.",
+      "key_components": [
+        {
+          "name": "Console Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Teal gradient header 'Staff Console' with a role badge like 'Administrator' and a settings icon.",
+          "interaction": "Settings opens the role and account options.",
+          "icon": "settings",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Console Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Segmented pills: 'Doctors', 'Availability', 'Book for Patient'. The active tab is white on teal.",
+          "interaction": "Switches the console section.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Report Stat Cards",
+          "type": "Card",
+          "position": "top",
+          "size": "medium",
+          "styling": "Three compact cards: 'Today 48 booked', 'Cancelled 6', 'No-shows 3'. Bold numbers with a small trend label.",
+          "interaction": "Tap a card to open a detailed appointment report.",
+          "icon": "bookmark",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Doctor Management Row",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Row with a photo, name, department, an 'Active' toggle in green and an edit icon.",
+          "interaction": "Toggle activates or deactivates the listing; edit opens the doctor form.",
+          "icon": "edit",
+          "has_image": true,
+          "image_type": "user"
+        },
+        {
+          "name": "Add Doctor Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Floating teal pill button 'Add Doctor' with a plus icon and a soft shadow.",
+          "interaction": "Opens the Add Doctor form sheet.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Add Doctor Form Sheet",
+          "type": "Modal",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Bottom sheet with inputs 'Doctor name', 'Specialty', 'Department' and a primary 'Save Doctor' button.",
+          "interaction": "Save adds the doctor to patient search results.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Weekly Availability Editor",
+          "type": "Card",
+          "position": "center",
+          "size": "large",
+          "styling": "Card of Mon\u2013Sun rows, each with an on/off switch and time range chips like '09:00 \u2013 13:00', plus a 'Save Availability' button.",
+          "interaction": "Save publishes new slots to the patient calendar within a minute.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Patient Lookup Input",
+          "type": "Input",
+          "position": "center",
+          "size": "medium",
+          "styling": "Rounded input with placeholder 'Search patient by name or phone', shown on the Book for Patient tab.",
+          "interaction": "Shows matching patients; selecting one fills the booking form.",
+          "icon": "search",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Book on Behalf Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width teal gradient button 'Choose Doctor and Slot' under the selected patient card.",
+          "interaction": "Opens Doctor Profile and Booking for the selected patient.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F2",
+        "F5"
+      ],
+      "user_flow": "Visible only to staff roles via the Staff Console tab. Book on Behalf opens Doctor Profile and Booking. Saving a doctor returns to the Doctors list."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": "bottom",
+      "size": "large",
+      "styling": "56px tall, full-width, 14px radius, subtle teal gradient, white semibold label, pressed state darkens.",
+      "interaction": "Triggers the main screen action.",
+      "icon": "plus",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": "center",
+      "size": "medium",
+      "styling": "48px tall, white fill, 1.5px teal border and teal label, 12px radius.",
+      "interaction": "Triggers a supporting action such as Reschedule.",
+      "icon": "edit",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input",
+      "type": "Input",
+      "position": "center",
+      "size": "medium",
+      "styling": "56px, white fill, 1px slate border, 12px radius, teal focus ring, red border with helper text on error.",
+      "interaction": "Tap to type with inline validation.",
+      "icon": "none",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Doctor Card",
+      "type": "Card",
+      "position": "center",
+      "size": "large",
+      "styling": "White, 16px radius, soft shadow, circular photo, name, specialty, rating and availability badge.",
+      "interaction": "Opens Doctor Profile and Booking.",
+      "icon": "user",
+      "has_image": true,
+      "image_type": "user"
+    },
+    {
+      "name": "Time Slot Pill",
+      "type": "Chip",
+      "position": "center",
+      "size": "small",
+      "styling": "44px high outlined pill. Selected is filled teal; booked is grey with strikethrough.",
+      "interaction": "Tap to select an open slot.",
+      "icon": "none",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Status Chip",
+      "type": "Chip",
+      "position": "center",
+      "size": "small",
+      "styling": "Rounded tinted pill with matching text: green Confirmed, amber Pending, red Failed or Cancelled.",
+      "interaction": "Static indicator.",
+      "icon": "none",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Segmented Tabs",
+      "type": "Tabs",
+      "position": "top",
+      "size": "medium",
+      "styling": "Pill-shaped control on a light blue track; the active segment is solid teal with white text.",
+      "interaction": "Switches content in place.",
+      "icon": "filter",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Bottom Navigation Bar",
+      "type": "Footer",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "64px white bar with a top hairline; active tab has a teal icon and label, inactive tabs are slate.",
+      "interaction": "Switches between main sections.",
+      "icon": "home",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Confirmation Modal",
+      "type": "Modal",
+      "position": "center",
+      "size": "medium",
+      "styling": "White 20px-radius dialog over a dimmed overlay, with a title, short body and one primary plus one text action.",
+      "interaction": "Confirms or dismisses the pending action.",
+      "icon": "bell",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toggle Switch",
+      "type": "Switch",
+      "position": "center",
+      "size": "small",
+      "styling": "52x32px switch; teal when on, grey when off, with a white thumb.",
+      "interaction": "Tap to turn a setting on or off.",
+      "icon": "settings",
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "Mobile-first at 360px with single-column layouts. Tablet adds a two-column doctor grid. Desktop web centers content at a 480px column for booking and uses a wider table layout for the staff console. All touch targets stay at least 44px.",
+  "accessibility": "Meets WCAG 2.1 AA: 4.5:1 text contrast, visible focus rings, labels on all inputs, screen-reader names on icon buttons, status shown by text as well as color, and a logical tab order. Text scales to 200% without breaking layouts.",
+  "animations": "Subtle 200ms transitions: screen slide for navigation, bottom sheet slide-up for modals, tap scale to 0.97, slot selection fade-fill, skeleton loaders under 2s, and toast fade in and out.",
+  "icons": "Outline icons only, 24px with a 2px stroke, limited to home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash and share. Teal for active, slate for inactive, red for destructive trash. No emojis."
+}

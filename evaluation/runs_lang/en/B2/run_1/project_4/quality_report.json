@@ -1,0 +1,40 @@
+{
+  "artifact_reviewed": [
+    "Requirements",
+    "Design",
+    "Database"
+  ],
+  "checklist": {
+    "requirements_complete": true,
+    "design_consistent": true,
+    "db_matches_requirements": true,
+    "nfr_defined": true
+  },
+  "issues": [
+    {
+      "severity": "Medium",
+      "item": "Design - Profile screen vs F3 interests",
+      "message": "F3 and the database (interests, user_interests) support profile interests, but the Profile screen has only bio and course chips and no way to view or edit interests."
+    },
+    {
+      "severity": "Medium",
+      "item": "Design - Notifications",
+      "message": "The Home bell says it opens a notifications list, but no Notifications screen is defined, although F5 requires the author to be notified of removals and the database has a notifications table."
+    },
+    {
+      "severity": "Medium",
+      "item": "Requirements - Platform Administrator role",
+      "message": "Platform Administrator is listed as a user role (and exists in the roles table), but no feature, user story or screen describes what that role can do, such as assigning moderators."
+    }
+  ],
+  "required_fixes": [
+    "Add an interests selector (backed by interests/user_interests) to the Profile screen's edit mode.",
+    "Add a Notifications screen or sheet, opened from the bell, that lists notification types such as note removed, join request outcome and account suspended.",
+    "Define Platform Administrator responsibilities, for example moderator role assignment and university and course management, in the requirements or remove the role."
+  ],
+  "recommendations": [
+    "Add a star icon to the icon set, or specify the rating glyph, because the Star Rating Input currently uses a heart icon.",
+    "Clean up the malformed notifications index entry ('unique-free composite (user_id, is_read, created_at)') and store search_vector as a real tsvector type in the DDL.",
+    "Add a cover image field for study groups (the design shows a group image) and align the Download button text with image uploads rather than 'Download PDF' only."
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "plan_name": "StudyCircle MVP Plan",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Design PostgreSQL schema and migrations for users, profiles, courses, notes, tags, groups, memberships, join requests, ratings, comments, bookmarks, reports and moderation actions",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": "Create design system and core UI components (indigo theme, buttons, inputs, cards, chips, bottom sheet, toast, responsive bottom nav and desktop sidebar)",
+      "assigned_agent": "Designer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": []
+    },
+    {
+      "id": "T3",
+      "title": "Set up project scaffolding: React app, Node.js REST API, PostgreSQL connection, HTTPS config, AWS S3 bucket, CI and deploy pipeline",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T1"
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "Build authentication backend: university email registration and domain validation, email verification link, bcrypt hashing, JWT login, role-based access (Student, Group Admin, Moderator, Platform Administrator)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T3"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "Build Sign Up / Log In and Profile screens: auth forms, verification state, profile edit, course chips, bookmarks and uploads tabs",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T2",
+        "T4"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "Implement note upload backend: S3 presigned upload, 20 MB PDF/image validation, malware scan before publishing, note metadata and tags APIs",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T4"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "Implement note search and filter API (keyword, university, course, topic, rating; relevance sort via PostgreSQL full-text search with indexes) and download endpoint",
+      "assigned_agent": "DBA",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T6"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "Build Home Browse, Upload Note and Note Detail screens (search, filter sheet, course chips, note cards, upload form with progress, file preview and download)",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T2",
+        "T5",
+        "T7"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "Implement study groups backend: create public/private groups, join, request/approve/reject, remove members, admin role assignment, group listing and search APIs",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T4"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Build Study Groups screen: Discover, My Groups and Requests tabs, group cards, create group modal, join/request buttons, admin member management",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F2"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T2",
+        "T9"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Implement ratings, comments and bookmarks APIs and UI (star rating with live average, comment list, bookmark toggle, bookmarks page)",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F4"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T7",
+        "T8"
+      ]
+    },
+    {
+      "id": "T12",
+      "title": "Implement reporting and moderation: report API and modal, moderator queue, remove content, suspend user, dismiss, author notification, hide removed content from all queries",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F5"
+      ],
+      "estimate": 8,
+      "depends_on": [
+        "T8",
+        "T11"
+      ]
+    },
+    {
+      "id": "T13",
+      "title": "Implement GDPR account deletion (30-day purge job), privacy and terms pages, and data cleanup of notes, comments and S3 files",
+      "assigned_agent": "Developer",
+      "priority": "low",
+      "feature_ids": [
+        "F3"
+      ],
+      "estimate": 3,
+      "depends_on": [
+        "T5",
+        "T8"
+      ]
+    },
+    {
+      "id": "T14",
+      "title": "Performance and QA pass: index tuning, load test at 500 concurrent users, WCAG AA and responsive checks, acceptance-criteria test run, production deploy with uptime monitoring",
+      "assigned_agent": "Developer",
+      "priority": "high",
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "estimate": 5,
+      "depends_on": [
+        "T10",
+        "T11",
+        "T12",
+        "T13"
+      ]
+    }
+  ],
+  "risks": [
+    "Malware scanning of uploads may be slow or costly to integrate; mitigate with an S3-triggered scan (e.g., ClamAV Lambda) and a pending-publish state.",
+    "University email domain verification requires a maintained domain allowlist and reliable email delivery; use a transactional email service and a small seed list of universities.",
+    "Meeting 500 concurrent users with sub-1-second search may need PostgreSQL full-text indexing tuning and caching; schedule early load testing.",
+    "Copyright and abusive content could appear before moderation tools ship; limit launch to a small pilot group and prioritize report/remove flow.",
+    "Scope is large for a small team; if time slips, cut F4 and F5 polish (comments, suspension durations) and keep core note sharing, groups and auth."
+  ]
+}

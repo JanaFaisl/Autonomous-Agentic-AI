@@ -1,0 +1,172 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "purpose": "Stores registered accounts used for authentication (email/password with bcrypt hash) and role-based access (User or Administrator).",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key; referenced by tasks.user_id (one user owns many tasks, ON DELETE CASCADE)"
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": true,
+          "default": null,
+          "notes": "Login identifier; store lowercased so uniqueness is case-insensitive"
+        },
+        {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "bcrypt hash only; never store plaintext passwords"
+        },
+        {
+          "name": "role",
+          "type": "varchar(20)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "'user'",
+          "notes": "Allowed values: 'user', 'administrator' (enforce with CHECK constraint)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Registration time"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Last modification time"
+        }
+      ],
+      "indexes": [
+        "email"
+      ],
+      "relationships": []
+    },
+    {
+      "name": "tasks",
+      "purpose": "Stores each user's tasks, including title, optional description, and completion status. Supports create, complete/reopen, delete, and filtered viewing.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "pk": true,
+          "nullable": false,
+          "unique": true,
+          "default": "gen_random_uuid()",
+          "notes": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "FK to users.id; owner of the task; ON DELETE CASCADE. Used to enforce that users only access their own tasks"
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": null,
+          "notes": "Required; empty or whitespace-only titles rejected by validation (CHECK length(trim(title)) > 0)"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Optional task details"
+        },
+        {
+          "name": "is_completed",
+          "type": "boolean",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "false",
+          "notes": "false = active/incomplete, true = completed; toggled to complete or reopen"
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": true,
+          "unique": false,
+          "default": null,
+          "notes": "Set when marked complete; set to NULL when reopened"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Used for newest-first sorting"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "pk": false,
+          "nullable": false,
+          "unique": false,
+          "default": "CURRENT_TIMESTAMP",
+          "notes": "Last modification time"
+        }
+      ],
+      "indexes": [
+        "user_id",
+        "user_id, is_completed, created_at"
+      ],
+      "relationships": [
+        {
+          "type": "many-to-one",
+          "to_table": "users",
+          "fk": "user_id",
+          "ref": "id",
+          "notes": "Each task belongs to exactly one user; ON DELETE CASCADE"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Database is PostgreSQL, so uuid primary keys use gen_random_uuid() (pgcrypto or PostgreSQL 13+).",
+    "Each user has exactly one role (User or Administrator), so role is a column on users rather than a roles table with a junction table; no many-to-many relationships exist in the requirements.",
+    "Authentication uses JWT, which is stateless, so no sessions or token table is stored.",
+    "Tasks are permanently deleted (hard delete) per the requirement that tasks are removed from the database; no soft-delete column is included.",
+    "Task status is a boolean (is_completed) since only active and completed states are required; completed_at records when completion occurred.",
+    "Each task belongs to exactly one user; sharing and collaboration are out of scope.",
+    "The one-to-many relationship between users and tasks is defined only on the tasks table via tasks.user_id referencing users.id (ON DELETE CASCADE); the users table holds no foreign key column.",
+    "Cross-user access (HTTP 403) is enforced in the application layer by checking tasks.user_id against the authenticated user.",
+    "The composite index (user_id, is_completed, created_at) supports listing a user's tasks, filtering by status, and sorting newest first.",
+    "Email addresses are normalized to lowercase by the application before storage to ensure unique login identifiers.",
+    "Timestamps are stored in UTC."
+  ]
+}

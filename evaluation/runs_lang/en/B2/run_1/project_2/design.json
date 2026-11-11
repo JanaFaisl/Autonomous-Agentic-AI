@@ -1,0 +1,615 @@
+{
+  "design_overview": "A clean, card-based web task manager built around one fast loop: add a task, check it off, filter, delete with confirmation. Indigo primary actions, generous spacing, and clear states keep a new user productive within a minute.",
+  "color_scheme": {
+    "primary": "#4F46E5",
+    "secondary": "#6B7280",
+    "accent": "#14B8A6",
+    "surface": "#FFFFFF",
+    "background": "#F5F6FA",
+    "text_primary": "#1F2430",
+    "error": "#DC2626",
+    "success": "#16A34A",
+    "warning": "#F59E0B"
+  },
+  "typography": {
+    "font_family": "Inter, system-ui, sans-serif",
+    "heading_font": "Inter, system-ui, sans-serif",
+    "body_font": "Inter, system-ui, sans-serif",
+    "sizes": {
+      "small": "13px",
+      "medium": "16px",
+      "large": "20px",
+      "xlarge": "28px"
+    },
+    "weights": {
+      "normal": "400",
+      "bold": "600"
+    }
+  },
+  "navigation": {
+    "type": "top",
+    "items": [
+      "All Tasks",
+      "New Task"
+    ]
+  },
+  "screens": [
+    {
+      "name": "Task List",
+      "purpose": "Home screen to view all tasks, filter by status, complete or uncheck tasks, and start creating a task.",
+      "key_components": [
+        {
+          "name": "App Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with soft shadow, title 'My Tasks' in bold 28px, subtle open-task count 'Open 3' beneath in gray.",
+          "interaction": "Static title; stays pinned while list scrolls.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Add Task Button",
+          "type": "Button",
+          "position": "top",
+          "size": "medium",
+          "styling": "Indigo filled rounded button in header right, white label 'New Task', plus icon, 44px height.",
+          "interaction": "Opens the New Task screen.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Filter Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Segmented pill chips 'All', 'Active', 'Completed'; selected chip indigo filled with white text, others light gray.",
+          "interaction": "Tap refreshes list to show only matching tasks.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Card List",
+          "type": "List",
+          "position": "center",
+          "size": "large",
+          "styling": "Vertical stack of white rounded cards, 12px gaps, light border and soft shadow, scannable rows.",
+          "interaction": "Scrolls; tapping a card opens Task Details.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Checkbox",
+          "type": "Checkbox",
+          "position": "left",
+          "size": "small",
+          "styling": "24px rounded square, gray outline when open, green fill with white check when complete; 44px touch area.",
+          "interaction": "Toggles complete or incomplete instantly and saves status.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Title Row",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold 16px title, one-line gray description preview; completed tasks show strikethrough and muted color.",
+          "interaction": "Tap opens Task Details for that task.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Badge",
+          "type": "Badge",
+          "position": "right",
+          "size": "small",
+          "styling": "Small pill: amber tint 'Open' or green tint 'Done', 13px semibold text.",
+          "interaction": "Informational; reflects current status.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Quick Add Floating Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "56px circular indigo floating button bottom-right with white plus icon and shadow.",
+          "interaction": "Opens the New Task screen.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1",
+        "F2",
+        "F4"
+      ],
+      "user_flow": "Landing screen on app open. Leaves via New Task button to New Task, via task card to Task Details, or via an empty filter to Empty State."
+    },
+    {
+      "name": "New Task",
+      "purpose": "Create a task with a required title and optional description, with clear validation.",
+      "key_components": [
+        {
+          "name": "Form Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with back arrow label 'Back' and bold title 'New Task'.",
+          "interaction": "Back returns to Task List without saving.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Title Input",
+          "type": "Input",
+          "position": "top",
+          "size": "large",
+          "styling": "Rounded 12px field, 52px high, gray border turning indigo on focus, label 'Title', placeholder 'What do you need to do?'.",
+          "interaction": "Tap to type; auto-focused on screen open.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Title Validation Error",
+          "type": "Text",
+          "position": "top",
+          "size": "small",
+          "styling": "Red 13px message 'Please enter a title' under field; field border turns red.",
+          "interaction": "Appears when saving with empty title; no task created.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Input",
+          "type": "Input",
+          "position": "center",
+          "size": "large",
+          "styling": "Multi-line rounded textarea, 120px high, label 'Description (optional)', placeholder 'Add details, notes, or links'.",
+          "interaction": "Tap to type optional details.",
+          "icon": "edit",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Character Counter",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Right-aligned gray 13px counter '0 / 100' under title field.",
+          "interaction": "Updates live while typing.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Save Task Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width indigo button, white bold label 'Save Task', 52px high, rounded 12px.",
+          "interaction": "Validates title; saves and returns to Task List with new task.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width outlined gray button, label 'Cancel', below the primary action.",
+          "interaction": "Discards input and returns to Task List.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Success Toast",
+          "type": "Toast",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Dark rounded snackbar with green accent bar, text 'Task added'.",
+          "interaction": "Shows on Task List after save; dismisses after 3 seconds.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1"
+      ],
+      "user_flow": "Reached from New Task button or floating button on Task List. Saving or cancelling returns to Task List."
+    },
+    {
+      "name": "Task Details",
+      "purpose": "Review a task's full information, toggle completion, and start deletion.",
+      "key_components": [
+        {
+          "name": "Details Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "White bar with 'Back' link and bold title 'Task Details'.",
+          "interaction": "Back returns to Task List.",
+          "icon": "home",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Summary Card",
+          "type": "Card",
+          "position": "top",
+          "size": "large",
+          "styling": "White rounded card, 20px padding, large bold title, status badge, soft shadow.",
+          "interaction": "Static summary of selected task.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Description Block",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Body text in card section labeled 'Description'; gray italic 'No description added' when empty.",
+          "interaction": "Read-only display.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Created Date Row",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Gray 13px metadata line 'Created Nov 11, 2026' with divider above.",
+          "interaction": "Informational only.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Complete Toggle Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width green filled button 'Mark as Complete'; when done becomes outlined 'Mark as Incomplete'.",
+          "interaction": "Toggles status, saves, updates badge and card.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Delete Task Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "large",
+          "styling": "Full-width outlined red button, red label 'Delete Task', trash icon, 52px high.",
+          "interaction": "Opens Delete Confirmation dialog.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Change Toast",
+          "type": "Toast",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Dark snackbar reading 'Marked as complete' with 'Undo' text action in teal.",
+          "interaction": "Undo reverts status; auto-dismisses after 4 seconds.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F2",
+        "F3"
+      ],
+      "user_flow": "Opened by tapping a card on Task List. Leaves via Back to Task List or Delete Task to Delete Confirmation."
+    },
+    {
+      "name": "Delete Confirmation",
+      "purpose": "Confirm or cancel permanent deletion to prevent accidental loss.",
+      "key_components": [
+        {
+          "name": "Dim Overlay",
+          "type": "Overlay",
+          "position": "center",
+          "size": "large",
+          "styling": "Semi-transparent dark scrim over Task Details, blocks background interaction.",
+          "interaction": "Tap outside cancels and closes dialog.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirmation Dialog",
+          "type": "Modal",
+          "position": "center",
+          "size": "medium",
+          "styling": "White rounded 16px modal, centered, 24px padding, strong shadow, max width 400px.",
+          "interaction": "Holds delete and cancel actions.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Dialog Title",
+          "type": "Text",
+          "position": "top",
+          "size": "medium",
+          "styling": "Bold 20px title 'Delete this task?'.",
+          "interaction": "Static text.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Task Name Preview",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Gray rounded chip showing selected task title in 16px medium text.",
+          "interaction": "Static; confirms which task is affected.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Warning Message",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Amber-tinted 13px note 'This action is permanent and cannot be undone.'",
+          "interaction": "Static warning.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Confirm Delete Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Red filled button, white label 'Delete', 48px high, rounded 12px.",
+          "interaction": "Deletes task permanently; returns to Task List with toast.",
+          "icon": "trash",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Cancel Delete Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Light gray outlined button, label 'Keep Task', placed beside delete action.",
+          "interaction": "Closes dialog; task unchanged on Task Details.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F3"
+      ],
+      "user_flow": "Opens from Delete Task on Task Details. Delete goes to Task List; Keep Task returns to Task Details."
+    },
+    {
+      "name": "Empty State",
+      "purpose": "Guide users when no tasks exist or a filter returns no results.",
+      "key_components": [
+        {
+          "name": "List Header",
+          "type": "Header",
+          "position": "top",
+          "size": "medium",
+          "styling": "Same 'My Tasks' header with 'New Task' button for consistency.",
+          "interaction": "New Task opens the New Task screen.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Status Filter Tabs",
+          "type": "Tabs",
+          "position": "top",
+          "size": "medium",
+          "styling": "Pill chips 'All', 'Active', 'Completed'; 'Completed' selected in indigo.",
+          "interaction": "Tap switches filter and reloads Task List.",
+          "icon": "filter",
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty Illustration",
+          "type": "Image",
+          "position": "center",
+          "size": "large",
+          "styling": "Soft indigo line illustration of an empty checklist on a pale circular backdrop, 160px.",
+          "interaction": "Decorative; not interactive.",
+          "icon": null,
+          "has_image": true,
+          "image_type": "content"
+        },
+        {
+          "name": "Empty Title",
+          "type": "Text",
+          "position": "center",
+          "size": "medium",
+          "styling": "Bold 20px centered text 'No completed tasks yet'.",
+          "interaction": "Static text.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Empty Helper Text",
+          "type": "Text",
+          "position": "center",
+          "size": "small",
+          "styling": "Gray centered body text 'Finish a task and it will show up here.'",
+          "interaction": "Static text.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Show All Tasks Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Outlined indigo button, label 'Show All Tasks', 48px high, rounded.",
+          "interaction": "Resets filter and returns to Task List.",
+          "icon": null,
+          "has_image": false,
+          "image_type": "none"
+        },
+        {
+          "name": "Create First Task Button",
+          "type": "Button",
+          "position": "bottom",
+          "size": "medium",
+          "styling": "Indigo filled button 'Create Your First Task', shown when no tasks exist at all.",
+          "interaction": "Opens the New Task screen.",
+          "icon": "plus",
+          "has_image": false,
+          "image_type": "none"
+        }
+      ],
+      "feature_ids": [
+        "F1",
+        "F4"
+      ],
+      "user_flow": "Appears on Task List when filter has no matches or no tasks exist. Leaves to Task List or New Task."
+    }
+  ],
+  "ui_components": [
+    {
+      "name": "Primary Button",
+      "type": "Button",
+      "position": null,
+      "size": "large",
+      "styling": "Indigo filled, white bold text, 12px radius, 48-52px height, darker on hover and press.",
+      "interaction": "Triggers main screen action.",
+      "icon": "plus",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Secondary Button",
+      "type": "Button",
+      "position": null,
+      "size": "large",
+      "styling": "White background, gray border, dark text, 12px radius.",
+      "interaction": "Triggers secondary or cancel action.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Destructive Button",
+      "type": "Button",
+      "position": null,
+      "size": "large",
+      "styling": "Red outline for entry points; red filled inside confirmation dialog.",
+      "interaction": "Starts or confirms deletion.",
+      "icon": "trash",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Text Input",
+      "type": "Input",
+      "position": null,
+      "size": "large",
+      "styling": "White field, 1px gray border, 12px radius, indigo focus ring, red error border.",
+      "interaction": "Accepts typed text with inline validation.",
+      "icon": "edit",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Task Card",
+      "type": "Card",
+      "position": null,
+      "size": "large",
+      "styling": "White surface, 16px radius, 1px light border, soft shadow, 16px padding.",
+      "interaction": "Opens Task Details when tapped.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Checkbox",
+      "type": "Checkbox",
+      "position": null,
+      "size": "small",
+      "styling": "24px rounded square, gray outline, green filled when checked, 44px hit area.",
+      "interaction": "Toggles completion status.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Filter Chip",
+      "type": "Tabs",
+      "position": null,
+      "size": "small",
+      "styling": "Pill shape, 36px height; selected indigo filled, unselected light gray.",
+      "interaction": "Filters list by status.",
+      "icon": "filter",
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Status Badge",
+      "type": "Badge",
+      "position": null,
+      "size": "small",
+      "styling": "Pill with tinted background: amber for Open, green for Done.",
+      "interaction": "Informational only.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Modal Dialog",
+      "type": "Modal",
+      "position": "center",
+      "size": "medium",
+      "styling": "White 16px radius panel over dark scrim with strong shadow.",
+      "interaction": "Blocks background until action or dismissal.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    },
+    {
+      "name": "Toast",
+      "type": "Toast",
+      "position": "bottom",
+      "size": "medium",
+      "styling": "Dark rounded snackbar with white text and optional teal action.",
+      "interaction": "Auto-dismisses after 3-4 seconds.",
+      "icon": null,
+      "has_image": false,
+      "image_type": "none"
+    }
+  ],
+  "responsive_design": "Mobile-first single column up to 600px. On tablet and desktop, content centers in a 720px column with a modal-style form, keeping cards and touch targets unchanged.",
+  "accessibility": "WCAG AA contrast, 44px minimum touch targets, visible focus rings, labeled inputs, errors announced via aria-live, checkbox state not conveyed by color alone, full keyboard support.",
+  "animations": "Checkbox check scales in over 150ms, completed titles fade to strikethrough, deleted cards collapse over 200ms, modals fade and scale in, toasts slide up.",
+  "icons": "Line icons in a consistent 2px stroke from the allowed set: plus for add, filter for status tabs, edit for inputs, trash for deletion, home for back navigation."
+}
