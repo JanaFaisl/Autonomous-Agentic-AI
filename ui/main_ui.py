@@ -31,6 +31,9 @@ from core.utils import get_component_icon_glyph
 from utils.prototype_bridge import build_bridge as build_prototype_bridge
 from ui.prototype_render import build_device_html
 from core.constants import DEFAULT_MODEL, DEFAULT_TEMPERATURE
+from core.language import LANGUAGES, is_rtl, set_language
+from ui import i18n
+from utils.schema_labels import arabic_labels, schema_key
 
 try:
     from db import (
@@ -1423,6 +1426,7 @@ def ensure_state() -> None:
         st.session_state.session_id = f"session_{int(time.time() * 1000)}"
 
     st.session_state.setdefault("dark_mode", False)
+    st.session_state.setdefault("language", "en")
     st.session_state.setdefault("chat_history", [])
     st.session_state.setdefault("initial_chat_mode", True)
     st.session_state.setdefault("processing_choice", None)
@@ -1502,6 +1506,10 @@ def _build_full_export_zip() -> Optional[bytes]:
 # ----------------------------
 # MAIN APPLICATION
 # ----------------------------
+_GREETING_EN = "Hey there! 👋 \n\nWhat's the main idea behind your project? "
+_GREETINGS = {_GREETING_EN.strip(), "أهلاً بك! 👋 \n\nما الفكرة الرئيسية وراء مشروعك؟"}
+
+
 def main() -> None:
     """Main Streamlit application."""
     _ensure_agent_imports()
@@ -1517,6 +1525,54 @@ def main() -> None:
     inject_css(st.session_state.dark_mode)
 
     analyzer: Optional[RequirementsAnalystAgent] = st.session_state.analyzer
+
+    # Output language (agents write in it; the UI and live preview flip to RTL for Arabic)
+    _lang_col = st.columns([1, 20, 1])[1].columns([2, 1, 2])[1]
+    with _lang_col:
+        _code = st.segmented_control(
+            "Language / اللغة", list(LANGUAGES), format_func=LANGUAGES.get,
+            key="language", label_visibility="collapsed", width="stretch",
+        ) or st.session_state.get("_last_language", "en")  # a click on the active option deselects it
+        st.session_state["_last_language"] = _code
+    st.markdown(
+        "<style>.st-key-language{direction:ltr!important;margin:-0.25rem 0 -0.75rem}"
+        ".st-key-language [data-baseweb='button-group']{background:linear-gradient(135deg,rgba(102,126,234,.16) 0%,rgba(244,114,182,.12) 100%);"
+        "border-radius:12px;padding:3px;gap:2px;border:1px solid rgba(15,23,42,.10);box-shadow:0 4px 14px rgba(0,0,0,.06);width:100%}"
+        ".st-key-language button{border:0!important;border-radius:8px!important;background:transparent!important;"
+        "color:#1e293b!important;font-size:.8rem!important;font-weight:600;min-height:28px!important;"
+        "padding:0 .6rem!important;box-shadow:none!important;transition:all .15s}"
+        ".st-key-language button:hover{color:#1e293b!important}"
+        ".st-key-language button[aria-checked='true'],.st-key-language button[aria-pressed='true'],"
+        ".st-key-language button[kind='segmented_controlActive']{background:#fff!important;color:#1e293b!important;"
+        "box-shadow:0 1px 3px rgba(15,23,42,.18)!important}"
+        "</style>",
+        unsafe_allow_html=True,
+    )
+    set_language(_code)
+    i18n.install()
+    _labels: Dict[str, Any] = {}
+    if is_rtl():
+        _schema = (st.session_state.get("requirements_for_review") or {}).get("database_schema") \
+            if isinstance(st.session_state.get("requirements_for_review"), dict) else None
+        if isinstance(_schema, dict) and _schema.get("tables"):
+            _cache = st.session_state.setdefault("schema_labels", {})
+            _k = schema_key(_schema)
+            if _k not in _cache:
+                with st.spinner("جارٍ ترجمة أسماء الجداول والأعمدة…"):
+                    _cache[_k] = arabic_labels(_schema, os.getenv("ANTHROPIC_API_KEY", ""))
+            _labels = _cache[_k]
+    i18n.set_schema_labels(_labels)
+    if is_rtl():
+        st.markdown(
+            "<style>[data-testid='stMarkdownContainer'], [data-testid='stCaptionContainer'], [data-testid='stAlert'], "
+            "[data-testid='stMetric'], [data-testid='stWidgetLabel'], [data-testid='stChatMessage'], textarea, "
+            "input, [data-baseweb='tab-list'], [data-testid='stExpander'] summary, [data-testid='stHorizontalBlock'] "
+            "{direction: rtl; text-align: right;} .stButton button, code, pre, [data-testid='stSlider'] {direction: ltr;} "
+            "[data-testid='stSlider'] [data-testid='stWidgetLabel'] {direction: rtl; text-align: right;}"
+            "</style>",
+            unsafe_allow_html=True,
+        )
+
 
     
 
@@ -1611,10 +1667,14 @@ def main() -> None:
                 st.session_state.chat_history = [
                     {
                         "role": "assistant",
-                        "content": "Hey there! 👋 \n\nWhat's the main idea behind your project? ",
+                        "content": i18n.tr_text(_GREETING_EN),
                     }
                 ]
                 st.session_state.initial_chat_mode = False
+            elif (len(st.session_state.chat_history) == 1 and st.session_state.chat_history[0]["content"].strip() in _GREETINGS):
+                # Only the greeting so far: show it in the language chosen now.
+                st.session_state.chat_history[0]["content"] = (
+                    i18n.tr_text(_GREETING_EN) if is_rtl() else _GREETING_EN)
             
             for msg in st.session_state.chat_history:
                 with st.chat_message(msg["role"]):
@@ -2028,7 +2088,7 @@ def main() -> None:
                     create_table_from_schema, table_exists, list_domain_tables,
                     fetch_objects, insert_object, get_table_columns,
                     count_rows, get_database_url,
-                    register_project_table, list_project_tables
+                    register_project_table, list_project_tables, drop_domain_tables
                 )
                 DB_AVAILABLE = True
             except ImportError:
@@ -2043,6 +2103,7 @@ def main() -> None:
                 def get_database_url(): return ""
                 def register_project_table(*args, **kwargs): pass
                 def list_project_tables(*args): return []
+                def drop_domain_tables(*args): return 0
 
             _TABULAR_EXTS = (".csv", ".tsv", ".json", ".jsonl", ".ndjson", ".xlsx", ".xls", ".parquet")
             _MAX_DOWNLOAD_BYTES = 200 * 1024 * 1024  # 200 MB, matching Streamlit's upload cap
@@ -2793,6 +2854,17 @@ def main() -> None:
                 )
                 live_tables = all_tables if show_all else project_tables
 
+                if other_count > 0:
+                    _stale = [t for t in all_tables if t not in set(project_tables)]
+                    with st.expander(f"🗑️ Delete tables from earlier sessions ({len(_stale)})"):
+                        st.caption("Permanently drops these tables and their rows. This project's tables are kept.")
+                        _sure = st.checkbox("I understand this cannot be undone", key="db_drop_confirm")
+                        if st.button("Delete tables from earlier sessions", disabled=not _sure, key="db_drop_stale"):
+                            st.session_state["db_dropped"] = drop_domain_tables(_stale)
+                            st.rerun()
+                if st.session_state.get("db_dropped"):
+                    st.success(f"Deleted {st.session_state.pop('db_dropped')} table(s) from earlier sessions.")
+
                 if not live_tables:
                     if project_tables or not all_tables:
                         st.info(
@@ -3202,7 +3274,7 @@ def main() -> None:
                         rels = t.get("relationships", []) if isinstance(t.get("relationships"), list) else []
                         idxs = t.get("indexes", []) if isinstance(t.get("indexes"), list) else []
 
-                        with st.expander(f"🧩 {name} — {purpose}", expanded=False):
+                        with st.expander(f"🧩 {i18n.label_table(name)} — {purpose}", expanded=False):
                             # Columns table
                             if cols:
                                 if PANDAS_AVAILABLE:

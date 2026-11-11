@@ -24,7 +24,7 @@ def _ok(d: Any) -> bool:
 def _tokens(*texts: Any) -> Set[str]:
     out: Set[str] = set()
     for text in texts:
-        for word in re.findall(r"[a-zA-Z]+", str(text or "").replace("_", " ").lower()):
+        for word in re.findall(r"[^\W\d_]+", str(text or "").replace("_", " ").lower()):
             if len(word) < 3 or word in _STOPWORDS:
                 continue
             if word.endswith("ies") and len(word) > 4:
@@ -77,6 +77,8 @@ def build_trace_matrix(
     for s in screens:
         comps = " ".join(str(c.get("name", "")) for c in (s.get("key_components") or []) if isinstance(c, dict))
         screen_toks.append((s["name"], _tokens(s["name"], s.get("purpose"), comps), f"{s['name']} {s.get('purpose', '')}"))
+    # Screens that declare feature_ids link only to those features; the rest fall back to matching.
+    screen_declared = {s["name"]: {str(i) for i in (s.get("feature_ids") or [])} for s in screens}
     def _ttl(t: Dict[str, Any]) -> str:
         return str(t.get("title") or t.get("name") or "")  # single-prompt output names tasks "name"
 
@@ -98,8 +100,9 @@ def build_trace_matrix(
         }
         for kind, cands in (("screens", screen_toks), ("tables", table_toks), ("tasks", task_toks)):
             for label, toks, text in cands:
-                if kind == "tasks" and task_declared.get(label):
-                    if str(f.get("id")) in task_declared[label]:
+                declared = task_declared if kind == "tasks" else screen_declared if kind == "screens" else {}
+                if declared.get(label):
+                    if str(f.get("id")) in declared[label]:
                         row[kind].append(label)
                         used[kind].add(label)
                     continue
@@ -120,6 +123,25 @@ def build_trace_matrix(
     }
     coverage = round(sum(r["coverage"] for r in rows) / len(rows), 2) if rows else 0.0
     return {"features": rows, "orphans": orphans, "available": available, "coverage": coverage}
+
+
+def uncovered_features(requirements: Optional[Dict[str, Any]], design: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Requirement features that no design screen implements.
+
+    Uses the screens' declared ``feature_ids`` when the design provides them, otherwise keyword matching.
+    """
+    if not _ok(requirements) or not _ok(design):
+        return []
+    screens = [s for s in (design.get("screens") or []) if isinstance(s, dict)]
+    if not screens:
+        return []
+    if any(s.get("feature_ids") for s in screens):
+        covered = {str(i) for s in screens for i in (s.get("feature_ids") or [])}
+        return [f for f in (requirements.get("features") or [])
+                if isinstance(f, dict) and str(f.get("id")) not in covered]
+    rows = {str(r["id"]): r for r in build_trace_matrix(requirements, design)["features"]}
+    return [f for f in (requirements.get("features") or [])
+            if isinstance(f, dict) and not rows.get(str(f.get("id") or f.get("name")), {}).get("screens")]
 
 
 def diff_requirements(old: Optional[Dict[str, Any]], new: Optional[Dict[str, Any]]) -> Dict[str, List[str]]:

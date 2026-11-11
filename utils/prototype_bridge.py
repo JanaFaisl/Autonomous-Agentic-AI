@@ -21,7 +21,7 @@ _GENERIC = {"enter", "field", "input", "text", "your", "the"}
 
 def _words(text: str) -> set:
     out = set()
-    for w in re.findall(r"[a-z0-9]+", str(text or "").replace("_", " ").lower()):
+    for w in re.findall(r"[^\W_]+", str(text or "").replace("_", " ").lower()):
         if w in _GENERIC:
             continue
         out.add(w[:-1] if w.endswith("s") and len(w) > 3 else w)

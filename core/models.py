@@ -107,6 +107,7 @@ if PYDANTIC_AVAILABLE:
         name: str
         purpose: str
         key_components: List[ComponentModel] = []
+        feature_ids: List[str] = []
         user_flow: Optional[str] = None
 
     class DesignOutputModel(BaseModel):

@@ -14,6 +14,8 @@ import json
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
+from core.language import is_rtl
+
 from utils.prototype_bridge import is_input_component
 
 # ---------------------------------------------------------------------------
@@ -124,7 +126,7 @@ def _e(text: Any) -> str:
 
 _QUOTE_RE = re.compile(r"'([^'\n]{1,48})'|“([^”\n]{1,48})”|\"([^\"\n]{1,48})\"")
 _NOISE_RE = re.compile(r"^(#[0-9a-f]{3,8}|[\d.]+\s*(px|rem|em|%|pt|ms|s)|[\d.]+)$", re.I)
-_STRIP_WORDS = re.compile(r"\b(button|btn|input|field|card|component|section|area|container|widget|control|element|cta|header)\b", re.I)
+_STRIP_WORDS = re.compile(r"\b(button|btn|input|field|card|component|section|area|container|widget|control|element|cta|header|زر|أزرار|حقل|إدخال|بطاقة|مكوّن|مكون|منطقة|حاوية|قسم)\b", re.I)
 
 
 def _quotes(*texts: Any) -> List[str]:
@@ -323,7 +325,7 @@ def _row_sheet(ctx: "_Ctx", title: str, parent: str, interaction: str) -> str:
     done = '<button class="btn ghost" data-close="1">Close</button>'
     if re.search(r"edit profile|personal|account details", low):
         return ctx.add_sheet(title, "Update how you appear in the app.", _field("Name", "Alex Morgan") + _field("Email", "alex@example.com", "email"),
-                             '<button class="btn primary" data-close="1" data-toast="Profile updated">Save changes</button>' + done)
+                             '<button class="btn primary" data-close="1" data-toast="' + _e(_t("Profile updated")) + '">' + _e(_t("Save changes")) + '</button>' + done)
     if "notif" in low:
         return ctx.add_sheet(title, "Choose what you hear about.", _sw("Push notifications", True) + _sw("Email updates") + _sw("Reminders", True), done)
     if re.search(r"privacy|security|password", low):
@@ -447,7 +449,7 @@ def _render_component(comp: Dict[str, Any], screen: Dict[str, Any], ctx: _Ctx, h
         label_txt = _clean(re.sub(r"\b(textarea|text area|textfield|text field)\b", "", name, flags=re.I), name)
         is_search = "search" in lowname or icon == "search"
         if is_search:
-            return (f'<div class="search">{_svg("search", 18)}<input type="text" placeholder="{_e(placeholder or "Search")}" '
+            return (f'<div class="search">{_svg("search", 18)}<input type="text" placeholder="{_e(placeholder or _t("Search"))}" '
                     f'data-screen="{_e(sname)}" data-field="{_e(field)}" aria-label="{_e(label_txt)}"/></div>')
         kindtype = "password" if re.search(r"password|passcode|pin\b", lowname) else "email" if "email" in lowname else \
             "date" if re.search(r"\bdate\b|datepicker", lowname) else "number" if re.search(r"quantity|amount|price|age\b|count", lowname) else "text"
@@ -510,7 +512,7 @@ def _render_component(comp: Dict[str, Any], screen: Dict[str, Any], ctx: _Ctx, h
                 f'<div><b>{_e(title)}</b>{f"<span>{_e(body)}</span>" if body else ""}</div></div>')
 
     if kind == "empty":
-        title = quotes[0] if quotes else "Nothing here yet"
+        title = quotes[0] if quotes else _t("Nothing here yet")
         body = quotes[1] if len(quotes) > 1 else "Items you add will show up here."
         return (f'<div class="empty"><div class="empty-ic">{_svg("inbox", 30)}</div>'
                 f'<h3>{_e(title)}</h3><p>{_e(body)}</p></div>')
@@ -570,7 +572,7 @@ _NAV_STOP = {"screen", "page", "view", "the", "and", "for", "with", "app", "main
 
 
 def _words(text: Any) -> set:
-    return {w for w in re.findall(r"[a-z]+", str(text or "").lower()) if len(w) > 2 and w not in _NAV_STOP}
+    return {w for w in re.findall(r"[^\W\d_]+", str(text or "").lower()) if len(w) > 2 and w not in _NAV_STOP}
 
 
 def _same_word(a: str, b: str) -> bool:
@@ -767,6 +769,19 @@ input.checkbox{width:22px;height:22px;accent-color:var(--primary)}
 """
 
 
+_AR = {
+    "Search": "بحث", "Save changes": "حفظ التغييرات", "Profile updated": "تم تحديث الملف الشخصي",
+    "Nothing here yet": "لا يوجد شيء هنا بعد", "Confirm": "تأكيد", "Cancel": "إلغاء",
+    "Saved to": "تم الحفظ في", "Could not save": "تعذر الحفظ", "Database not reachable": "قاعدة البيانات غير متاحة",
+    "Nothing to delete": "لا يوجد ما يُحذف", "New item": "عنصر جديد",
+}
+
+
+def _t(text: str) -> str:
+    """Static preview text, translated when the output language is Arabic."""
+    return _AR.get(text, text) if is_rtl() else text
+
+
 _PROFILE_SCREEN = {
     "name": "Profile",
     "purpose": "Your account, preferences and sign-out.",
@@ -850,23 +865,28 @@ def build_device_html(design: Dict[str, Any], is_mobile: bool, primary_hex: str,
     topnav = f'<nav class="topnav">{nav_buttons("navlink")}</nav>' if (not is_mobile and nav) else ""
     tabbar = f'<nav class="tabbar">{nav_buttons("tab")}</nav>' if (is_mobile and nav) else ""
     bridge_json = json.dumps(bridge or None).replace("</", "<\\/")
+    t_json = json.dumps({k: _t(v) for k, v in {"saved": "Saved to", "fail": "Could not save", "unreach": "Database not reachable", "nodel": "Nothing to delete", "newitem": "New item", "confirm": "Confirm"}.items()}, ensure_ascii=False)
     css = _CSS % {
         "primary": primary_hex, "secondary": secondary_hex,
         "bg": colors.get("background", "#f6f7fb"), "surface": colors.get("surface", "#ffffff"),
         "text": colors.get("text", "#0f172a"), "font": font,
     }
-    return f"""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    rtl = is_rtl()
+    if rtl:
+        css += ".back svg{transform:scaleX(-1)}body{font-family:Tahoma,'Segoe UI','Noto Sans Arabic',var(--font),sans-serif}"
+    return f"""<!doctype html><html{' dir="rtl" lang="ar"' if rtl else ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>{css}</style></head><body>
 <div class="stage"><div class="device {'mobile' if is_mobile else 'desktop'}" id="device">
 {chrome}{topnav}<div class="screens" id="screens">{''.join(sections)}</div>{tabbar}
 <div class="toast" id="toast"></div>
 {''.join(ctx.sheets)}
 <div class="sheetwrap" id="sheetWrap"><div class="bsheet" id="sheetBody"></div></div>
-<div class="modal" id="modal"><div class="sheet"><h3 id="mTitle">Confirm</h3><p id="mBody"></p>
-<div class="acts"><button class="btn ghost" id="mNo">Cancel</button><button class="btn primary" id="mYes">Confirm</button></div></div></div>
+<div class="modal" id="modal"><div class="sheet"><h3 id="mTitle">{_t("Confirm")}</h3><p id="mBody"></p>
+<div class="acts"><button class="btn ghost" id="mNo">{_t("Cancel")}</button><button class="btn primary" id="mYes">{_t("Confirm")}</button></div></div></div>
 </div></div>
 <script>
 const BRIDGE = {bridge_json};
+const T = {t_json};
 const stack = [];
 let lastSave = 0, tt = null;
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
@@ -906,9 +926,9 @@ function submitScreen(screen) {{
     body: JSON.stringify({{token: BRIDGE.token, table: cfg.table, data: data}})}})
     .then(r => r.json()).then(j => {{
       lastSave = Date.now();
-      if (j.ok) {{ used.forEach(i => i.value = ''); toast('Saved to ' + cfg.table + ' ✓'); }} else toast(j.error || 'Could not save', true);
+      if (j.ok) {{ used.forEach(i => i.value = ''); toast(T.saved + ' ' + cfg.table + ' ✓'); }} else toast(j.error || T.fail, true);
       return !!j.ok;
-    }}).catch(() => {{ lastSave = Date.now(); toast('Database not reachable', true); return false; }});
+    }}).catch(() => {{ lastSave = Date.now(); toast(T.unreach, true); return false; }});
 }}
 function rowsOf(scr) {{ return $$('.rows .row:not(.gone)', scr); }}
 function act(el) {{
@@ -916,7 +936,7 @@ function act(el) {{
   if (kind === 'like') el.classList.toggle('on');
   else if (kind === 'delete') {{
     const row = rowsOf(scr)[0];
-    if (row) row.classList.add('gone'); else toast('Nothing to delete');
+    if (row) row.classList.add('gone'); else toast(T.nodel);
   }} else if (kind === 'done') {{
     const rows = rowsOf(scr), open = rows.find(r => !r.classList.contains('done'));
     if (open) open.classList.add('done'); else rows.forEach(r => r.classList.remove('done'));
@@ -929,7 +949,7 @@ function act(el) {{
     if (model) {{
       const row = model.cloneNode(true);
       row.classList.remove('done', 'gone', 'hide'); row.classList.add('fresh');
-      row.querySelector('b').textContent = typed || 'New item';
+      row.querySelector('b').textContent = typed || T.newitem;
       model.parentNode.insertBefore(row, model.parentNode.firstChild);
       if (!el.dataset.nav) {{ stack.length = 0; show(dest.dataset.screenName, false); }}
     }}
@@ -1017,7 +1037,7 @@ document.addEventListener('click', ev => {{
   }};
   if (el.dataset.confirm) {{
     pending = run;
-    document.getElementById('mTitle').textContent = (el.textContent || 'Confirm').trim();
+    document.getElementById('mTitle').textContent = (el.textContent || T.confirm).trim();
     document.getElementById('mBody').textContent = el.dataset.confirm;
     document.getElementById('modal').classList.add('open');
   }} else run();

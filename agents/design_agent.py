@@ -6,6 +6,8 @@ from typing import Dict, Any, List, Optional
 import requests
 import streamlit as st
 
+from core.language import with_language
+from core.traceability import uncovered_features
 from core.constants import (
     DEFAULT_MODEL, model_for, MAX_RETRIES, MAX_ITERATIONS, DESIGN_MAX_EXECUTION_TIME, DESIGN_MAX_TOKENS,
     EXPONENTIAL_BACKOFF_BASE, ERROR_NO_API_KEY, SOLUTION_ADD_API_KEY,
@@ -95,7 +97,7 @@ class DesignGenerationAgent:
     @classmethod
     def _build_task_prompt(cls, requirements_summary: str) -> str:
         """Build the full task description, injecting requirements into the template."""
-        return f"""You are a Senior Product Designer and UX Architect working at a high-quality software company.
+        return with_language(f"""You are a Senior Product Designer and UX Architect working at a high-quality software company.
 
 Your responsibility is to design a **real, production-ready user interface** based on structured software requirements.
 The output must resemble a **modern iOS / Android application** that users can realistically tap, navigate, and interact with — not a wireframe, concept sketch, or decorative mockup.
@@ -195,6 +197,7 @@ Return ONLY valid JSON using EXACTLY this structure:
   "screens": [
     {{
       "name": "...", "purpose": "...",
+      "feature_ids": ["F1"],
       "key_components": [
         {{
           "name": "...", "type": "Button/Input/Card/List/Image/Header/Footer/Modal/etc",
@@ -216,12 +219,13 @@ Return ONLY valid JSON using EXACTLY this structure:
 ━━━━━━━━━━━━━━━━━━━━━━
 QUALITY BAR
 ━━━━━━━━━━━━━━━━━━━━━━
-• Include 4–6 screens, each with 6–10 meaningful components
-• BE CONCISE: every string short (descriptions under 25 words); ui_components at most 8 entries; the whole JSON must stay well under 12,000 tokens or it will be cut off and rejected
+• FEATURE COVERAGE IS MANDATORY: every feature in the requirements (all of F1, F2, ...) must be fully designed on at least one screen, with the components needed to perform it (inputs, actions, lists, states). Set each screen's "feature_ids" to the requirement ids it implements; every requirement id must appear in at least one screen. Do not drop or merge away a feature to save space.
+• Include as many screens as the features need (typically 5–10), each with 6–12 meaningful components; add a Profile/Settings screen only if the requirements call for accounts
+• BE CONCISE: every string short (descriptions under 25 words); ui_components at most 10 entries; the whole JSON must stay well under 20,000 tokens or it will be cut off and rejected
 • Screens must feel connected and realistic
 • UI must look suitable for startup demos, usability testing, and live clickable preview
 
-FINAL RULES: Output ONLY JSON. Start with {{ and end with }}. No markdown, no explanations."""
+FINAL RULES: Output ONLY JSON. Start with {{ and end with }}. No markdown, no explanations.""")
 
     def __init__(self, api_key: str) -> None:
         self.api_key = api_key
@@ -367,6 +371,25 @@ FINAL RULES: Output ONLY JSON. Start with {{ and end with }}. No markdown, no ex
 
     def generate_design(self, requirements: Dict[str, Any], max_retries: int = MAX_RETRIES,
                         feedback: Optional[List[str]] = None) -> Dict[str, Any]:
+        """Generate the design; if some requirement features have no screen, redo it once with those listed."""
+        design = self._generate_design_once(requirements, max_retries, feedback)
+        if not isinstance(design, dict) or "error" in design:
+            return design
+        missing = uncovered_features(requirements, design)
+        if not missing:
+            return design
+        notes = [
+            f"Feature {f.get('id')} '{f.get('name')}' is not designed on any screen: add a screen (or the needed "
+            f"components on an existing one) that fully implements it and list '{f.get('id')}' in that screen's feature_ids."
+            for f in missing
+        ]
+        retry = self._generate_design_once(requirements, 1, list(feedback or []) + notes)
+        if isinstance(retry, dict) and "error" not in retry and len(uncovered_features(requirements, retry)) < len(missing):
+            return retry
+        return design
+
+    def _generate_design_once(self, requirements: Dict[str, Any], max_retries: int = MAX_RETRIES,
+                              feedback: Optional[List[str]] = None) -> Dict[str, Any]:
         """Generate UI/UX design specification from requirements with retry logic.
         
         Args:

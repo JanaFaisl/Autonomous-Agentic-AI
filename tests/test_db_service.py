@@ -249,3 +249,12 @@ def test_artifacts_round_trip_on_sqlite(use_memory_db):
     from db.db_service import save_artifact, get_latest_artifact
     save_artifact("s1", "quality_report", {"checklist": {"a": True}, "issues": []})
     assert get_latest_artifact("s1", "quality_report") == {"checklist": {"a": True}, "issues": []}
+
+
+def test_drop_domain_tables_never_drops_system_tables():
+    import db.db_service as db_mod
+    db_mod.create_table_from_schema("old_stuff", [{"name": "id", "type": "INTEGER", "pk": True}])
+    assert "old_stuff" in db_mod.list_domain_tables()
+    assert db_mod.drop_domain_tables(["old_stuff", "sessions", "artifacts", "no_such_table"]) == 1
+    assert "old_stuff" not in db_mod.list_domain_tables()
+    assert db_mod.list_project_tables("anything") == []

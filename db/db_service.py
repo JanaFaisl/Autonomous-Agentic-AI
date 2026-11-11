@@ -881,6 +881,26 @@ def register_project_table(session_id: str, table_name: str, source: str = "") -
         logger.debug("register_project_table failed for %s: %s", table_name, e)
 
 
+def drop_domain_tables(names: List[str]) -> int:
+    """Permanently drop the given domain tables (never the system tables) and their project registrations.
+
+    Returns how many tables were dropped.
+    """
+    allowed = set(list_domain_tables())
+    dropped = 0
+    _ensure_project_registry()
+    for name in names:
+        if name not in allowed:
+            continue
+        try:
+            _run(f"DROP TABLE IF EXISTS {_quote_identifier(name)}")
+            _run(f"DELETE FROM {_quote_identifier(_PROJECT_TABLES)} WHERE table_name = ?", (name,))
+            dropped += 1
+        except Exception as e:
+            logger.debug("drop_domain_tables failed for %s: %s", name, e)
+    return dropped
+
+
 def list_project_tables(session_id: str) -> List[str]:
     """Table names registered to this session, most recently added first."""
     if not session_id:

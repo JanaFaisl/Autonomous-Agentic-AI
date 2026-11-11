@@ -18,6 +18,19 @@ than through string interpolation. Section "Threats to Validity" should say so.
 """
 from __future__ import annotations
 
+import functools
+
+from core.language import with_language
+
+
+def _localized(fn):
+    """Append the output-language instruction (a no-op in English)."""
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        return with_language(fn(*args, **kwargs))
+    return wrapper
+
+
 #: Passed by the unified crew in place of an inline artifact. CrewAI injects the
 #: real upstream output through the task's ``context``, so the prompt only needs
 #: to name which artifact it should look for.
@@ -67,6 +80,7 @@ STRICT RULES:
 6. If information is missing, make a reasonable assumption — never ask questions."""
 
 
+@_localized
 def build_requirements_prompt(user_input: str) -> str:
     """Full requirements task description, including the user's project idea."""
     return (
@@ -81,6 +95,7 @@ def build_requirements_prompt(user_input: str) -> str:
 # Database Agent
 # ---------------------------------------------------------------------------
 
+@_localized
 def build_database_prompt(req_json: str) -> str:
     return f"""From these requirements, produce a complete database schema. Rules:
 - Use snake_case for all table and column names.
@@ -111,6 +126,7 @@ Output JSON structure exactly:
 # Planning Manager
 # ---------------------------------------------------------------------------
 
+@_localized
 def build_planning_prompt(req_json: str, design_json: str) -> str:
     return f"""Create a short-term MVP execution plan. Output ONLY a JSON object with no markdown.
 
@@ -130,6 +146,7 @@ Output JSON with:
 # Quality / Process Manager
 # ---------------------------------------------------------------------------
 
+@_localized
 def build_quality_prompt(req_json: str, design_json: str, db_json: str) -> str:
     return f"""Inspect these artifacts and produce a quality report. Output ONLY a JSON object with no markdown.
 
@@ -161,6 +178,7 @@ Output JSON with:
 # Support Manager
 # ---------------------------------------------------------------------------
 
+@_localized
 def build_support_prompt(req_json: str, design_json: str, db_json: str, plan_json: str) -> str:
     return f"""Produce a support governance package from these project artifacts. Output ONLY a JSON object with no markdown.
 

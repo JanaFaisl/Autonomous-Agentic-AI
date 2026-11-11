@@ -1,4 +1,6 @@
 import json
+
+from core.language import with_language
 import os
 import time
 import requests
@@ -45,7 +47,7 @@ class RequirementsAnalystAgent:
             "Content-Type": "application/json",
         } if self.api_key else {}
         
-        self.system_prompt = """You are an expert software requirements analyst. Your ONLY job is to output a compact JSON object. NEVER write explanations, questions, or prose.
+        self._base_prompt = """You are an expert software requirements analyst. Your ONLY job is to output a compact JSON object. NEVER write explanations, questions, or prose.
 
 Output ONLY a JSON object with this structure (start with {, end with }):
 
@@ -147,6 +149,10 @@ STRICT RULES:
             if "signal" not in error_msg.lower() and "telemetry" not in error_msg.lower():
                 st.error(f"Failed to create CrewAI crew: {e}")
             self.crew = None
+
+    @property
+    def system_prompt(self) -> str:
+        return with_language(self._base_prompt)
 
     def revise_requirements(self, requirements: Dict[str, Any], issues: List[str]) -> Dict[str, Any]:
         """Amend existing requirements to resolve quality-review issues, keeping what is already there."""

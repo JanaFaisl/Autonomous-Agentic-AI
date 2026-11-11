@@ -4,11 +4,13 @@ from typing import Dict, List
 import streamlit as st
 
 from core.constants import DEFAULT_MODEL, model_for
+from core.language import with_language
 from core.llm import CREWAI_AVAILABLE, Agent, Task, Crew, Process, get_llm
 from core.utils import extract_crewai_output
 from utils.io_suppression import suppress_stderr, suppress_io
 
 # 1. Centralized System Prompt — friendly tone, clean MCQ format, no inline option leakage.
+
 PROFESSIONAL_SYSTEM_PROMPT = """You are a friendly product discovery companion helping someone shape their idea.
 Think of yourself as a curious teammate, not a corporate analyst.
 
@@ -123,7 +125,7 @@ class ChatAssistantAgent:
         if CREWAI_AVAILABLE and self.crew and self.task:
             # Re-inject the system prompt + format guard on every turn.
             self.task.description = (
-                f"{PROFESSIONAL_SYSTEM_PROMPT}\n\n"
+                f"{with_language(PROFESSIONAL_SYSTEM_PROMPT, chat=True)}\n\n"
                 "BEFORE YOU ANSWER, CHECK:\n"
                 "1. Read the transcript. If a roadmap step (Vision, Audience, Workflow, Technicals) "
                 "is already answered, skip to the NEXT unanswered step.\n"
@@ -171,7 +173,7 @@ def call_chat_assistant(agent: "RequirementsAnalystAgent", messages: List[Dict[s
             resp = client.messages.create(
                 model=model_for("chat"),
                 max_tokens=1024,
-                system=PROFESSIONAL_SYSTEM_PROMPT,
+                system=with_language(PROFESSIONAL_SYSTEM_PROMPT, chat=True),
                 messages=messages,
             )
             return resp.content[0].text

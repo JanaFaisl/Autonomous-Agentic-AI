@@ -149,3 +149,18 @@ def test_tasks_named_name_instead_of_title_still_link():
     plan = {"tasks": [{"name": "Implement order checkout"}]}
     f1, f2 = build_trace_matrix(_req(), DESIGN, plan)["features"]
     assert f2["tasks"] == ["Implement order checkout"]
+
+
+class TestDesignCoverage:
+    def test_declared_screen_feature_ids(self):
+        from core.traceability import uncovered_features
+        design = {"screens": [{"name": "Catalogue", "purpose": "", "feature_ids": ["F1"], "key_components": []}]}
+        assert [f["id"] for f in uncovered_features(_req(), design)] == ["F2"]
+
+    def test_keyword_fallback_without_ids(self):
+        from core.traceability import uncovered_features
+        assert [f["id"] for f in uncovered_features(_req(), DESIGN)] == ["F2"]
+
+    def test_missing_design_is_not_reported(self):
+        from core.traceability import uncovered_features
+        assert uncovered_features(_req(), None) == []

@@ -80,6 +80,8 @@ Open **http://localhost:8501** in your browser.
 
 > **Note:** The full pipeline takes approximately 13 minutes under real API load. The Design Agent is the primary bottleneck (~400s+) due to the complexity of its output.
 
+**Arabic:** pick *العربية* in the language switch at the top. Agents then write all human-readable content in Arabic (JSON keys, enums, IDs and database names stay English), and the UI and live preview switch to right-to-left. The app's buttons, tabs, headings, form labels and messages are translated too (see `ui/i18n.py`; add entries there for new UI text). Agent-generated content follows the language you chose.
+
 ## Downloadable output
 
 The **"Download project (.zip)"** button in the Review tab bundles everything generated so far into one archive:
