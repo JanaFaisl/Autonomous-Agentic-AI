@@ -66,3 +66,6 @@ app.db
 # Evaluation build scratch (node_modules, vite output), regenerated each run.
 # evaluation/runs/ is deliberately NOT ignored: it is the paper's raw data.
 evaluation/builds/
+
+# Paper draft and email (kept locally only)
+paper/
