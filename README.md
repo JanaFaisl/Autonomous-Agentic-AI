@@ -56,7 +56,7 @@ ANTHROPIC_API_KEY=your_anthropic_api_key_here
 Optional — override the default Claude model:
 
 ```env
-DEFAULT_MODEL=claude-sonnet-4-5
+DEFAULT_MODEL=claude-sonnet-5-5
 ```
 
 See the [Anthropic model docs](https://docs.anthropic.com/en/docs/about-claude/models) for valid model IDs.
@@ -162,7 +162,8 @@ Key values in `core/constants.py`:
 
 | Constant | Default | Description |
 |---|---|---|
-| `DEFAULT_MODEL` | `claude-sonnet-4-5` | Claude model used by all agents |
+| `DEFAULT_MODEL` | `claude-sonnet-5-5` | Claude model used by all agents |
+| `MODEL_<AGENT>` | `DEFAULT_MODEL` | Per-agent override, e.g. `MODEL_DESIGN=claude-sonnet-5-5`. Agents: `CHAT`, `REQUIREMENTS`, `DATABASE`, `DESIGN`, `PLANNING`, `QUALITY`, `SUPPORT`, `PROJECT_MANAGER` |
 | `DEFAULT_TEMPERATURE` | `0.2` | LLM temperature (low = more consistent) |
 | `DEFAULT_MAX_TOKENS` | `16000` | Shared output token budget; sized for the most verbose agent (Design) so large JSON isn't truncated mid-generation |
 | `MAX_EXECUTION_TIME` | `180` | CrewAI max execution time per agent (seconds), for the lighter agents |

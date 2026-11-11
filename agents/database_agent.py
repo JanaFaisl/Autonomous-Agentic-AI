@@ -4,7 +4,7 @@ from typing import Dict, Any, List, Optional
 import requests as _requests
 
 from core.constants import (
-    DEFAULT_MODEL, MAX_ITERATIONS, MAX_EXECUTION_TIME,
+    DEFAULT_MODEL, model_for, MAX_ITERATIONS, MAX_EXECUTION_TIME,
     ERROR_NO_API_KEY, ERROR_PARSE_JSON, SOLUTION_ADD_API_KEY, SOLUTION_RETRY,
 )
 from core.models import PYDANTIC_AVAILABLE, DatabaseSchemaModel
@@ -160,7 +160,7 @@ class DatabaseAgent:
         if not CREWAI_AVAILABLE:
             return
 
-        llm = get_llm()
+        llm = get_llm("database")
         agent_kwargs = {
             "role": "Database Agent",
             "goal": "Produce a clear, minimal database schema (tables, columns, relationships) from software requirements.",
@@ -209,7 +209,7 @@ class DatabaseAgent:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": DEFAULT_MODEL,
+                    "model": model_for("database"),
                     "max_tokens": 4096,
                     "messages": [{"role": "user", "content": prompt}],
                 },

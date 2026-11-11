@@ -1,13 +1,13 @@
 import errno
 import json
 import time
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
 
 import requests
 import streamlit as st
 
 from core.constants import (
-    DEFAULT_MODEL, MAX_RETRIES, MAX_ITERATIONS, DESIGN_MAX_EXECUTION_TIME,
+    DEFAULT_MODEL, model_for, MAX_RETRIES, MAX_ITERATIONS, DESIGN_MAX_EXECUTION_TIME, DESIGN_MAX_TOKENS,
     EXPONENTIAL_BACKOFF_BASE, ERROR_NO_API_KEY, SOLUTION_ADD_API_KEY,
     MSG_CONNECTION_ISSUE, MSG_RETRYING,
 )
@@ -199,7 +199,7 @@ Return ONLY valid JSON using EXACTLY this structure:
         {{
           "name": "...", "type": "Button/Input/Card/List/Image/Header/Footer/Modal/etc",
           "position": "top/center/bottom", "size": "small/medium/large",
-          "styling": "Clear visual description", "interaction": "What happens when tapped",
+          "styling": "Visual description, max 25 words; quote any visible text in single quotes", "interaction": "What happens when tapped, max 15 words; name the screen it opens if any",
           "icon": "home/search/user/etc", "has_image": true, "image_type": "product/user/background/content/none"
         }}
       ],
@@ -216,7 +216,8 @@ Return ONLY valid JSON using EXACTLY this structure:
 ━━━━━━━━━━━━━━━━━━━━━━
 QUALITY BAR
 ━━━━━━━━━━━━━━━━━━━━━━
-• Include 4–6 screens, each with 8–12 meaningful components
+• Include 4–6 screens, each with 6–10 meaningful components
+• BE CONCISE: every string short (descriptions under 25 words); ui_components at most 8 entries; the whole JSON must stay well under 12,000 tokens or it will be cut off and rejected
 • Screens must feel connected and realistic
 • UI must look suitable for startup demos, usability testing, and live clickable preview
 
@@ -238,142 +239,8 @@ FINAL RULES: Output ONLY JSON. Start with {{ and end with }}. No markdown, no ex
         if not CREWAI_AVAILABLE:
             return
     
-        llm = get_llm()
-        
-        design_prompt = """You are an expert UI/UX designer. Create detailed, practical UI/UX design specifications with realistic components, icons, and visual elements.
+        llm = get_llm("design")
 
-Return a JSON object with this EXACT structure:
-
-{
-    "design_overview": "Brief overview of the design approach and key principles",
-    "color_scheme": {
-        "primary": "#hexcolor",
-        "secondary": "#hexcolor",
-        "accent": "#hexcolor",
-        "surface": "#hexcolor",
-        "background": "#hexcolor",
-        "text_primary": "#hexcolor",
-        "error": "#hexcolor",
-        "success": "#hexcolor",
-        "warning": "#hexcolor"
-    },
-    "typography": {
-        "font_family": "Primary font family name",
-        "heading_font": "Font for headings",
-        "body_font": "Font for body text",
-        "sizes": {
-            "xs": "0.75rem", "sm": "0.875rem", "base": "1rem",
-            "lg": "1.125rem", "xl": "1.25rem", "2xl": "1.5rem"
-        },
-        "weights": {
-            "normal": "400", "medium": "500", "semibold": "600", "bold": "700"
-        }
-    },
-    "navigation": {
-        "type": "top/bottom/side",
-        "items": ["Home", "Features", "About", "Contact"]
-    },
-    "screens": [
-        {
-            "name": "Screen Name",
-            "purpose": "What this screen is for",
-            "key_components": [
-                {
-                    "name": "Component Name",
-                    "type": "Button/Input/Card/List/Image/Search/Header/Footer/Modal/etc",
-                    "position": "top/center/bottom",
-                    "size": "small/medium/large",
-                    "styling": "Description of styling",
-                    "interaction": "What happens when user interacts",
-                    "icon": "one of: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share",
-                    "has_image": true/false,
-                    "image_type": "product/user/background/content/none"
-                }
-            ],
-            "user_flow": "How users navigate to/from this screen"
-        }
-    ],
-    "ui_components": [
-        {
-            "name": "Component Name",
-            "type": "Button/Input/Card/List/Image/Search/Header/Footer/Modal/etc",
-            "description": "What it does",
-            "styling": "Visual details",
-            "states": ["default", "hover", "active", "disabled"],
-            "icon": "one of: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share",
-            "has_image": true/false
-        }
-    ],
-    "responsive_design": "How the design adapts to different screen sizes",
-    "accessibility": "Accessibility considerations and features",
-    "animations": "Animation and transition details",
-    "icons": "Icon system and usage guidelines"
-}
-
-CRITICAL REQUIREMENTS:
-- Return ONLY the JSON object, nothing else.
-- Include at least 4-6 screens with detailed components (8-12 components per screen).
-- For each component, specify an "icon" field - DO NOT use emojis for icons. Use short icon names only (one of: home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share).
-- Set "has_image": true for components that should display images (cards, product listings, profiles, etc.).
-- Make components specific and actionable with realistic names and descriptions.
-- Use hex color codes for all colors.
-- Include diverse component types: buttons, cards, lists, inputs, search bars, headers, images, etc.
-
-DEFAULT/COMMON FEATURES (MANDATORY - Always Include):
-⚠️ CRITICAL: Even if the user doesn't explicitly mention these features, you MUST ALWAYS include them. These are standard features found in virtually all modern apps and should be part of every design.
-
-1. NAVIGATION & HEADER (REQUIRED):
-   - Navigation bar/header with: Home (icon: "home"), Search (icon: "search"), Notifications (icon: "bell"), Profile/User (icon: "user")
-   - Bottom navigation bar for mobile apps (Home, Search, Favorites/Bookmarks, Profile) - use icons: "home", "search", "bookmark", "user"
-   - Menu/Hamburger icon - use icon: "settings" or "filter"
-   - Logo or app name in header
-   - Back button/arrow for navigation history
-
-2. SEARCH FUNCTIONALITY (REQUIRED):
-   - Search bar component with search icon (icon: "search") - MUST appear in at least one screen
-   - Search input field prominently placed (usually in header or as main component)
-   - Search icon button
-   - Search results screen or search functionality
-
-3. USER PROFILE & SETTINGS (REQUIRED):
-   - User profile section/icon (icon: "user") - MUST be accessible
-   - Settings/Preferences screen (icon: "settings") - MUST be included as a screen
-   - Account management options
-   - User avatar/profile picture component
-   - Logout/Sign out option
-
-4. HOME/DASHBOARD SCREEN (REQUIRED):
-   - Main landing/home screen as the primary entry point - MUST be the first screen
-   - Dashboard with key information and quick actions
-   - Content cards, featured items, or main content area
-   - Welcome message or personalized greeting
-   - Quick action buttons
-
-5. COMMON UI COMPONENTS (Include in multiple screens):
-   - Primary action buttons (with appropriate icons like "plus", "edit", "share", "trash")
-   - Content cards (with images where appropriate - set has_image: true)
-   - Lists with icons (navigation lists, menu items, item lists)
-   - Input fields (forms, search, text entry)
-   - Image placeholders/content images (use has_image: true for visual components)
-   - Icons throughout: use icon names only (home, search, user, settings, bell, bookmark, heart, filter, plus, edit, trash, share) - DO NOT use emojis
-
-6. ADDITIONAL STANDARD SCREENS (Include at least 2-3 of these):
-   - Settings/Preferences screen (icon: "settings") - HIGHLY RECOMMENDED
-   - Profile/Account screen (icon: "user") - HIGHLY RECOMMENDED
-   - Search/Discovery screen (icon: "search")
-   - Notifications screen (icon: "bell")
-   - Favorites/Bookmarks screen (icon: "bookmark")
-   - Help/Support screen (icon: "settings")
-
-7. VISUAL ELEMENTS (Enhance realism):
-   - Include images in cards, product listings, profiles (set has_image: true)
-   - Use icons for all interactive elements
-   - Add visual hierarchy with colors, spacing, and typography
-   - Include placeholder images for content areas
-
-REMEMBER: These default features should be integrated naturally into the design alongside the user's specific requirements. The design should feel complete, production-ready, and include all standard app features that users expect. Always include navigation, search, profile, and settings - these are non-negotiable.
-"""
-        
         # Create CrewAI agent (uses get_llm() from ui.main_ui, typically Anthropic)
         agent_kwargs = {
             "role": "UI/UX Design Specialist",
@@ -412,7 +279,7 @@ REMEMBER: These default features should be integrated naturally into the design 
         task_kwargs = {
             "description": task_description,
             "agent": self.agent,
-            "expected_output": "A complete, valid JSON object starting with { and ending with }, containing design_overview, color_scheme, typography, navigation, screens (4-6 screens with 8-12 components each), ui_components, responsive_design, accessibility, animations, and icons. No markdown, no explanations, just pure JSON.",
+            "expected_output": "A complete, valid JSON object starting with { and ending with }, containing design_overview, color_scheme, typography, navigation, screens (4-6 screens with 6-10 components each), ui_components, responsive_design, accessibility, animations, and icons. No markdown, no explanations, just pure JSON.",
         }
         
         # Add output_json if Pydantic is available
@@ -461,18 +328,18 @@ REMEMBER: These default features should be integrated naturally into the design 
                 f"{self.api_base}/messages",
                 headers=self.headers,
                 json={
-                    "model": DEFAULT_MODEL,
-                    "max_tokens": 3200,
+                    "model": model_for("design"),
+                    "max_tokens": DESIGN_MAX_TOKENS // 2,
                     "messages": [{"role": "user", "content": prompt}],
                 },
-                timeout=120,
+                timeout=300,
             )
             if resp.status_code == 200:
                 data = resp.json()
                 content = data["content"][0]["text"]
                 parsed = parse_json_from_text(content)
                 if isinstance(parsed, dict) and "error" not in parsed:
-                    parsed["model_used"] = f"{DEFAULT_MODEL} (direct)"
+                    parsed["model_used"] = f'{model_for("design")} (direct)'
                     parsed["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
                     return parsed
                 return {
@@ -498,7 +365,8 @@ REMEMBER: These default features should be integrated naturally into the design 
                 "raw_error": str(e),
             }
 
-    def generate_design(self, requirements: Dict[str, Any], max_retries: int = MAX_RETRIES) -> Dict[str, Any]:
+    def generate_design(self, requirements: Dict[str, Any], max_retries: int = MAX_RETRIES,
+                        feedback: Optional[List[str]] = None) -> Dict[str, Any]:
         """Generate UI/UX design specification from requirements with retry logic.
         
         Args:
@@ -512,6 +380,13 @@ REMEMBER: These default features should be integrated naturally into the design 
             return create_error_response(ERROR_NO_API_KEY, SOLUTION_ADD_API_KEY)
 
         requirements_summary = json.dumps(requirements, indent=2)
+        if feedback:
+            requirements_summary += (
+                "\n\nQUALITY REVIEW FEEDBACK: the previous design was rejected for the issues below. "
+                "Produce a corrected design that resolves every one of them (add the missing screens/components, "
+                "use the exact field names and statuses from the database schema):\n"
+                + "\n".join(f"- {m}" for m in feedback)
+            )
 
         # 1) Try CrewAI first — full orchestration with role, goal, and backstory context
         # If CrewAI unavailable, fall straight through to the direct API fallback below

@@ -1,3 +1,4 @@
+import copy
 import html as _html
 import os
 import re
@@ -19,14 +20,22 @@ except ImportError:
     PANDAS_AVAILABLE = False
     pd = None
 
+from utils.net_safety import check_database_url, safe_get
 from utils.project_export import build_files_zip
 from utils.code_scaffold import build_scaffold_files
+from core.traceability import build_trace_matrix, diff_requirements, change_impact
+from utils.self_heal import self_heal, validate_project
+from utils.fix_gaps import failing_checks, fix_gaps, group_fixable, issues_by_check
+from core.test_cases import generate_test_cases, render_test_stubs
 from core.utils import get_component_icon_glyph
+from utils.prototype_bridge import build_bridge as build_prototype_bridge
+from ui.prototype_render import build_device_html
+from core.constants import DEFAULT_MODEL, DEFAULT_TEMPERATURE
 
 try:
     from db import (
         init_db, save_input, save_click, save_navigation,
-        get_screen_state, get_all_session_state, clear_session,
+        get_screen_state, clear_session,
         save_artifact, get_latest_artifact
     )
     # Initialize database on import
@@ -38,7 +47,6 @@ except ImportError:
     def save_click(*args, **kwargs): pass
     def save_navigation(*args, **kwargs): pass
     def get_screen_state(*args, **kwargs): return {}
-    def get_all_session_state(*args, **kwargs): return {}
     def clear_session(*args, **kwargs): pass
     def save_artifact(*args, **kwargs): return 0
     def get_latest_artifact(*args, **kwargs): return None
@@ -68,11 +76,6 @@ os.environ["CREWAI_PLUS_ENABLED"] = "false"
 # Suppress warnings from CrewAI telemetry
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="crewai")
 warnings.filterwarnings("ignore", message=".*signal.*", category=RuntimeWarning)
-
-try:
-    import anthropic as _anthropic_module
-except ImportError:
-    _anthropic_module = None
 
 # Keep OpenAI import for backward compatibility if any code still references it
 OpenAI = None
@@ -123,38 +126,6 @@ except ImportError:
 # ----------------------------
 # CONSTANTS
 # ----------------------------
-# Model Configuration
-DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "claude-3-5-sonnet-latest")
-DEFAULT_TEMPERATURE = 0.2  # Lower temperature for faster, more deterministic responses
-MAX_RETRIES = 2  # Reduced retries for faster failure detection
-MAX_EXECUTION_TIME = 40  # 40 seconds (reduced for faster response)
-MAX_ITERATIONS = 1  # Single iteration for faster response
-
-# Retry Configuration
-RETRY_DELAY = 0.5  # seconds (reduced delay)
-EXPONENTIAL_BACKOFF_BASE = 1.5  # seconds (reduced backoff)
-
-# Error Messages
-ERROR_NO_API_KEY = "Anthropic API key not found"
-ERROR_CREWAI_NOT_INSTALLED = "CrewAI not installed"
-ERROR_AGENT_NOT_INITIALIZED = "CrewAI agent not initialized"
-ERROR_EMPTY_RESPONSE = "Empty response from CrewAI agent"
-ERROR_PARSE_JSON = "Could not parse JSON"
-
-# Solutions
-SOLUTION_ADD_API_KEY = "Add ANTHROPIC_API_KEY to your .env file"
-SOLUTION_INSTALL_CREWAI = "Run: pip install crewai"
-SOLUTION_CHECK_CONFIG = "Check your ANTHROPIC_API_KEY configuration"
-SOLUTION_RETRY = "Please try again or check the agent configuration."
-
-# UI Messages
-MSG_ANALYZING = "Analyzing requirements…"
-MSG_GENERATING_DESIGN = "🎨 Generating UI/UX design…"
-MSG_RETRYING = "Retrying…"
-MSG_CONNECTION_ISSUE = "⚠️ Connection issue detected. Retrying in {wait_time}s…"
-MSG_AGENT_EMPTY = "⚠️ Agent returned empty/thought-only response. Retrying with more explicit instructions…"
-MSG_PARSE_ERROR = "⚠️ Could not parse JSON from agent response. Retrying…"
-
 # Thought Patterns to Filter
 THOUGHT_PATTERNS = [
     r'^I\s+now\s+can\s+give',
@@ -181,7 +152,7 @@ THOUGHT_INDICATORS = [
 # PYDANTIC MODELS FOR CREWAI OUTPUT
 # ----------------------------
 try:
-    from pydantic import BaseModel, Field
+    from pydantic import BaseModel
     PYDANTIC_AVAILABLE = True
 except ImportError:
     PYDANTIC_AVAILABLE = False
@@ -317,7 +288,6 @@ if PYDANTIC_AVAILABLE:
         message: Optional[str] = None
 
     class QualityReportOutputModel(BaseModel):
-        gate_decision: str  # PASS or FAIL
         artifact_reviewed: List[str] = []
         checklist: Optional[Dict[str, bool]] = None
         issues: List[QualityIssueModel] = []
@@ -353,21 +323,6 @@ def suppress_stderr(func):
         try:
             return func(*args, **kwargs)
         finally:
-            sys.stderr = old_stderr
-    return wrapper
-
-
-def suppress_stdin_stderr(func):
-    """Context manager to suppress stdin/stderr during function execution."""
-    def wrapper(*args, **kwargs):
-        old_stdin = sys.stdin
-        old_stderr = sys.stderr
-        sys.stdin = io.StringIO("n\n")  # Auto-answer "no" to prompts
-        sys.stderr = io.StringIO()
-        try:
-            return func(*args, **kwargs)
-        finally:
-            sys.stdin = old_stdin
             sys.stderr = old_stderr
     return wrapper
 
@@ -922,12 +877,8 @@ def get_llm():
     # CrewAI uses LiteLLM under the hood — prefix with "anthropic/" for correct routing
     model_str = DEFAULT_MODEL if DEFAULT_MODEL.startswith("anthropic/") else f"anthropic/{DEFAULT_MODEL}"
     try:
-        return LLM(
-            model=model_str,
-            temperature=DEFAULT_TEMPERATURE,
-            api_key=api_key,
-            timeout=30,
-        )
+        extra = {} if "-5-" in DEFAULT_MODEL else {"temperature": DEFAULT_TEMPERATURE}  # Claude 5 rejects temperature
+        return LLM(model=model_str, api_key=api_key, timeout=30, **extra)
     except Exception:
         return None
 
@@ -1160,6 +1111,9 @@ def run_full_pipeline(api_key: str, session_id: str) -> Dict[str, Any]:
 
     st.session_state["pipeline_running"] = False
     st.session_state["pipeline_step"] = None
+    _final_req = st.session_state.get("requirements_for_review")
+    if isinstance(_final_req, dict) and "error" not in _final_req:
+        st.session_state["trace_baseline"] = copy.deepcopy(_final_req)
     errors = st.session_state.get("pipeline_errors", {})
     if errors:
         # Return partial success — caller decides how to surface per-step errors
@@ -1173,1053 +1127,6 @@ def run_full_pipeline(api_key: str, session_id: str) -> Dict[str, Any]:
 
 # ----------------------------
 # UI SIMULATION (Device HTML)
-# ----------------------------
-def build_device_html(design: Dict[str, Any], is_mobile: bool, primary_hex: str, secondary_hex: str, screen_index: int = 0) -> str:
-    """Build HTML preview of device interface."""
-    nav = design.get("navigation") or {}
-    nav_items = nav.get("items") or ["Home", "Features", "About", "Contact"]
-
-    screens = design.get("screens") if isinstance(design.get("screens"), list) else []
-    # Render all screens for interactive navigation (not just one)
-    # screen_index is used as the initial active screen
-
-    bg1 = "#0b1220"
-    bg2 = "#111827"
-    surface = "#ffffff"
-    border = "rgba(255,255,255,0.08)"
-
-    # Navigation will be generated per screen in the screen loop
-    nav_html = ""  # Not used anymore - each screen has its own appbar
-
-    get_component_icon = get_component_icon_glyph
-
-    def generate_image_placeholder(comp: dict, primary: str, secondary: str) -> str:
-        """Generate a styled image placeholder."""
-        img_type = comp.get("image_type", "content")
-        patterns = {
-            "product": "linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)",
-            "user": "radial-gradient(circle, #e3f2fd 0%, #bbdefb 100%)",
-            "background": f"linear-gradient(135deg, {primary}22 0%, {secondary}22 100%)",
-            "content": "linear-gradient(45deg, #f5f5f5 25%, transparent 25%), linear-gradient(-45deg, #f5f5f5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f5f5f5 75%), linear-gradient(-45deg, transparent 75%, #f5f5f5 75%)"
-        }
-        pattern = patterns.get(img_type, patterns["content"])
-        return f"""
-        <div style="
-            width: 100%;
-            height: 120px;
-        border-radius: 12px;
-            background: {pattern};
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 2rem;
-        ">🖼️</div>
-        """
-
-    screens_html = ""
-    # Get global UI components as fallback
-    global_ui_components = design.get("ui_components") if isinstance(design.get("ui_components"), list) else []
-    
-    for idx, screen in enumerate(screens):
-        screen_name = safe_str(screen.get("name"), f"Screen {idx+1}")
-        screen_purpose = safe_str(screen.get("purpose"), "")
-        
-        # Try multiple possible keys for components
-        comps = []
-        if isinstance(screen.get("key_components"), list):
-            comps = screen.get("key_components")
-        elif isinstance(screen.get("components"), list):
-            comps = screen.get("components")
-        elif isinstance(screen.get("ui_components"), list):
-            comps = screen.get("ui_components")
-        elif global_ui_components:
-            # Fallback to global UI components if screen has none
-            comps = global_ui_components
-        
-        # Show more components: 12 for mobile, 15 for desktop
-        comps = comps[: (12 if is_mobile else 15)]
-
-        comp_cards = ""
-        if not comps:
-            # Improved empty state messaging
-            comp_cards = f"""
-            <div style="
-                padding: 50px 30px;
-                text-align: center;
-                color: #6b7280;
-                font-size: 1rem;
-            ">
-                <div style="font-size: 3.5rem; margin-bottom: 20px; opacity: 0.6;">📱</div>
-                <div style="font-weight: 900; font-size: 1.1rem; color: #111827; margin-bottom: 8px;">
-                    This screen is defined, but not detailed yet
-                </div>
-                <div style="opacity: 0.7; margin-top: 6px; line-height: 1.6;">
-                    The AI generated the screen structure but did not assign components.
-                </div>
-            </div>
-            """
-        
-        # Track component types for section headers
-        seen_types = set()
-        type_labels = {
-            "button": "Primary Actions",
-            "search": "Navigation & Search",
-            "input": "Forms & Inputs",
-            "card": "Content Cards",
-            "list": "Lists & Menus",
-            "image": "Media & Images"
-        }
-        for comp in comps:
-            if not isinstance(comp, dict):
-                comp = {"name": str(comp), "type": "Component"}
-            
-            cname = safe_str(comp.get("name"), "Component")
-            ctype = safe_str(comp.get("type"), "Component")
-            icon = get_component_icon(comp)
-            has_image = comp.get("has_image", False)
-            ct = ctype.lower()
-            
-            # Add section header for first component of each type
-            section_label = None
-            for key, label in type_labels.items():
-                if key in ct and key not in seen_types:
-                    section_label = label
-                    seen_types.add(key)
-                    break
-            
-            if section_label:
-                comp_cards += f"""
-                <div class="section-label">{section_label}</div>
-                """
-
-            # Generate component HTML based on type - Professional card structure
-            if "button" in ct:
-                # Extract navigation target from interaction or infer from component name
-                interaction = comp.get("interaction", "")
-                nav_target = None
-                if interaction and "navigate:" in interaction:
-                    nav_target = interaction.split("navigate:")[-1].strip()
-                else:
-                    # Try to find matching screen name from component name
-                    for screen in screens:
-                        screen_name_lower = safe_str(screen.get("name"), "").lower()
-                        if cname.lower() in screen_name_lower or any(word in screen_name_lower for word in cname.lower().split() if len(word) > 3):
-                            nav_target = safe_str(screen.get("name"), "")
-                            break
-
-                if nav_target:
-                    onclick = f"onclick=\"saveClick('{_j(screen_name)}', '{_j(cname)}'); navigateTo('{_j(nav_target)}')\""
-                else:
-                    onclick = f"onclick=\"saveClick('{_j(screen_name)}', '{_j(cname)}')\""
-                tooltip = 'title="Static preview element"' if not nav_target else ""
-                role_attr = f'role="button" tabindex="0" aria-label="Navigate to {_h(cname)}"' if nav_target else ''
-                keypress = f"onkeypress=\"if(event.key==='Enter') {{ saveClick('{_j(screen_name)}', '{_j(cname)}'); navigateTo('{_j(nav_target)}') }}\"" if nav_target else ''
-                opacity_style = "1" if nav_target else "0.85"
-
-                comp_cards += f"""
-                <button {onclick} {tooltip} {role_attr} {keypress} class="btn-primary" style="opacity: {opacity_style};">
-                    {icon} {_h(cname)}
-                </button>
-                """
-            elif "search" in ct:
-                field_id = f"search_{_j(screen_name.lower().replace(' ', '_'))}"
-                comp_cards += f"""
-                <div class="input-wrap">
-                    <div class="left">{icon}</div>
-                    <input class="input" type="text" placeholder="Search..." id="{field_id}" data-screen="{_h(screen_name)}" data-field="search" onblur="saveInput('{_j(screen_name)}', 'search', this.value)" />
-                </div>
-                """
-            elif "card" in ct or "image" in ct or has_image:
-                # Extract navigation target for cards
-                interaction = comp.get("interaction", "")
-                nav_target = None
-                if interaction and "navigate:" in interaction:
-                    nav_target = interaction.split("navigate:")[-1].strip()
-                else:
-                    # Try to find matching screen name
-                    for screen in screens:
-                        screen_name_lower = safe_str(screen.get("name"), "").lower()
-                        if cname.lower() in screen_name_lower or any(word in screen_name_lower for word in cname.lower().split() if len(word) > 3):
-                            nav_target = safe_str(screen.get("name"), "")
-                            break
-
-                onclick = f"onclick=\"navigateTo('{_j(nav_target)}')\"" if nav_target else ""
-                image_html = generate_image_placeholder(comp, primary_hex, secondary_hex) if has_image else ""
-                chevron = '<span style="margin-left: auto; opacity: 0.35; font-weight: 900; font-size: 1.2rem;">›</span>' if nav_target else ""
-                tooltip = 'title="Static preview element"' if not nav_target else ""
-                role_attr = f'role="button" tabindex="0" aria-label="Navigate to {_h(cname)}"' if nav_target else ''
-                keypress = f"onkeypress=\"if(event.key==='Enter') navigateTo('{_j(nav_target)}')\"" if nav_target else ''
-                cursor_style = "pointer" if nav_target else "default"
-                opacity_style = "1" if nav_target else "0.85"
-                desc = _h(safe_str(comp.get("description", ctype), ""))
-
-                comp_cards += f"""
-                <div {onclick} {tooltip} {role_attr} {keypress} class="card" style="cursor: {cursor_style}; opacity: {opacity_style};">
-                    {image_html}
-                    <div class="row">
-                        <div class="ic">{icon}</div>
-                        <div style="flex: 1;">
-                            <div class="t1">{_h(cname)}</div>
-                            <div class="t2">{desc}</div>
-                        </div>
-                        {chevron}
-                    </div>
-                </div>
-                """
-            elif "list" in ct:
-                comp_cards += f"""
-                <div class="card">
-                    <div class="row" style="margin-bottom: 8px;">
-                        <div class="ic">{icon}</div>
-                        <div class="t1">{_h(cname)}</div>
-                    </div>
-                    <div style="padding-left: 52px;">
-                        <div style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 14px;">• Item 1</div>
-                        <div style="padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 14px;">• Item 2</div>
-                        <div style="padding: 8px 0; color: var(--muted); font-size: 14px;">• Item 3</div>
-                    </div>
-                </div>
-                """
-            elif "input" in ct:
-                field_id = f"{_j(cname.lower().replace(' ', '_'))}_{_j(screen_name.lower().replace(' ', '_'))}"
-                field_name = cname.lower().replace(' ', '_')
-                comp_cards += f"""
-                <div style="margin: 14px 0;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                        <span style="font-size: 1.1rem; color: var(--muted);">{icon}</span>
-                        <label style="font-weight: 700; color: var(--text); font-size: 0.9rem;">{_h(cname)}</label>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="left">{icon}</div>
-                        <input class="input" type="text" placeholder="Enter {_h(cname.lower())}..." id="{field_id}" data-screen="{_h(screen_name)}" data-field="{_h(field_name)}" onblur="saveInput('{_j(screen_name)}', '{_j(field_name)}', this.value)" />
-                    </div>
-                </div>
-                """
-            else:
-                # Generic component - use card structure
-                comp_cards += f"""
-                <div class="card">
-                    <div class="row">
-                        <div class="ic">{icon}</div>
-                        <div style="flex: 1;">
-                            <div class="t1">{_h(cname)}</div>
-                            <div class="t2">{_h(ctype)}</div>
-                        </div>
-                    </div>
-                </div>
-                """
-
-        # Append screen HTML with professional appbar structure
-        is_active = "active" if idx == screen_index else ""
-        screens_html += f"""
-        <div id="screen-{idx}" class="screen {is_active}" data-screen-name="{_h(screen_name)}" style="
-            border-radius: 18px;
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.07);
-            box-shadow: 0 18px 40px rgba(0,0,0,0.10);
-            margin: 14px 0;
-            display: {'block' if idx == screen_index else 'none'};
-            background: {surface};
-        ">
-            <div class="screen-scroll" style="padding: 14px;max-height: {'580px' if is_mobile else '600px'};overflow-y:auto;box-sizing:border-box;">
-                <div class="screen-shell">
-                    <div class="appbar">
-                        <div onclick="goBack()" class="back-btn icon-btn" role="button" tabindex="0" aria-label="Go back" title="Go Back" onkeypress="if(event.key==='Enter') goBack()">←</div>
-                        <div class="title">{_h(screen_name)}</div>
-                        <div class="icon-btn" onclick="toast('Notifications')" aria-label="Notifications" role="button" tabindex="0">◉</div>
-                    </div>
-                    <div id="crumb" style="opacity:.65;font-size:.78rem;font-weight:800;text-align:center;margin-bottom:8px;color:var(--muted);"></div>
-                    <div class="screen-content">
-                        {comp_cards}
-                    </div>
-                </div>
-            </div>
-        </div>
-        """
-    
-    # If no screens at all, show a fallback message
-    if not screens_html:
-        screens_html = f"""
-        <div style="
-            border-radius: 18px;
-            overflow:hidden;
-            border: 1px solid rgba(0,0,0,0.07);
-            box-shadow: 0 18px 40px rgba(0,0,0,0.10);
-            margin: 14px 0;
-            padding: 60px 40px;
-            text-align: center;
-            background: {surface};
-        ">
-            <div style="font-size: 4rem; margin-bottom: 20px;">🎨</div>
-            <div style="font-size: 1.5rem; font-weight: 900; color: #111827; margin-bottom: 12px;">No Screens Found</div>
-            <div style="color: #6b7280; font-size: 1rem; line-height: 1.6;">
-                The design specification doesn't contain any screens with components.<br/>
-                Please check the Design Specs tab to see what was generated.
-            </div>
-        </div>
-        """
-
-    # Build bottom navigation for mobile - Professional style
-    bottom_nav_html = ""
-    if is_mobile and screens:
-        nav_items_html = ""
-        for idx, screen in enumerate(screens[:4]):  # Limit to 4 items for mobile
-            screen_name = safe_str(screen.get("name"), f"Screen {idx+1}")
-            # Use simple glyphs instead of emojis
-            icon_map = {
-                "home": "⌂", "search": "🔍", "profile": "●", "settings": "⚙",
-                "favorites": "★", "bookmark": "★", "notifications": "◉",
-                "translate": "文", "translat": "文"
-            }
-            icon = "●"
-            screen_lower = screen_name.lower()
-            for key, glyph in icon_map.items():
-                if key in screen_lower:
-                    icon = glyph
-                    break
-            
-            # Ensure label doesn't truncate - use shorter version if needed
-            label = screen_name
-            if len(label) > 10:
-                # Try to shorten intelligently
-                if "translate" in screen_lower:
-                    label = "Translate"
-                elif "notification" in screen_lower:
-                    label = "Alerts"
-                elif "favorite" in screen_lower or "bookmark" in screen_lower:
-                    label = "Saved"
-                else:
-                    label = screen_name[:8]
-            
-            is_active = "active" if idx == screen_index else ""
-            nav_items_html += f"""
-            <div onclick="navigateTo('{screen_name}')" data-nav="{screen_name}" class="nav-item {is_active}">
-                <div class="nav-ic">{icon}</div>
-                <div class="lbl">{label}</div>
-            </div>
-            """
-        bottom_nav_html = f"""
-        <div class="bottom-nav" style="
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            z-index: 100;
-        ">
-            {nav_items_html}
-        </div>
-        """
-    
-    # JavaScript for navigation with enhanced UX
-    screen_names_js = [safe_str(s.get("name"), f"Screen {i+1}") for i, s in enumerate(screens)]
-    nav_js = f"""
-    <script>
-    let navStack = [];
-    const screenNames = {json.dumps(screen_names_js)};
-    const scrollMemory = {{}}; // screenName -> scrollTop
-    let modalOnConfirm = null;
-    let touchStartX = null;
-    let touchStartY = null;
-    
-    function toast(msg) {{
-        const el = document.getElementById('toast');
-        if (!el) return;
-        el.textContent = msg;
-        el.style.opacity = '1';
-        el.style.transform = 'translateX(-50%) translateY(0)';
-        setTimeout(() => {{
-            el.style.opacity = '0';
-            el.style.transform = 'translateX(-50%) translateY(-6px)';
-        }}, 1100);
-    }}
-    
-    function openModal(title, body, onConfirm) {{
-        modalOnConfirm = onConfirm || null;
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalBody').textContent = body;
-        document.getElementById('modal').style.display = 'block';
-    }}
-    
-    function closeModal() {{
-        document.getElementById('modal').style.display = 'none';
-        modalOnConfirm = null;
-    }}
-    
-    function confirmModal() {{
-        if (modalOnConfirm) modalOnConfirm();
-        closeModal();
-    }}
-    
-    function rememberScroll() {{
-        const active = document.querySelector('.screen.active .screen-scroll');
-        const name = document.querySelector('.screen.active')?.getAttribute('data-screen-name');
-        if (active && name) scrollMemory[name] = active.scrollTop;
-    }}
-    
-    function restoreScroll(screenName) {{
-        const el = document.querySelector(`[data-screen-name="${{screenName}}"] .screen-scroll`);
-        if (!el) return;
-        const y = scrollMemory[screenName] || 0;
-        setTimeout(() => {{ el.scrollTop = y; }}, 50);
-    }}
-    
-    function showSkeleton() {{
-        const active = document.querySelector('.screen.active');
-        if (!active) return;
-        const scrollEl = active.querySelector('.screen-scroll');
-        if (!scrollEl) return;
-        const shell = document.createElement('div');
-        shell.className = 'skeletonShell';
-        shell.innerHTML = `
-            <div class="sk sk1"></div>
-            <div class="sk sk2"></div>
-            <div class="sk sk3"></div>
-        `;
-        scrollEl.appendChild(shell);
-        setTimeout(() => shell.remove(), 220);
-    }}
-    
-    function updateBackState() {{
-        const backBtns = document.querySelectorAll('.back-btn');
-        backBtns.forEach(btn => {{
-            btn.style.opacity = navStack.length > 0 ? '1' : '0.3';
-            btn.style.cursor = navStack.length > 0 ? 'pointer' : 'default';
-        }});
-    }}
-    
-    function updateBottomNav(activeName) {{
-        document.querySelectorAll('.nav-item').forEach(el => {{
-            const navName = el.getAttribute('data-nav');
-            if (navName === activeName) {{
-                el.classList.add('active');
-            }} else {{
-                el.classList.remove('active');
-            }}
-        }});
-    }}
-    
-    // Persistence functions - save data to database via URL query params
-    function saveInput(screen, field, value) {{
-        if (!value || value.trim() === '') return;
-        
-        // Store in localStorage as backup
-        const key = `prototype_${{screen}}_${{field}}`;
-        localStorage.setItem(key, value);
-        
-        // Update URL query params to trigger Streamlit rerun
-        try {{
-            const params = new URLSearchParams(window.location.search);
-            params.set('prototype_event', JSON.stringify({{
-                type: 'prototype_input',
-                payload: {{ screen: screen, field: field, value: value }}
-            }}));
-            // Use history.replaceState to avoid adding to browser history
-            const newUrl = window.location.pathname + '?' + params.toString();
-            window.history.replaceState({{}}, '', newUrl);
-            // Trigger a small delay then reload query params (Streamlit will pick it up on next interaction)
-        }} catch(e) {{
-            console.log('Persistence update failed:', e);
-        }}
-    }}
-    
-    function saveClick(screen, buttonName) {{
-        try {{
-            const params = new URLSearchParams(window.location.search);
-            params.set('prototype_event', JSON.stringify({{
-                type: 'prototype_click',
-                payload: {{ screen: screen, button: buttonName }}
-            }}));
-            const newUrl = window.location.pathname + '?' + params.toString();
-            window.history.replaceState({{}}, '', newUrl);
-        }} catch(e) {{
-            console.log('Click save failed:', e);
-        }}
-    }}
-    
-    function showScreen(screenName, direction = 'forward') {{
-        rememberScroll();
-        const active = document.querySelector('.screen.active');
-        const target = document.querySelector(`[data-screen-name="${{screenName}}"]`);
-        if (!target || active === target) return;
-        
-        if (active) {{
-            active.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            active.style.opacity = '0';
-            active.style.transform = direction === 'back' ? 'translateX(6px)' : 'translateX(-6px)';
-            setTimeout(() => {{
-                active.classList.remove('active');
-                active.style.display = 'none';
-            }}, 200);
-        }}
-        
-        target.style.display = 'block';
-        target.style.opacity = '0';
-        target.style.transform = direction === 'back' ? 'translateX(-6px)' : 'translateX(6px)';
-        target.classList.add('active');
-        
-        requestAnimationFrame(() => {{
-            target.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-            target.style.opacity = '1';
-            target.style.transform = 'translateX(0)';
-        }});
-        
-        restoreScroll(screenName);
-        updateBackState();
-        updateBottomNav(screenName);
-        
-        // Restore saved input values from localStorage
-        setTimeout(() => {{
-            const inputs = target.querySelectorAll('input[data-screen][data-field]');
-            inputs.forEach(input => {{
-                const key = `prototype_${{input.getAttribute('data-screen')}}_${{input.getAttribute('data-field')}}`;
-                const saved = localStorage.getItem(key);
-                if (saved) input.value = saved;
-            }});
-        }}, 100);
-        
-        // Update breadcrumb
-        const crumb = document.getElementById('crumb');
-        if (crumb) crumb.textContent = screenName;
-    }}
-    
-    function navigateTo(screenName) {{
-        // Haptic feedback (if available)
-        if (navigator.vibrate) navigator.vibrate(8);
-        
-        const active = document.querySelector('.screen.active');
-        if (active) {{
-            const current = active.getAttribute('data-screen-name');
-            if (current && current !== screenName) {{
-                // Save navigation event
-                if (window.parent && window.parent !== window) {{
-                    window.parent.postMessage({{
-                        type: 'prototype_navigation',
-                        payload: {{
-                            from: current,
-                            to: screenName
-                        }}
-                    }}, '*');
-                }}
-                navStack.push(current);
-                showSkeleton();
-            }}
-        }}
-        showScreen(screenName, 'forward');
-        toast('Navigated');
-    }}
-    
-    function goBack() {{
-        if (navStack.length === 0) return;
-        const prev = navStack.pop();
-        showScreen(prev, 'back');
-        toast('Back');
-    }}
-    
-    // Gesture navigation (swipe back)
-    document.addEventListener('touchstart', (e) => {{
-        const t = e.touches[0];
-        touchStartX = t.clientX;
-        touchStartY = t.clientY;
-    }}, {{passive: true}});
-    
-    document.addEventListener('touchend', (e) => {{
-        if (touchStartX === null) return;
-        const t = e.changedTouches[0];
-        const dx = t.clientX - touchStartX;
-        const dy = t.clientY - touchStartY;
-        
-        // swipe right = back (only if mostly horizontal + strong enough)
-        if (dx > 70 && Math.abs(dy) < 50) {{
-            goBack();
-        }}
-        
-        touchStartX = null;
-        touchStartY = null;
-    }}, {{passive: true}});
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {{
-        if (e.key === 'Escape') closeModal();
-        if (e.key === 'Backspace' && !e.target.matches('input, textarea')) goBack();
-    }});
-    
-    // Initialize back button state, bottom nav, and page load
-    document.addEventListener('DOMContentLoaded', () => {{
-        updateBackState();
-        // Set initial bottom nav state
-        const active = document.querySelector('.screen.active');
-        if (active) {{
-            const activeName = active.getAttribute('data-screen-name');
-            updateBottomNav(activeName);
-            const crumb = document.getElementById('crumb');
-            if (crumb) crumb.textContent = activeName;
-        }}
-        // Page load illusion
-        const container = document.querySelector('.device-container');
-        if (container) {{
-            container.style.opacity = '0';
-            container.style.transition = 'opacity 0.4s ease';
-            requestAnimationFrame(() => {{
-                container.style.opacity = '1';
-            }});
-        }}
-        
-        // Make inputs actually focusable (prevent parent handlers from stealing clicks)
-        document.querySelectorAll('input, textarea').forEach((el) => {{
-            el.addEventListener('pointerdown', (e) => e.stopPropagation(), true);
-            el.addEventListener('mousedown', (e) => e.stopPropagation(), true);
-            el.addEventListener('click', (e) => e.stopPropagation(), true);
-            el.addEventListener('touchstart', (e) => e.stopPropagation(), {{ passive: true, capture: true }});
-        }});
-    }});
-    </script>
-    <style>
-    :root {{
-        --bg: #F6F7FB;
-        --surface: #FFFFFF;
-        --text: #111827;
-        --muted: #6B7280;
-        --border: rgba(17,24,39,.10);
-        --shadow: 0 10px 30px rgba(17,24,39,.08);
-        --shadow-soft: 0 6px 16px rgba(17,24,39,.06);
-        --radius: 18px;
-        --radius-sm: 14px;
-        --primary: {primary_hex};
-        --primary2: {secondary_hex};
-    }}
-    
-    * {{ box-sizing: border-box; }}
-    
-    .screen {{
-        transition: opacity 0.25s ease, transform 0.25s ease;
-    }}
-    
-    .screen-scroll {{
-        height: 100%;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        box-sizing: border-box;
-    }}
-    
-    .screen-shell {{
-        background: var(--bg);
-        border-radius: var(--radius);
-        padding: 14px;
-        box-shadow: var(--shadow);
-    }}
-    
-    /* App bar (single, clean) */
-    .appbar {{
-        background: linear-gradient(90deg, {primary_hex}dd, {secondary_hex}dd);
-        border-radius: 16px;
-        padding: 14px 14px;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: var(--shadow-soft);
-        margin-bottom: 14px;
-    }}
-    
-    .appbar .title {{
-        font-weight: 800;
-        letter-spacing: .2px;
-        font-size: 18px;
-        flex: 1;
-        text-align: center;
-    }}
-    
-    .icon-btn {{
-        width: 38px;
-        height: 38px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255,255,255,.16);
-        border: 1px solid rgba(255,255,255,.18);
-        cursor: pointer;
-        transition: transform .15s ease, background .15s ease;
-        user-select: none;
-        font-size: 18px;
-        color: #fff;
-    }}
-    .icon-btn:active {{ transform: scale(.96); }}
-    .icon-btn:hover {{ background: rgba(255,255,255,.22); }}
-    
-    .back-btn {{
-        transition: opacity 0.2s ease;
-    }}
-    
-    /* Section label */
-    .section-label {{
-        margin: 16px 4px 10px;
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-        color: var(--muted);
-    }}
-    
-    /* Cards */
-    .card {{
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        padding: 14px;
-        box-shadow: 0 2px 10px rgba(17,24,39,.04);
-        margin: 12px 0;
-    }}
-    
-    .row {{
-        display: flex;
-        gap: 12px;
-        align-items: center;
-    }}
-    
-    .ic {{
-        width: 40px;
-        height: 40px;
-        border-radius: 14px;
-        background: rgba(109,94,248,.10);
-        border: 1px solid rgba(109,94,248,.14);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        color: var(--primary);
-        font-size: 18px;
-        flex-shrink: 0;
-    }}
-    
-    .t1 {{ font-weight: 900; color: var(--text); font-size: 16px; line-height: 1.1; }}
-    .t2 {{ color: var(--muted); font-size: 13px; margin-top: 2px; }}
-    
-    /* Inputs */
-    .input {{
-        width: 100%;
-        padding: 14px 14px 14px 44px;
-        border-radius: 14px;
-        border: 1px solid var(--border);
-        background: #fff;
-        font-size: 15px;
-        outline: none;
-        transition: box-shadow .15s ease, border-color .15s ease;
-        /* --- INPUT FIX: allow typing/focus inside Streamlit iframe --- */
-        pointer-events: auto !important;
-        user-select: text !important;
-        -webkit-user-select: text !important;
-        cursor: text !important;
-    }}
-    .input:focus {{
-        border-color: {primary_hex}88;
-        box-shadow: 0 0 0 4px {primary_hex}25;
-    }}
-    
-    /* Ensure all inputs and textareas are focusable and allow text selection */
-    input, textarea {{
-        pointer-events: auto !important;
-        user-select: text !important;
-        -webkit-user-select: text !important;
-        cursor: text !important;
-    }}
-    
-    .input-wrap {{
-        position: relative;
-        margin: 10px 0;
-    }}
-    .input-wrap .left {{
-        position: absolute;
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: .55;
-        font-size: 18px;
-    }}
-    
-    /* Buttons */
-    .btn-primary {{
-        padding: 14px 16px;
-        border-radius: var(--radius-sm);
-        background: linear-gradient(135deg, {secondary_hex}, {primary_hex});
-        color: white;
-        font-weight: 800;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,.12);
-        margin: 12px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-        user-select: none;
-        border: none;
-    }}
-    .btn-primary:active {{ transform: scale(.96); }}
-    
-    /* Bottom nav */
-    .bottom-nav {{
-        margin-top: 12px;
-        background: rgba(255,255,255,.92);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 10px 6px;
-        display: flex;
-        justify-content: space-between;
-        gap: 6px;
-        box-shadow: var(--shadow-soft);
-    }}
-    
-    .nav-item {{
-        flex: 1;
-        border-radius: 14px;
-        padding: 10px 6px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        user-select: none;
-        transition: background .15s ease, transform .15s ease;
-        color: var(--muted);
-        min-width: 0;
-    }}
-    
-    .nav-item .nav-ic {{
-        width: 26px;
-        height: 26px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(17,24,39,.10);
-        background: #fff;
-        font-size: 16px;
-    }}
-    
-    .nav-item .lbl {{
-        font-size: 12px;
-        font-weight: 800;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-    }}
-    
-    .nav-item.active {{
-        background: {primary_hex}18;
-        color: var(--primary);
-    }}
-    .nav-item.active .nav-ic {{
-        border-color: {primary_hex}58;
-        background: {primary_hex}1f;
-        color: var(--primary);
-    }}
-    .nav-item:active {{ transform: scale(.98); }}
-    
-    .skeleton-card {{
-        height: 80px;
-        border-radius: 12px;
-        background: linear-gradient(90deg, #eee 0%, #f5f5f5 50%, #eee 100%);
-        background-size: 200% 100%;
-        animation: pulse 1.2s infinite;
-        margin: 14px 0;
-    }}
-    
-    .skeletonShell {{
-        padding: 12px;
-    }}
-    
-    .sk {{
-        height: 14px;
-        border-radius: 10px;
-        margin: 10px 0;
-        background: linear-gradient(90deg, rgba(0,0,0,.06), rgba(0,0,0,.10), rgba(0,0,0,.06));
-        animation: shimmer 1.1s infinite;
-    }}
-    
-    .sk1 {{ width: 70%; height: 18px; }}
-    .sk2 {{ width: 92%; }}
-    .sk3 {{ width: 84%; }}
-    
-    @keyframes pulse {{
-        0% {{ background-position: 200% 0; }}
-        100% {{ background-position: -200% 0; }}
-    }}
-    
-    @keyframes shimmer {{
-        0% {{ filter: brightness(1); }}
-        50% {{ filter: brightness(1.15); }}
-        100% {{ filter: brightness(1); }}
-    }}
-    
-    * {{
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
-    }}
-    
-    button, [onclick] {{
-        user-select: none;
-        -webkit-user-select: none;
-    }}
-    
-    /* Exclude inputs from button user-select rules */
-    button input, button textarea, [onclick] input, [onclick] textarea {{
-        user-select: text !important;
-        -webkit-user-select: text !important;
-    }}
-    </style>
-    
-            """
-    
-    # Toast and Modal HTML (to be included in containers)
-    toast_modal_html = f"""
-    <!-- Toast Notification -->
-    <div id="toast" style="
-        position: absolute;
-        left: 50%;
-        top: 16px;
-        transform: translateX(-50%);
-        background: rgba(17,24,39,.92);
-        color: #fff;
-        padding: 10px 14px;
-        border-radius: 999px;
-        font-size: .85rem;
-        font-weight: 800;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity .2s ease, transform .2s ease;
-        z-index: 9999;
-    "></div>
-    
-    <!-- Modal Dialog -->
-    <div id="modal" onclick="if(event.target.id === 'modal') closeModal()" style="
-        position: absolute;
-        inset: 0;
-        display: none;
-        z-index: 9998;
-        background: rgba(0,0,0,.45);
-    ">
-        <div id="modalCard" style="
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-            width: 86%;
-            max-width: 320px;
-            background: #fff;
-            border-radius: 18px;
-            padding: 16px;
-            box-shadow: 0 18px 60px rgba(0,0,0,.25);
-        ">
-            <div id="modalTitle" style="font-weight: 900; font-size: 1rem; margin-bottom: 6px; color: #111827;">Title</div>
-            <div id="modalBody" style="opacity: .8; font-size: .92rem; line-height: 1.35; color: #6b7280; margin-bottom: 14px;">Body</div>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="closeModal()" style="
-                    flex: 1;
-                    padding: 10px;
-                    border-radius: 12px;
-                    border: 1px solid rgba(17,24,39,.15);
-                    background: #fff;
-                    font-weight: 800;
-                    cursor: pointer;
-                    color: #111827;
-                ">Cancel</button>
-                <button onclick="confirmModal()" style="
-                    flex: 1;
-                    padding: 10px;
-                    border-radius: 12px;
-                    border: none;
-                    background: {primary_hex};
-                    color: #fff;
-                    font-weight: 900;
-                    cursor: pointer;
-                ">OK</button>
-            </div>
-        </div>
-    </div>
-    """
-
-    if is_mobile:
-        return f"""
-        <div class="device-container" style="
-            max-width: 380px;
-            margin: 0 auto;
-            padding: 14px 12px;
-            border-radius: 36px;
-            background: linear-gradient(180deg, {bg1} 0%, {bg2} 100%);
-            border: 1px solid {border};
-            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
-            position: relative;
-        ">
-            <div style="
-                position: absolute;
-                top: 10px;
-                right: 12px;
-                background: rgba(0,0,0,0.55);
-                color: white;
-                padding: 4px 10px;
-                border-radius: 999px;
-                font-size: 0.7rem;
-                font-weight: 800;
-                letter-spacing: 0.04em;
-                z-index: 10;
-            ">PROTOTYPE</div>
-            <div style="height:20px;width:90px;margin: 6px auto 12px auto;border-radius:999px;background: rgba(255,255,255,0.12)"></div>
-            <div style="
-                background: {surface}; 
-                border-radius: 26px; 
-                padding: 14px; 
-                padding-bottom: 80px;
-                min-height: 620px;
-                box-shadow: 0 -8px 24px rgba(0,0,0,0.12);
-                position: relative;
-            ">
-                {screens_html}
-                {bottom_nav_html}
-            </div>
-            {toast_modal_html}
-            {nav_js}
-        </div>
-        """
-    return f"""
-    <div class="device-container" style="
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 16px;
-        border-radius: 18px;
-        background: linear-gradient(180deg, rgba(17,24,39,0.06) 0%, rgba(17,24,39,0.02) 100%);
-        border: 1px solid rgba(17,24,39,0.08);
-        position: relative;
-    ">
-        <div style="
-            position: absolute;
-            top: 10px;
-            right: 16px;
-            background: rgba(0,0,0,0.55);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 0.04em;
-            z-index: 10;
-        ">PROTOTYPE</div>
-        {screens_html}
-        {toast_modal_html}
-        {nav_js}
-    </div>
-    """
-
-
-# ----------------------------
-# DISPLAY FUNCTIONS
 # ----------------------------
 def format_requirements_for_display(data: Dict[str, Any]) -> None:
     """Format and display requirements in Streamlit."""
@@ -2242,10 +1149,11 @@ def format_requirements_for_display(data: Dict[str, Any]) -> None:
     with c2:
         features_count = len(data.get("features", []) or [])
         roles_count = len(data.get("user_roles", []) or [])
-        st.metric("Features", features_count)
-        st.metric("Roles", roles_count)
-                
-        st.divider()
+        m1, m2 = st.columns(2)
+        m1.metric("Features", features_count)
+        m2.metric("Roles", roles_count)
+
+    st.divider()
 
     st.markdown("### 🚀 Features")
     feats = data.get("features") or []
@@ -2256,7 +1164,7 @@ def format_requirements_for_display(data: Dict[str, Any]) -> None:
             fid = f.get("id", "F?")
             name = f.get("name", "Unnamed Feature")
             pr = f.get("priority", "Medium")
-            pr_color = {"High": "🟥", "Medium": "🟨", "Low": "🟩"}.get(pr, "⬜")
+            pr_color = {"High": "🔴", "Medium": "🟡", "Low": "🟢"}.get(pr, "⚪")
 
             with st.expander(f"{pr_color} {fid} • {name}  —  Priority: {pr}"):
                 st.markdown(f"**Description**: {f.get('description', '—')}")
@@ -2295,8 +1203,14 @@ def format_requirements_for_display(data: Dict[str, Any]) -> None:
                     st.write(f"• {x}")
             if tech.get("database"):
                 st.markdown(f"**Database**: {tech['database']}")
-            else:
-                st.info("No technical requirements returned.")
+    else:
+        st.info("No technical requirements returned.")
+
+    nfrs = [n for n in (data.get("non_functional_requirements") or []) if isinstance(n, dict)]
+    if nfrs:
+        st.markdown("### 📏 Non-Functional Requirements")
+        for n in nfrs:
+            st.write(f"• **{n.get('category', 'General')}**: {n.get('requirement', '')}")
 
     roles = data.get("user_roles") or []
     if roles:
@@ -2329,6 +1243,10 @@ def inject_css(dark: bool) -> None:
     st.markdown(
         f"""
 <style>
+/* Emoji fallback fonts (Windows/Linux) */
+[data-testid="stMarkdownContainer"], .stButton button, [data-baseweb="tab"] {{
+    font-family: "Source Sans", "Source Sans Pro", "Segoe UI", sans-serif, "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji";
+}}
 /* Increase main content width */
 .block-container {{
     max-width: 960px !important;
@@ -2352,7 +1270,7 @@ p, li, span, div {{ color: {text}; }}
   box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 }}
 .hero-title {{ font-size: 2.0rem; font-weight: 900; margin: 0; text-align: center; }}
-.hero-sub {{ margin-top: 6px; color: {muted}; font-weight: 600; }}
+.hero-sub {{ margin-top: 6px; color: {muted}; font-weight: 500; text-align: center; font-size: 0.95rem; }}
 
 .stTabs [data-baseweb="tab-list"] {{
   gap: 4px;
@@ -2454,6 +1372,36 @@ p, li, span, div {{ color: {text}; }}
 }}
 
 details {{ border-radius: 16px !important; }}
+
+/* Interaction polish */
+.stButton > button, .stDownloadButton > button {{
+  transition: transform .12s ease, box-shadow .12s ease;
+}}
+.stButton > button:hover, .stDownloadButton > button:hover {{
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}}
+.stDownloadButton > button {{ border-radius: 14px; font-weight: 800; }}
+button:focus-visible, [role="tab"]:focus-visible, summary:focus-visible {{
+  outline: 2px solid #667eea !important;
+  outline-offset: 2px;
+}}
+.stTabs [data-baseweb="tab"]:hover {{ border-color: #667eea; }}
+
+/* Palette swatches */
+.swatch {{ display:flex; align-items:center; gap:10px; margin:4px 0; font-size:.85rem; }}
+.swatch i {{ width:28px; height:28px; border-radius:8px; border:1px solid {border}; flex:none; }}
+.swatch code {{ font-size:.8rem; }}
+
+/* Small screens: let tabs scroll instead of truncating labels */
+@media (max-width: 640px) {{
+  .stTabs [data-baseweb="tab-list"] {{ overflow-x: auto; }}
+  .stTabs [data-baseweb="tab"] {{ flex: 0 0 auto !important; padding: 8px 14px; }}
+  .hero-title {{ font-size: 1.5rem; }}
+}}
+@media (prefers-reduced-motion: reduce) {{
+  * {{ transition: none !important; }}
+}}
 </style>
         """,
         unsafe_allow_html=True,
@@ -2492,6 +1440,7 @@ def ensure_state() -> None:
     st.session_state.setdefault("pipeline_completed_steps", [])
     st.session_state.setdefault("pipeline_running", False)
     st.session_state.setdefault("pipeline_errors", {})
+    st.session_state.setdefault("trace_baseline", None)
 
 
 def _build_full_export_zip() -> Optional[bytes]:
@@ -2533,6 +1482,12 @@ def _build_full_export_zip() -> Optional[bytes]:
         files["quality_report.json"] = json.dumps(quality, indent=2)
     if ok(support):
         files["support_package.json"] = json.dumps(support, indent=2)
+    if req_ok:
+        files["traceability.json"] = json.dumps(build_trace_matrix(req, design, plan), indent=2)
+        _cases = generate_test_cases(req)
+        if _cases:
+            files["test_cases.json"] = json.dumps(_cases, indent=2)
+            files["app/tests/acceptance.test.js"] = render_test_stubs(_cases)
 
     if req_ok and (design_ok or db_schema_ok):
         scaffold = build_scaffold_files(req, design if design_ok else None, db_schema if db_schema_ok else None)
@@ -2572,7 +1527,8 @@ def main() -> None:
             """
             <div class="hero">
             <div class="hero-title">🤖 Requirements Agent</div>
-                </div>
+            <div class="hero-sub">Describe your idea in chat → review requirements → get a design, database, plan and more.</div>
+            </div>
             """,
             unsafe_allow_html=True,
         )
@@ -2581,7 +1537,7 @@ def main() -> None:
     with center:
         tab_chat, tab_review, tab_design, tab_db, tab_planning, tab_quality, tab_support = st.tabs([
             "💬 Chat", "📋 Review", "🎨 Design", "🗄️ Database",
-            "📅 Planning", "✅ Quality", "🛟 Support"
+            "📅 Planning", "✅ Quality", "🎧 Support"
         ])
 
         # Handle prototype persistence events from JavaScript via query params
@@ -2593,9 +1549,16 @@ def main() -> None:
                 # Fix: Handle both list and string formats (Streamlit version differences)
                 if isinstance(raw, list):
                     raw = raw[0]
+                if len(raw) > 4000:
+                    raise ValueError("prototype_event too large")
                 event_data = json.loads(raw)
+                if not isinstance(event_data, dict):
+                    raise ValueError("bad prototype_event")
                 event_type = event_data.get("type")
                 payload = event_data.get("payload", {})
+                if not isinstance(payload, dict):
+                    raise ValueError("bad prototype_event payload")
+                payload = {k: (str(v)[:500] if v is not None else "") for k, v in payload.items()}
                 session_id = st.session_state.get("session_id", f"session_{int(time.time() * 1000)}")
                 
                 if event_type == "prototype_input":
@@ -2683,14 +1646,13 @@ def main() -> None:
 
             if has_choices:
                 _, choices = parsed
-                st.markdown("#### Choose one option 👇")
+                st.caption("Choose one option to continue 👇")
                 cols = st.columns(min(4, len(choices)))
                 for i, c in enumerate(choices):
                     with cols[i % len(cols)]:
                         if st.button(c, key=f"mc_{i}", width="stretch"):
                             st.session_state.processing_choice = c
                             st.rerun()
-                st.info("Pick one option above to continue.")
 
             if not has_choices:
                 prompt = st.chat_input("Type your message…")
@@ -2762,7 +1724,10 @@ def main() -> None:
                 c1, c2 = st.columns(2)
                 with c1:
                     if st.button("✏️ Continue Chat", width="stretch"):
-                        st.info("Go to the Chat tab to refine the idea.")
+                        st.session_state.navigate_to_tab = 0
+                        st.session_state._nav_pending = True
+                        st.session_state._nav_target = 0
+                        st.rerun()
                 with c2:
                     json_str = json.dumps(st.session_state.requirements_for_review, indent=2)
                     st.download_button(
@@ -2774,7 +1739,7 @@ def main() -> None:
                     )
                 st.divider()
                 st.caption("Central orchestrator (Project Manager Agent) runs Requirements → Database → Design → Planning → Quality → Support and stores artifacts.")
-                if st.button("🚀 Run full pipeline", type="primary", key="run_full_pipeline", width="stretch"):
+                if st.button("Confirm requirements", type="primary", key="run_full_pipeline", width="stretch"):
                     if not analyzer or not analyzer.api_key:
                         st.error("Anthropic API key missing. Add ANTHROPIC_API_KEY to your .env file.")
                     else:
@@ -2965,7 +1930,17 @@ def main() -> None:
                             is_mobile=is_mobile,
                             primary_hex=primary_hex,
                             secondary_hex=secondary_hex,
+                            colors={
+                                "background": extract_hex(colors.get("background"), "#f6f7fb"),
+                                "surface": extract_hex(colors.get("surface"), "#ffffff"),
+                                "text": extract_hex(colors.get("text_primary") or colors.get("text"), "#0f172a"),
+                            },
                             screen_index=selected_index,
+                            bridge=build_prototype_bridge(
+                                st.session_state.get("requirements_for_review"),
+                                design,
+                                st.session_state.get("cycle_plan"),
+                            ),
                         )
                         st.iframe(html, height=780 if is_mobile else 720, width="stretch")
 
@@ -2974,29 +1949,25 @@ def main() -> None:
                         st.info(design.get("design_overview", "—"))
 
                         st.markdown("### 🎨 Color Palette")
-                        c1, c2, c3, c4 = st.columns(4)
-                        with c1:
-                            primary_color = extract_hex(colors.get("primary"), "#667eea")
-                            secondary_color = extract_hex(colors.get("secondary"), "#f472b6")
-                            st.code(primary_color)
-                            st.code(secondary_color)
-                        with c2:
-                            accent_color = extract_hex(colors.get("accent"), "#8b5cf6")
-                            surface_color = extract_hex(colors.get("surface"), "#ffffff")
-                            st.code(accent_color)
-                            st.code(surface_color)
-                        with c3:
-                            bg_color = extract_hex(colors.get("background"), "#f8fafc")
-                            text_color = extract_hex(colors.get("text_primary") or colors.get("text"), "#0f172a")
-                            st.code(bg_color)
-                            st.code(text_color)
-                        with c4:
-                            error_color = extract_hex(colors.get("error"), "#ef4444")
-                            success_color = extract_hex(colors.get("success"), "#10b981")
-                            warning_color = extract_hex(colors.get("warning"), "#f59e0b")
-                            st.code(f"error: {error_color}")
-                            st.code(f"success: {success_color}")
-                            st.code(f"warning: {warning_color}")
+                        swatches = [
+                            ("Primary", extract_hex(colors.get("primary"), "#667eea")),
+                            ("Secondary", extract_hex(colors.get("secondary"), "#f472b6")),
+                            ("Accent", extract_hex(colors.get("accent"), "#8b5cf6")),
+                            ("Surface", extract_hex(colors.get("surface"), "#ffffff")),
+                            ("Background", extract_hex(colors.get("background"), "#f8fafc")),
+                            ("Text", extract_hex(colors.get("text_primary") or colors.get("text"), "#0f172a")),
+                            ("Error", extract_hex(colors.get("error"), "#ef4444")),
+                            ("Success", extract_hex(colors.get("success"), "#10b981")),
+                            ("Warning", extract_hex(colors.get("warning"), "#f59e0b")),
+                        ]
+                        sw_cols = st.columns(3)
+                        for i, (label, hexv) in enumerate(swatches):
+                            with sw_cols[i % 3]:
+                                st.markdown(
+                                    f'<div class="swatch"><i style="background:{_h(hexv)}"></i>'
+                                    f'<span>{label}</span><code>{_h(hexv)}</code></div>',
+                                    unsafe_allow_html=True,
+                                )
 
                         st.divider()
 
@@ -3328,6 +2299,9 @@ def main() -> None:
                 """Introspect a database URL's schema, preferring SQLAlchemy and falling
                 back to sqlite3 for sqlite:// URLs when SQLAlchemy isn't installed."""
                 url = url.strip()
+                blocked = check_database_url(url)
+                if blocked:
+                    return None, blocked
                 try:
                     from sqlalchemy import create_engine, inspect as _sa_inspect
                 except ImportError:
@@ -3635,8 +2609,10 @@ def main() -> None:
                                     raw, dl_err = None, None
                                     try:
                                         with st.spinner("Downloading…"):
-                                            resp = requests.get(url, timeout=120, stream=True)
-                                            if resp.status_code != 200:
+                                            resp, blocked = safe_get(url, timeout=120)
+                                            if blocked:
+                                                dl_err = blocked
+                                            elif resp.status_code != 200:
                                                 dl_err = f"the server returned {resp.status_code}."
                                             else:
                                                 chunks, total = [], 0
@@ -3907,9 +2883,15 @@ def main() -> None:
                                 if columns:
                                     with st.spinner(f"Creating table `{table_name}` from schema..."):
                                         created, error_msg = create_table_from_schema(table_name, columns)
-                                        if created:
+                                        _tried = st.session_state.setdefault("_db_autocreate_tried", set())
+                                        if created and table_name not in _tried:
+                                            # Rerun at most once per table: if the table still isn't
+                                            # visible afterwards, rerunning forever would block every tab after this one.
+                                            _tried.add(table_name)
                                             st.success(f"✅ Table `{table_name}` created successfully!")
                                             st.rerun()
+                                        elif created:
+                                            continue
                                         else:
                                             st.error(f"❌ Could not create table `{table_name}`")
                                             st.code(f"Error: {error_msg}", language="text")
@@ -4415,6 +3397,9 @@ def main() -> None:
                                     "Title": t.get("title", ""),
                                     "Agent": t.get("assigned_agent", ""),
                                     "Priority": t.get("priority", ""),
+                                    "Features": ", ".join(t.get("feature_ids") or []) or "—",
+                                    "Points": t.get("estimate") if t.get("estimate") is not None else "—",
+                                    "Depends on": ", ".join(t.get("depends_on") or []) or "—",
                                 })
                             st.dataframe(pd.DataFrame(task_rows), width="stretch", hide_index=True)
                         else:
@@ -4442,8 +3427,8 @@ def main() -> None:
             st.session_state.active_tab = 5
             st.markdown("## ✅ Quality Manager Agent")
             st.info(
-                "Evaluates requirements, design, and database schema. Produces a gate decision "
-                "(PASS/FAIL), checklist, issues, and required fixes."
+                "Traceability & coverage of every requirement, plus an agent review of requirements, design, "
+                "and database schema with a checklist, issues, and required fixes."
             )
             req = st.session_state.get("requirements_for_review")
             design = st.session_state.get("interface_design")
@@ -4472,49 +3457,244 @@ def main() -> None:
                     else:
                         st.error("Anthropic API key not found.")
 
+                st.divider()
+                st.markdown("## 🔗 Traceability & Coverage")
+                st.info(
+                    "Links every requirement to the screens, tables, tasks and acceptance criteria that cover it, "
+                    "shows what a change would affect, and validates the generated code. No API calls needed."
+                )
+                plan = st.session_state.get("cycle_plan")
+                matrix = build_trace_matrix(req, design, plan)
+                st.markdown("### Requirements coverage")
+                c1, c2, c3 = st.columns(3)
+                c1.metric("Coverage score", f"{int(matrix['coverage'] * 100)}%")
+                c2.metric("Features", len(matrix["features"]))
+                c3.metric("Features with gaps", sum(1 for r in matrix["features"] if r["gaps"]))
+                st.caption("Checked against: " + ", ".join(matrix["available"]) + ". Generate more artifacts to widen the check.")
+
+                if matrix["features"] and PANDAS_AVAILABLE:
+                    st.dataframe(pd.DataFrame([{
+                        "Feature": f"{r['id']} {r['name']}",
+                        "Screens": ", ".join(r["screens"]) or "—",
+                        "Tables": ", ".join(r["tables"]) or "—",
+                        "Tasks": ", ".join(r["tasks"]) or "—",
+                        "Criteria": r["acceptance_criteria"],
+                        "Coverage": f"{int(r['coverage'] * 100)}%",
+                        "Gaps": ", ".join(r["gaps"]) or "—",
+                    } for r in matrix["features"]]), width="stretch", hide_index=True)
+                else:
+                    for r in matrix["features"]:
+                        st.write(f"• **{r['id']} {r['name']}** — {int(r['coverage'] * 100)}%, gaps: {', '.join(r['gaps']) or 'none'}")
+
+                orphans = {k: v for k, v in matrix["orphans"].items() if v}
+                if orphans:
+                    st.markdown("**Not linked to any requirement**")
+                    for kind, items in orphans.items():
+                        st.write(f"• {kind}: {', '.join(items)}")
+
+                st.divider()
+                st.markdown("### Change impact")
+                baseline = st.session_state.get("trace_baseline")
+                if baseline:
+                    diff = diff_requirements(baseline, req)
+                    changed = diff["added"] + diff["modified"] + diff["removed"]
+                    if changed:
+                        base_matrix = build_trace_matrix(baseline, design, plan)
+                        st.warning(f"Since the last pipeline run — added: {diff['added'] or '—'}, "
+                                   f"modified: {diff['modified'] or '—'}, removed: {diff['removed'] or '—'}")
+                        impact = change_impact(base_matrix, changed)
+                        st.write(f"Affected screens: {', '.join(impact['screens']) or '—'}")
+                        st.write(f"Affected tables: {', '.join(impact['tables']) or '—'}")
+                        st.write(f"Affected tasks: {', '.join(impact['tasks']) or '—'}")
+                        st.write(f"Re-run: **{' → '.join(impact['steps_to_rerun'])}**")
+                    else:
+                        st.success("Requirements match the last pipeline run — nothing to re-run.")
+                    if st.button("Mark current requirements as baseline", key="trace_set_baseline"):
+                        st.session_state.trace_baseline = copy.deepcopy(req)
+                        st.rerun()
+                else:
+                    st.caption("Run the pipeline (or set a baseline) to track edits.")
+                    if st.button("Set baseline now", key="trace_set_baseline0"):
+                        st.session_state.trace_baseline = copy.deepcopy(req)
+                        st.rerun()
+
+                picked = st.multiselect(
+                    "What if I change…",
+                    [str(r["id"]) for r in matrix["features"]],
+                    format_func=lambda i: next((f"{r['id']} {r['name']}" for r in matrix["features"] if str(r["id"]) == i), i),
+                    key="trace_whatif",
+                )
+                if picked:
+                    impact = change_impact(matrix, picked)
+                    st.write(f"Screens: {', '.join(impact['screens']) or '—'} | Tables: {', '.join(impact['tables']) or '—'} | "
+                             f"Tasks: {', '.join(impact['tasks']) or '—'}")
+                    st.write(f"Re-run: **{' → '.join(impact['steps_to_rerun'])}**")
+
+                st.divider()
+                st.markdown("### Test cases")
+                _cases = generate_test_cases(req)
+                if _cases:
+                    st.caption(f"{len(_cases)} case(s) generated from acceptance criteria; the export includes runnable stubs.")
+                    if PANDAS_AVAILABLE:
+                        st.dataframe(pd.DataFrame([{
+                            "ID": c["id"], "Feature": c["feature"], "Given": c["given"] or "—",
+                            "When": c["when"] or "—", "Then": c["then"],
+                        } for c in _cases]), width="stretch", hide_index=True)
+                    st.download_button("📥 Download test cases JSON", data=json.dumps(_cases, indent=2),
+                                       file_name="test_cases.json", mime="application/json",
+                                       width="stretch", key="dl_test_cases")
+                else:
+                    st.info("No acceptance criteria in the requirements yet.")
+
+                st.divider()
+                st.markdown("### Validate generated code")
+                st.caption("Runs the schema checks, executes the SQLite DDL, and syntax-checks the backend (needs Node). "
+                           "On failure, the owning agent is asked to fix it using the error messages.")
+                db_schema = req.get("database_schema")
+                has_db = isinstance(db_schema, dict) and bool(db_schema.get("tables"))
+                design_ok = isinstance(design, dict) and "error" not in design
+                if not (has_db or design_ok):
+                    st.info("Generate a database schema or design first.")
+                elif st.button("🔧 Validate & self-heal", type="primary", key="trace_heal"):
+                    api_key = analyzer.api_key if analyzer and analyzer.api_key else None
+
+                    def _scaffold(r, d):
+                        sch = r.get("database_schema")
+                        return build_scaffold_files(r, d if design_ok else None, sch if isinstance(sch, dict) and sch.get("tables") else None)
+
+                    def _fix_db(r, messages):
+                        if not api_key:
+                            return {"error": "No API key"}
+                        return DatabaseAgent(api_key)._fix_schema(r["database_schema"], messages, r)
+
+                    with st.spinner("Validating…"):
+                        result = self_heal(req, design, _scaffold, {"database": _fix_db})
+                    if result["rounds"]:
+                        st.session_state.requirements_for_review = result["requirements"]
+                    st.session_state.trace_heal_result = result
+
+                result = st.session_state.get("trace_heal_result")
+                if result:
+                    if not result["problems"]:
+                        st.success("✅ All checks pass." if not result["rounds"] else
+                                   f"✅ Fixed after {len(result['rounds'])} round(s).")
+                    else:
+                        st.error(f"{len(result['problems'])} problem(s) remain")
+                        for p in result["problems"]:
+                            st.write(f"• [{p['step']}] {p['check']}: {p['message']}")
+                    for rd in result["rounds"]:
+                        st.caption(f"Round {rd['round']}: {len(rd['problems'])} problem(s), "
+                                   f"asked: {', '.join(rd['healed_steps']) or 'nobody (no fixer available)'}")
+
+                st.download_button(
+                    "📥 Download Traceability JSON",
+                    data=json.dumps(matrix, indent=2),
+                    file_name="traceability.json",
+                    mime="application/json",
+                    width="stretch",
+                )
+
                 report = st.session_state.get("quality_report")
                 if report and isinstance(report, dict) and "error" not in report:
                     st.divider()
                     st.markdown("### Quality assessment report")
                     if not report.get("checklist") and not report.get("issues") and not report.get("recommendations"):
                         st.warning("Agent returned minimal content. Try generating again.")
-                    decision = report.get("gate_decision", "")
-                    if decision.upper() == "PASS":
-                        st.success("✅ Gate decision: PASS")
-                    else:
-                        st.error(f"❌ Gate decision: {decision}")
+                    _last_fix = st.session_state.get("fix_gaps_summary")
+                    if _last_fix:
+                        st.caption(f"Last fix run: {_last_fix['checks_before']} → {_last_fix['checks_after']} failing checks "
+                                   f"({', '.join(('✓ ' if x['ok'] else '✗ ') + x['step'] for x in _last_fix['steps']) or 'nothing to fix'})")
 
-                    if report.get("checklist"):
-                        st.markdown("**Checklist**")
-                        _checklist_descriptions = {
-                            "requirements_complete": "Requirements document is complete and covers scope.",
-                            "design_consistent": "Design is consistent with requirements and architecture.",
-                            "db_matches_requirements": "Database schema and entities match stated requirements.",
-                            "nfr_defined": "Non-functional requirements are defined (performance, security, etc.).",
+                    def _short(text: Any, limit: int = 150) -> str:
+                        first = str(text or "").strip().split(". ")[0].rstrip(".")
+                        return first if len(first) <= limit else first[: limit - 1].rstrip() + "…"
+
+                    _issues = [i for i in (report.get("issues") or []) if isinstance(i, dict)]
+                    _sev = {k: sum(1 for i in _issues if i.get("severity") == k) for k in ("High", "Medium", "Low")}
+                    _checks = report.get("checklist") or {}
+                    st.write(f"**{sum(1 for v in _checks.values() if v)}/{len(_checks)} checks passed** · "
+                             f"{len(_issues)} issues ({_sev['High']} high, {_sev['Medium']} medium, {_sev['Low']} low)")
+                    if _checks:
+                        _labels = {
+                            "requirements_complete": "Requirements complete",
+                            "design_consistent": "Design consistent with requirements",
+                            "db_matches_requirements": "Database matches requirements",
+                            "nfr_defined": "Non-functional requirements defined",
                         }
-                        for k, v in report["checklist"].items():
-                            desc = _checklist_descriptions.get(k, "")
-                            if desc:
-                                st.write(f"• **{k}**: {'✅' if v else '❌'} — *{desc}*")
-                            else:
-                                st.write(f"• {k}: {'✅' if v else '❌'}")
+                        _by_check = issues_by_check(report)
+                        for k, v in _checks.items():
+                            _name = _labels.get(k, k)
+                            _why = _by_check.get(k, [])
+                            if v or not _why:
+                                st.write(f"{'✅' if v else '❌'} {_name}")
+                                continue
+                            with st.expander(f"❌ {_name} — {len(_why)} issue(s)"):
+                                for iss in _why:
+                                    st.write(f"**{str(iss.get('severity', '')).upper()}** · {_short(iss.get('message') or iss.get('item'))}")
 
-                    if report.get("issues") and isinstance(report["issues"], list):
-                        st.markdown("**Issues**")
-                        for iss in report["issues"]:
-                            if isinstance(iss, dict):
-                                sev = (iss.get("severity") or "—").upper()
-                                st.write(f"• [{sev}] {iss.get('item', '')}: {iss.get('message', '')}")
+                    _fixable = group_fixable(report)
+                    if failing_checks(report) and _fixable:
+                        st.caption("Sends High/Medium issues to the owning agent (requirements → database → design), then re-reviews. ~1–3 min.")
+                        if st.button("🛠️ Fix these issues", type="primary", key="fix_gaps_btn"):
+                            if not (analyzer and analyzer.api_key):
+                                st.error("Anthropic API key not found.")
+                            else:
+                                _key = analyzer.api_key
+
+                                def _fix_req(r, msgs):
+                                    agent = RequirementsAnalystAgent()
+                                    agent.api_key = _key
+                                    agent.headers = {"x-api-key": _key, "anthropic-version": "2023-06-01", "Content-Type": "application/json"}
+                                    return agent.revise_requirements(r, msgs)
+
+                                def _fix_db(r, msgs):
+                                    sch = r.get("database_schema")
+                                    if not isinstance(sch, dict):
+                                        return {"error": "No schema to fix"}
+                                    return DatabaseAgent(_key)._fix_schema(sch, msgs, r)
+
+                                def _fix_design(r, d, msgs):
+                                    return DesignGenerationAgent(_key).generate_design(r, feedback=msgs)
+
+                                def _recheck(r, d):
+                                    return QualityManagerAgent(_key).generate_quality_report(r, d, r.get("database_schema"))
+
+                                _before = len(failing_checks(report))
+                                with st.status("Fixing issues…", expanded=True) as _status:
+                                    _out = fix_gaps(
+                                        req, design, report,
+                                        {"requirements": _fix_req, "database": _fix_db, "design": _fix_design},
+                                        _recheck,
+                                        progress=lambda step: st.write(f"Running {step}…" if step != "quality" else "Re-running quality review…"),
+                                    )
+                                    _status.update(label="Done", state="complete")
+                                st.session_state.requirements_for_review = _out["requirements"]
+                                if _out["design"] is not None:
+                                    st.session_state.interface_design = _out["design"]
+                                _new = _out["report"]
+                                if isinstance(_new, dict) and "error" not in _new:
+                                    st.session_state.quality_report = _new
+                                for _kind, _val in (("requirements", _out["requirements"]), ("design", _out["design"]), ("quality_report", _new)):
+                                    try:
+                                        if isinstance(_val, dict) and "error" not in _val:
+                                            save_artifact(st.session_state.session_id, _kind, _val)
+                                    except Exception:
+                                        pass
+                                st.session_state["fix_gaps_summary"] = {
+                                    "steps": _out["steps"], "checks_before": _before,
+                                    "checks_after": len(failing_checks(_new)) if isinstance(_new, dict) else _before,
+                                }
+                                st.rerun()
 
                     if report.get("required_fixes"):
-                        st.markdown("**Required fixes**")
-                        for f in report["required_fixes"]:
-                            st.write(f"• {f}")
+                        with st.expander(f"Required fixes ({len(report['required_fixes'])})"):
+                            for f in report["required_fixes"]:
+                                st.write(f"• {_short(f, 220)}")
 
                     if report.get("recommendations"):
-                        st.markdown("**Recommendations**")
-                        for r in report["recommendations"]:
-                            st.write(f"• {r}")
+                        with st.expander(f"Recommendations ({len(report['recommendations'])})"):
+                            for r in report["recommendations"]:
+                                st.write(f"• {_short(r, 220)}")
 
                     with st.expander("View full JSON"):
                         st.json(report)
@@ -4532,7 +3712,7 @@ def main() -> None:
         # TAB 7: SUPPORT
         with tab_support:
             st.session_state.active_tab = 6
-            st.markdown("## 🛟 Support Manager Agent")
+            st.markdown("## 🎧 Support Manager Agent")
             with st.expander("📖 App documentation", expanded=False):
                 st.markdown("""
 **LLM Requirements Analyzer** helps you turn natural language into structured requirements, design, and project governance using AI agents (TSPi-style).
@@ -4565,7 +3745,7 @@ def main() -> None:
                 st.markdown("### Inputs")
                 st.write(f"Requirements ✅ | Design: {'✅' if design else '—'} | DB: {'✅' if db_schema else '—'} | MVP plan: {'✅' if cycle_plan else '—'}")
 
-                if st.button("🛟 Generate support package", type="primary", key="gen_support"):
+                if st.button("🎧 Generate support package", type="primary", key="gen_support"):
                     if analyzer and analyzer.api_key:
                         support_agent = SupportManagerAgent(analyzer.api_key)
                         with st.spinner("Generating support governance package…"):
@@ -4617,6 +3797,9 @@ def main() -> None:
                     )
             else:
                 st.info("Generate requirements first (Chat → Review) to enable support package generation.")
+
+
+        # TAB 8: TRACEABILITY
 
 
 if __name__ == "__main__":

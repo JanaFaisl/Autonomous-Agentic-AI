@@ -3,7 +3,7 @@ from typing import Dict, List
 
 import streamlit as st
 
-from core.constants import DEFAULT_MODEL
+from core.constants import DEFAULT_MODEL, model_for
 from core.llm import CREWAI_AVAILABLE, Agent, Task, Crew, Process, get_llm
 from core.utils import extract_crewai_output
 from utils.io_suppression import suppress_stderr, suppress_io
@@ -71,7 +71,7 @@ class ChatAssistantAgent:
         if not CREWAI_AVAILABLE:
             return
 
-        llm = get_llm()
+        llm = get_llm("chat")
 
         agent_kwargs = {
             "role": "Friendly Product Discovery Companion",
@@ -169,7 +169,7 @@ def call_chat_assistant(agent: "RequirementsAnalystAgent", messages: List[Dict[s
     with st.spinner("💭 Thinking about your answer…"):
         try:
             resp = client.messages.create(
-                model=DEFAULT_MODEL,
+                model=model_for("chat"),
                 max_tokens=1024,
                 system=PROFESSIONAL_SYSTEM_PROMPT,
                 messages=messages,

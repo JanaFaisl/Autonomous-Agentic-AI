@@ -4,7 +4,7 @@ from typing import Dict, Any, Optional
 import requests as _requests
 
 from core.constants import (
-    DEFAULT_MODEL, MAX_ITERATIONS, MAX_EXECUTION_TIME,
+    DEFAULT_MODEL, model_for, MAX_ITERATIONS, MAX_EXECUTION_TIME,
     ERROR_NO_API_KEY, ERROR_PARSE_JSON, SOLUTION_ADD_API_KEY, SOLUTION_RETRY,
 )
 from core.models import PYDANTIC_AVAILABLE, QualityReportOutputModel
@@ -14,7 +14,7 @@ from core.prompts import build_quality_prompt
 from utils.io_suppression import suppress_stderr, suppress_io
 
 class QualityManagerAgent:
-    """TSPi Quality Manager: inspects artifacts and produces quality gate decision."""
+    """TSPi Quality Manager: inspects artifacts and produces a quality report."""
 
     def __init__(self, api_key: str) -> None:
         self.api_key = api_key
@@ -25,11 +25,11 @@ class QualityManagerAgent:
         if not CREWAI_AVAILABLE:
             return
 
-        llm = get_llm()
+        llm = get_llm("quality")
         agent_kwargs = {
             "role": "Quality Manager Agent",
             "goal": "Evaluate requirements, design, and database schema for completeness and consistency.",
-            "backstory": "You are a quality assurance expert. You inspect artifacts and produce gate decisions with clear issues and required fixes.",
+            "backstory": "You are a quality assurance expert. You inspect artifacts and produce reports with clear issues and required fixes.",
             "verbose": False,
             "allow_delegation": False,
             "max_iter": MAX_ITERATIONS,
@@ -49,7 +49,7 @@ class QualityManagerAgent:
         task_kwargs = {
             "description": "Evaluate the provided artifacts and produce a quality inspection report.",
             "agent": self.agent,
-            "expected_output": "A quality inspection report with gate decision (PASS/FAIL), checklist results, issues, and required fixes.",
+            "expected_output": "A quality inspection report with checklist results, issues, and required fixes.",
         }
         if PYDANTIC_AVAILABLE and QualityReportOutputModel is not None:
             task_kwargs["output_json"] = QualityReportOutputModel
@@ -74,7 +74,7 @@ class QualityManagerAgent:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": DEFAULT_MODEL,
+                    "model": model_for("quality"),
                     "max_tokens": 4096,
                     "messages": [{"role": "user", "content": prompt}],
                 },

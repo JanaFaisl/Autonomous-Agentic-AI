@@ -2,7 +2,7 @@ import json
 from typing import Dict, Any, List
 
 from core.constants import (
-    DEFAULT_MODEL, MAX_ITERATIONS, MAX_EXECUTION_TIME,
+    DEFAULT_MODEL, model_for, MAX_ITERATIONS, MAX_EXECUTION_TIME,
 )
 from core.models import PYDANTIC_AVAILABLE, PipelinePlanOutputModel
 from core.llm import CREWAI_AVAILABLE, Agent, Task, Crew, Process, get_llm
@@ -23,7 +23,7 @@ class ProjectManagerAgent:
         if not CREWAI_AVAILABLE:
             return
 
-        llm = get_llm()
+        llm = get_llm("project_manager")
         agent_kwargs = {
             "role": "Project Manager Agent",
             "goal": "Orchestrate the development pipeline: decide execution order of agents and ensure workflow state and artifacts are managed.",

@@ -4,7 +4,7 @@ from typing import Dict, Any, Optional
 import requests as _requests
 
 from core.constants import (
-    DEFAULT_MODEL, MAX_ITERATIONS, MAX_EXECUTION_TIME,
+    DEFAULT_MODEL, model_for, MAX_ITERATIONS, MAX_EXECUTION_TIME,
     ERROR_NO_API_KEY, ERROR_PARSE_JSON, SOLUTION_ADD_API_KEY, SOLUTION_RETRY,
 )
 from core.models import PYDANTIC_AVAILABLE, CyclePlanOutputModel
@@ -25,7 +25,7 @@ class PlanningManagerAgent:
         if not CREWAI_AVAILABLE:
             return
 
-        llm = get_llm()
+        llm = get_llm("planning")
         agent_kwargs = {
             "role": "Planning Manager Agent",
             "goal": "Create a short-term MVP execution plan suitable for rapid development.",
@@ -74,7 +74,7 @@ class PlanningManagerAgent:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": DEFAULT_MODEL,
+                    "model": model_for("planning"),
                     "max_tokens": 4096,
                     "messages": [{"role": "user", "content": prompt}],
                 },

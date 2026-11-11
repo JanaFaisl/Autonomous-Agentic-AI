@@ -130,3 +130,23 @@ class TestCreateErrorResponse:
         resp = create_error_response("err", "fix", code=500, retryable=True)
         assert resp["code"] == 500
         assert resp["retryable"] is True
+
+
+def test_model_for_override(monkeypatch):
+    from core.constants import model_for, DEFAULT_MODEL
+    monkeypatch.delenv("MODEL_DESIGN", raising=False)
+    assert model_for("design") == DEFAULT_MODEL
+    monkeypatch.setenv("MODEL_DESIGN", "claude-haiku-5-5")
+    assert model_for("design") == "claude-haiku-5-5"
+
+
+def test_get_llm_omits_temperature_for_claude_5(monkeypatch):
+    import core.llm as llm_mod
+    seen = {}
+    monkeypatch.setattr(llm_mod, "CREWAI_AVAILABLE", True)
+    monkeypatch.setattr(llm_mod, "LLM", lambda **kw: seen.update(kw) or object())
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "k")
+    monkeypatch.setenv("MODEL_T5", "claude-opus-5-5")
+    monkeypatch.setenv("MODEL_T4", "claude-opus-4-6")
+    llm_mod.get_llm("t5"); assert "temperature" not in seen
+    seen.clear(); llm_mod.get_llm("t4"); assert seen["temperature"] == 0.2

@@ -4,7 +4,7 @@ from typing import Dict, Any, Optional
 import requests as _requests
 
 from core.constants import (
-    DEFAULT_MODEL, MAX_ITERATIONS, MAX_EXECUTION_TIME,
+    DEFAULT_MODEL, model_for, MAX_ITERATIONS, MAX_EXECUTION_TIME,
     ERROR_NO_API_KEY, ERROR_PARSE_JSON, SOLUTION_ADD_API_KEY, SOLUTION_RETRY,
 )
 from core.models import PYDANTIC_AVAILABLE, SupportGovernanceOutputModel
@@ -25,7 +25,7 @@ class SupportManagerAgent:
         if not CREWAI_AVAILABLE:
             return
 
-        llm = get_llm()
+        llm = get_llm("support")
         agent_kwargs = {
             "role": "Support Manager Agent",
             "goal": "Produce support governance artifacts from project state.",
@@ -74,7 +74,7 @@ class SupportManagerAgent:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": DEFAULT_MODEL,
+                    "model": model_for("support"),
                     "max_tokens": 4096,
                     "messages": [{"role": "user", "content": prompt}],
                 },

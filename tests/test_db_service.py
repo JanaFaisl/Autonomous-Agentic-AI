@@ -218,3 +218,34 @@ class TestCreateTableFromSchema:
         from db.db_service import init_db, table_exists
         init_db()
         assert table_exists("this_table_does_not_exist_xyz") is False
+
+
+def test_current_timestamp_default_is_a_keyword_not_a_string(use_memory_db):
+    from db.db_service import create_table_from_schema, insert_object, fetch_objects
+    ok, _ = create_table_from_schema("Stamped", [
+        {"name": "id", "type": "INTEGER", "pk": True},
+        {"name": "label", "type": "TEXT"},
+        {"name": "created_at", "type": "TIMESTAMP", "default": "CURRENT_TIMESTAMP"},
+    ])
+    assert ok
+    insert_object("Stamped", {"label": "x"})
+    assert fetch_objects("Stamped")[0]["created_at"] != "CURRENT_TIMESTAMP"
+
+
+def test_postgres_style_defaults_become_sqlite_expressions(use_memory_db):
+    from db.db_service import create_table_from_schema, insert_object, fetch_objects
+    ok, _ = create_table_from_schema("Pg", [
+        {"name": "id", "type": "UUID", "pk": True, "default": "gen_random_uuid()"},
+        {"name": "label", "type": "TEXT"},
+        {"name": "created_at", "type": "TIMESTAMP", "default": "now()"},
+    ])
+    assert ok
+    insert_object("Pg", {"label": "x"})
+    row = fetch_objects("Pg")[0]
+    assert len(row["id"]) == 32 and row["created_at"] != "now()"
+
+
+def test_artifacts_round_trip_on_sqlite(use_memory_db):
+    from db.db_service import save_artifact, get_latest_artifact
+    save_artifact("s1", "quality_report", {"checklist": {"a": True}, "issues": []})
+    assert get_latest_artifact("s1", "quality_report") == {"checklist": {"a": True}, "issues": []}

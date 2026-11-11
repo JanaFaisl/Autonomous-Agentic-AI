@@ -40,6 +40,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from core.constants import DEFAULT_MODEL, DEFAULT_TEMPERATURE  # noqa: E402
 
 RUNS_DIR = Path(__file__).resolve().parent / "runs"
+#: Fresh sweeps go here by default so they can never overwrite the saved
+#: runs behind the paper's tables (evaluation/runs/, tracked in git).
+NEW_RUNS_DIR = Path(__file__).resolve().parent / "runs_new"
 
 #: Artifact key -> filename, in pipeline order.
 ARTIFACT_FILES = {
@@ -90,6 +93,7 @@ class PipelineResult:
         meta = asdict(self)
         meta.pop("artifacts", None)
         meta["completed"] = self.completed
+        meta["default_model"] = DEFAULT_MODEL
         (out / "metrics.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
         return out
 
@@ -311,8 +315,7 @@ Output a JSON object with exactly these top-level keys:
 }}
 "cycle_plan": {{"tasks": [{{"name": string, "estimate_hours": number}}],
                 "milestones": [string], "risks": [string]}}
-"quality_report": {{"gate_decision": "PASS"|"FAIL",
-                    "checklist": {{"requirements_complete": boolean, "design_consistent": boolean,
+"quality_report": {{"checklist": {{"requirements_complete": boolean, "design_consistent": boolean,
                                    "db_matches_requirements": boolean, "nfr_defined": boolean}},
                     "issues": [{{"severity": string, "item": string, "message": string}}],
                     "required_fixes": [string], "recommendations": [string]}}
@@ -457,6 +460,10 @@ def main() -> int:
                         help="B3 only: give agents CrewAI's delegate/ask tools. Makes "
                              "execution order emergent; expect lower reliability.")
     parser.add_argument("--projects", type=int, nargs="*", help="Project ids to run (default: all)")
+    parser.add_argument("--runs-dir", type=Path, default=NEW_RUNS_DIR,
+                        help="Where to save runs (default: evaluation/runs_new, not the "
+                             "paper's evaluation/runs). Pass evaluation/runs only to "
+                             "deliberately reproduce the paper's data.")
     parser.add_argument("--repeats", type=int, default=1,
                         help="Runs per project. Use >=3 for the mean+/-SD the paper needs.")
     args = parser.parse_args()
@@ -492,7 +499,7 @@ def main() -> int:
 
             if args.repeats > 1:
                 result.condition = f"{args.condition}/run_{repeat + 1}"
-            out = result.save()
+            out = result.save(args.runs_dir)
 
             status = "COMPLETE" if result.completed else "INCOMPLETE"
             completed += int(result.completed)
@@ -508,7 +515,7 @@ def main() -> int:
                 print("\nerror: the API rejected the credentials. Aborting -- this is an\n"
                       "environment problem, so the remaining runs would fail identically.\n"
                       "Check that ANTHROPIC_API_KEY is a real key, then delete the partial\n"
-                      f"results under evaluation/runs/{args.condition}/ before re-running.")
+                      f"results under {args.runs_dir}/{args.condition}/ before re-running.")
                 return 1
 
             consecutive_failures = 0 if result.completed else consecutive_failures + 1
@@ -520,7 +527,7 @@ def main() -> int:
                       "  curl -s https://api.anthropic.com/v1/messages -H \"x-api-key: $ANTHROPIC_API_KEY\" \\\n"
                       "    -H 'anthropic-version: 2023-06-01' -H 'content-type: application/json' \\\n"
                       "    -d '{\"model\":\"claude-sonnet-4-5\",\"max_tokens\":1,\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}]}'\n"
-                      f"Then DELETE the affected runs under evaluation/runs/{args.condition}/\n"
+                      f"Then DELETE the affected runs under {args.runs_dir}/{args.condition}/\n"
                       "before re-running -- keeping them would deflate the completion rate.")
                 return 1
 

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic AI Explainer</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#fff; --text:#0f172a; --muted:#475569; --line:rgba(15,23,42,.12);
+  --a:#4f5bd5; --b:#d6409f; --ok:#0f9d6b; --warn:#c2410c;
+  --c0:#64748b; --c1:#0ea5a4; --c2:#4f5bd5; --c3:#d6409f;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0b1220;--card:#131c2e;--text:#eef2ff;--muted:#a9b4c8;--line:rgba(255,255,255,.14);
+    --a:#8b93ff;--b:#f472b6;--ok:#34d399;--warn:#fb923c;--c0:#94a3b8;--c1:#2dd4bf;--c2:#8b93ff;--c3:#f472b6}
+}
+:root[data-theme="dark"]{--bg:#0b1220;--card:#131c2e;--text:#eef2ff;--muted:#a9b4c8;--line:rgba(255,255,255,.14);
+    --a:#8b93ff;--b:#f472b6;--ok:#34d399;--warn:#fb923c;--c0:#94a3b8;--c1:#2dd4bf;--c2:#8b93ff;--c3:#f472b6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:0 16px 80px}
+section{padding:72px 0 24px}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.08;letter-spacing:-.03em;margin:0 0 14px}
+h2{font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.02em;margin:0 0 6px}
+p.lead{color:var(--muted);max-width:62ch;margin:0 0 22px}
+.eyebrow{font-weight:700;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--a)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+button{font:inherit;font-weight:700;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:8px 14px;cursor:pointer}
+button:hover{border-color:var(--a)}
+button:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+button[aria-pressed="true"]{background:var(--a);color:#fff;border-color:var(--a)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+svg{width:100%;height:auto;display:block}
+svg text{fill:var(--text);font-family:inherit}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* hero */
+.hero{padding-top:56px}
+.hero .sub{font-size:1.1rem;color:var(--muted);max-width:60ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:28px}
+.stat{padding:16px}
+.stat b{display:block;font-size:2rem;letter-spacing:-.02em}
+.stat span{color:var(--muted);font-size:.9rem}
+
+/* pipeline */
+.node rect{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.node.active rect{stroke:var(--a);stroke-width:2.5;filter:drop-shadow(0 4px 10px rgba(79,91,213,.35))}
+.node.done rect{stroke:var(--ok)}
+.node text{font-size:13px;font-weight:700;text-anchor:middle}
+.node .role{font-size:10.5px;font-weight:500;fill:var(--muted)}
+.edge{stroke:var(--line);stroke-width:2;fill:none}
+.pkt{fill:var(--b)}
+
+/* bars */
+.bar-row{display:grid;grid-template-columns:150px 1fr 90px;gap:12px;align-items:center;margin:10px 0}
+.bar-row .name{font-weight:700;font-size:.92rem}
+.track{height:28px;background:rgba(127,127,127,.12);border-radius:8px;overflow:hidden}
+.fill{height:100%;width:0;border-radius:8px;transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.val{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;font-size:.92rem}
+.val small{display:block;font-weight:500;color:var(--muted)}
+.seg{display:flex;height:34px;border-radius:9px;overflow:hidden;border:1px solid var(--line)}
+.seg i{display:block;height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1),background .3s;position:relative}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:.85rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--k)}
+.note{color:var(--muted);font-size:.9rem;margin-top:12px}
+.findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.findings .card h3{margin:0 0 6px;font-size:1.05rem}
+.findings .card p{margin:0;color:var(--muted)}
+.big{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;color:var(--a)}
+footer{color:var(--muted);font-size:.85rem;padding-top:40px}
+@media (max-width:600px){.bar-row{grid-template-columns:1fr 70px}.bar-row .name{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .fill,.seg i{transition:none}
+}
+</style>
+</head>
+<body>
+<main>
+
+<section class="hero">
+  <div class="eyebrow">Paper explainer</div>
+  <h1>Agentic AI-based Autonomous Software Development Organization</h1>
+  <p class="sub">Eight LLM agents, mapped onto the five TSPi roles, turn a one-sentence idea into specifications. A deterministic renderer then builds a runnable app, so "does it build?" measures specification quality without a human judge.</p>
+  <div class="stats">
+    <div class="card stat reveal"><b data-count="35">0</b><span>live runs, 4 conditions</span></div>
+    <div class="card stat reveal"><b data-count="35" data-suffix=" / 35">0</b><span>evaluated specs that built</span></div>
+    <div class="card stat reveal"><b data-count="0">0</b><span>fallbacks out of role framing</span></div>
+    <div class="card stat reveal"><b data-count="16.8" data-dec="1" data-suffix="%">0</b><span>faster by changing topology only</span></div>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="eyebrow">1 · The system</div>
+  <h2>From idea to running app</h2>
+  <p class="lead">Artifacts flow through six agents in fixed order. Only the reasoning stage is generative; the final render step makes no LLM calls.</p>
+  <div class="card">
+    <div class="row">
+      <button id="plPlay">▶ Replay</button>
+      <button id="plPause" aria-pressed="false">Pause</button>
+    </div>
+    <div style="overflow-x:auto"><svg style="min-width:700px" viewBox="0 0 900 250" role="img" aria-label="Pipeline: idea flows through Requirements, Database, Design, Planning, Quality, Support agents, then a deterministic renderer produces a running app.">
+      <g id="plEdges"></g>
+      <g id="plNodes"></g>
+      <circle id="pkt" class="pkt" r="7" cx="40" cy="70" opacity="0"/>
+    </svg></div>
+    <p class="note" id="plCaption">The Project Manager sequences the agents; the Quality role's report is displayed but consumed by nothing.</p>
+  </div>
+</section>
+
+<section id="topology">
+  <div class="eyebrow">2 · The experiment</div>
+  <h2>Same agents, different wiring</h2>
+  <p class="lead">Roles, prompts, model and temperature are held identical (verified byte-for-byte). Only coordination changes.</p>
+  <div class="card">
+    <div class="row" id="topoTabs" role="group" aria-label="Condition">
+      <button data-k="B0" aria-pressed="true">B0 single prompt</button>
+      <button data-k="B1" aria-pressed="false">B1 federated, no quality</button>
+      <button data-k="B2" aria-pressed="false">B2 federated</button>
+      <button data-k="B3" aria-pressed="false">B3 unified crew</button>
+    </div>
+    <svg viewBox="0 0 900 190" id="topoSvg" role="img" aria-label="Diagram of the selected condition"></svg>
+    <p class="note" id="topoNote"></p>
+  </div>
+</section>
+
+<section id="latency">
+  <div class="eyebrow">3 · The result</div>
+  <h2>No quality difference. A big cost difference.</h2>
+  <p class="lead">Every run completed and every specification built, so quality sits at a ceiling. What separates the conditions is wall-clock time.</p>
+  <div class="card" id="latCard">
+    <div id="latBars"></div>
+    <p class="note">Mean wall-clock per run, seconds. Multiplier is relative to the single prompt.</p>
+  </div>
+</section>
+
+<section id="where">
+  <div class="eyebrow">4 · Where time goes</div>
+  <h2>Design dominates both topologies</h2>
+  <p class="lead">Cost follows artifact schema complexity, not agent count. Switch topology to see the shift.</p>
+  <div class="card">
+    <div class="row" id="whereTabs" role="group" aria-label="Topology">
+      <button data-k="B2" aria-pressed="true">Federated (337.3 s)</button>
+      <button data-k="B3" aria-pressed="false">Unified (280.5 s)</button>
+    </div>
+    <div class="seg" id="seg" aria-hidden="true"></div>
+    <div class="legend" id="segLegend"></div>
+    <p class="note" id="whereNote"></p>
+  </div>
+</section>
+
+<section id="findings">
+  <div class="eyebrow">5 · Takeaways</div>
+  <h2>Three findings that hold up</h2>
+  <div class="findings">
+    <div class="card reveal"><div class="big">−16.8%</div><h3>Topology is a free lever</h3><p>Unified crew vs federated: faster for all 5 projects, paired t(4) = 4.19, p = 0.014. One pipeline, one model.</p></div>
+    <div class="card reveal"><div class="big">−56.7 s</div><h3>Advisory roles cost, not contribute</h3><p>Removing the Quality role saved about its own runtime and changed nothing else, because no agent consumes its verdict.</p></div>
+    <div class="card reveal"><div class="big">≈47%</div><h3>One schema drives cost</h3><p>The Design agent takes 46.9% (federated) and 48.6% (unified) of pipeline time.</p></div>
+  </div>
+  <p class="note" style="margin-top:18px">Open question: whether decomposition improves specification <em>quality</em>. That needs coverage-sensitive metrics and harder inputs.</p>
+</section>
+
+<footer>Figures taken from the paper's results tables. Federated token cost was not measurable; the unified crew used ≈468k tokens per run (≈44× a single prompt).</footer>
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent){
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, reduce ? 0 : ms); }); }
+
+  /* ---------- scroll reveal + counters ---------- */
+  function countUp(node){
+    var to = parseFloat(node.dataset.count), dec = +(node.dataset.dec || 0), suf = node.dataset.suffix || '';
+    if (reduce || to === 0){ node.textContent = to.toFixed(dec) + suf; return; }
+    var t0 = performance.now(), dur = 1200;
+    (function tick(t){
+      var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      node.textContent = (to * e).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+  var seen = new WeakSet();
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting || seen.has(e.target)) return;
+      seen.add(e.target);
+      var t = e.target;
+      if (t.classList.contains('reveal')) t.classList.add('in');
+      t.querySelectorAll && t.querySelectorAll('[data-count]').forEach(countUp);
+      if (t.id === 'pipeline') runPipeline();
+      if (t.id === 'latCard') animateLatency();
+      if (t.id === 'where') setWhere(whereKey, true);
+    });
+  }, {threshold: .25});
+  document.querySelectorAll('.reveal,#pipeline,#latCard,#where').forEach(function(n){ io.observe(n); });
+
+  /* ---------- pipeline ---------- */
+  var steps = [
+    {n:'Idea', r:'user'},
+    {n:'Requirements', r:'Development'},
+    {n:'Database', r:'Development'},
+    {n:'Design', r:'Development'},
+    {n:'Planning', r:'Planning'},
+    {n:'Quality', r:'Quality (advisory)'},
+    {n:'Support', r:'Support'},
+    {n:'Renderer', r:'no LLM'},
+  ];
+  var X0 = 62, GAP = 111, Y = 70, nodesG = document.getElementById('plNodes'), edgesG = document.getElementById('plEdges');
+  var nodeEls = steps.map(function(s,i){
+    var cx = X0 + i * GAP;
+    if (i) el('path', {class:'edge', d:'M'+(cx-GAP+44)+' '+Y+' H'+(cx-44)}, edgesG);
+    var g = el('g', {class:'node'}, nodesG);
+    el('rect', {x:cx-44, y:Y-30, width:88, height:60, rx:12}, g);
+    var t = el('text', {x:cx, y:Y+2}, g); t.textContent = s.n;
+    var r = el('text', {x:cx, y:Y+18, class:'role'}, g); r.textContent = s.r;
+    return {g:g, cx:cx};
+  });
+  // result box under renderer
+  var app = el('g', {class:'node', opacity:0}, nodesG);
+  el('rect', {x:X0+7*GAP-60, y:150, width:120, height:60, rx:12}, app);
+  var at = el('text', {x:X0+7*GAP, y:176}, app); at.textContent = 'Running app';
+  var at2 = el('text', {x:X0+7*GAP, y:194, class:'role'}, app); at2.textContent = 'Express + React';
+  el('path', {class:'edge', d:'M'+(X0+7*GAP)+' '+(Y+30)+' V150'}, edgesG);
+
+  var pkt = document.getElementById('pkt'), cap = document.getElementById('plCaption');
+  var caps = [
+    'A one-sentence idea enters the pipeline.',
+    'Requirements Analyst: features, user stories, roles.',
+    'Database Agent: tables, keys, SQLite + PostgreSQL DDL.',
+    'Design Agent: screens, components, navigation. The biggest schema.',
+    'Planning Manager: MVP tasks, priorities, risks.',
+    'Quality/Process Manager: a PASS/FAIL report that nothing consumes.',
+    'Support Manager: documentation, baselines, glossary.',
+    'Deterministic renderer: pure function of the specs, no LLM calls.'
+  ];
+  var runId = 0, paused = false;
+  async function runPipeline(){
+    var my = ++runId;
+    nodeEls.forEach(function(n){ n.g.setAttribute('class','node'); });
+    app.setAttribute('opacity', 0);
+    pkt.setAttribute('opacity', 1); pkt.setAttribute('cx', nodeEls[0].cx); pkt.setAttribute('cy', Y);
+    for (var i = 0; i < nodeEls.length; i++){
+      if (my !== runId) return;
+      while (paused && my === runId) await sleep(150);
+      nodeEls[i].g.setAttribute('class','node active');
+      cap.textContent = caps[i];
+      if (i) {
+        var from = nodeEls[i-1].cx, to = nodeEls[i].cx, dur = reduce ? 0 : 600, t0 = performance.now();
+        await new Promise(function(res){
+          (function f(t){
+            var p = dur ? Math.min(1,(t-t0)/dur) : 1;
+            pkt.setAttribute('cx', from + (to-from)*p);
+            if (p < 1 && my === runId) requestAnimationFrame(f); else res();
+          })(t0);
+        });
+      }
+      await sleep(i === 3 ? 1100 : 650);
+      nodeEls[i].g.setAttribute('class','node done');
+    }
+    if (my !== runId) return;
+    pkt.setAttribute('opacity', 0);
+    app.setAttribute('opacity', 1);
+    app.setAttribute('class','node done');
+  }
+  document.getElementById('plPlay').onclick = function(){ paused = false; pauseBtn.setAttribute('aria-pressed','false'); pauseBtn.textContent='Pause'; runPipeline(); };
+  var pauseBtn = document.getElementById('plPause');
+  pauseBtn.onclick = function(){
+    paused = !paused; pauseBtn.setAttribute('aria-pressed', paused); pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+  };
+
+  /* ---------- topology diagrams ---------- */
+  var topo = {
+    B0:{note:'One LLM call returns all six artifacts in the pipeline\'s JSON schemas. 136.3 s, ≈10.6k tokens.', draw:function(s){
+      box(s,60,70,150,50,'One prompt'); arrow(s,210,95,330,95);
+      box(s,330,70,300,50,'6 artifacts, 1 response'); arrow(s,630,95,740,95); box(s,740,70,120,50,'Renderer');
+    }},
+    B1:{note:'Application code calls five single-agent crews in turn and passes JSON between them. No Quality role. 280.6 s.', draw:function(s){ chain(s,['Req','DB','Design','Plan','Support'], 'app code'); }},
+    B2:{note:'Six single-agent crews sequenced by application code; artifacts are interpolated into prompts as JSON. 337.3 s.', draw:function(s){ chain(s,['Req','DB','Design','Plan','Quality','Support'], 'app code'); }},
+    B3:{note:'One crew, six agents, six context-chained tasks. The framework sequences them with a single kickoff(). 280.5 s.', draw:function(s){
+      el('rect',{x:30,y:30,width:840,height:130,rx:18,fill:'none',stroke:'var(--c3)','stroke-width':2,'stroke-dasharray':'6 5'},s);
+      var t=el('text',{x:48,y:52,'font-size':13,'font-weight':700},s); t.textContent='single crew · kickoff()';
+      var names=['Req','DB','Design','Plan','Quality','Support'];
+      names.forEach(function(n,i){ var x=60+i*135; box(s,x,85,100,48,n); if(i) arrow(s,x-35,109,x,109); });
+    }}
+  };
+  function box(s,x,y,w,h,label){
+    el('rect',{x:x,y:y,width:w,height:h,rx:12,fill:'var(--card)',stroke:'var(--line)','stroke-width':1.5},s);
+    var t=el('text',{x:x+w/2,y:y+h/2+5,'text-anchor':'middle','font-size':14,'font-weight':700},s); t.textContent=label;
+  }
+  function arrow(s,x1,y1,x2,y2){
+    var l=el('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:'var(--muted)','stroke-width':2,'marker-end':'url(#ah)'},s);
+    if(!reduce){ l.setAttribute('stroke-dasharray','6 6'); l.innerHTML='<animate attributeName="stroke-dashoffset" from="12" to="0" dur=".8s" repeatCount="indefinite"/>'; }
+  }
+  function chain(s,names,who){
+    var t=el('text',{x:450,y:36,'text-anchor':'middle','font-size':13,'font-weight':700,fill:'var(--c2)'},s); t.textContent='sequenced by '+who+', each in its own crew';
+    names.forEach(function(n,i){
+      var w=100,gap=(840-names.length*w)/(names.length-1),x=30+i*(w+gap);
+      el('rect',{x:x-8,y:60,width:w+16,height:96,rx:14,fill:'none',stroke:'var(--c2)','stroke-width':1.5,'stroke-dasharray':'4 4'},s);
+      box(s,x,85,w,48,n); if(i) arrow(s,x-gap+w+8,109,x-8,109);
+    });
+  }
+  var topoSvg = document.getElementById('topoSvg');
+  function drawTopo(k){
+    topoSvg.innerHTML = '<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>';
+    topo[k].draw(topoSvg);
+    document.getElementById('topoNote').textContent = topo[k].note;
+    document.querySelectorAll('#topoTabs button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.k === k); });
+  }
+  document.querySelectorAll('#topoTabs button').forEach(function(b){ b.onclick = function(){ drawTopo(b.dataset.k); }; });
+  drawTopo('B0');
+
+  /* ---------- latency bars ---------- */
+  var lat = [
+    {k:'B0',n:'B0 single prompt',v:136.3,m:'1.00×',c:'var(--c0)'},
+    {k:'B1',n:'B1 federated, no quality',v:280.6,m:'2.06×',c:'var(--c1)'},
+    {k:'B2',n:'B2 federated',v:337.3,m:'2.47×',c:'var(--c2)'},
+    {k:'B3',n:'B3 unified crew',v:280.5,m:'2.06×',c:'var(--c3)'}
+  ];
+  var latBars = document.getElementById('latBars');
+  lat.forEach(function(d){
+    var r = document.createElement('div'); r.className = 'bar-row';
+    r.innerHTML = '<div class="name">'+d.n+'</div><div class="track"><div class="fill" style="background:'+d.c+'" data-w="'+(d.v/337.3*100)+'"></div></div><div class="val">'+d.v+' s<small>'+d.m+'</small></div>';
+    latBars.appendChild(r);
+  });
+  function animateLatency(){ requestAnimationFrame(function(){ latBars.querySelectorAll('.fill').forEach(function(f,i){ setTimeout(function(){ f.style.width = f.dataset.w + '%'; }, reduce?0:i*180); }); }); }
+
+  /* ---------- where time goes ---------- */
+  var agents = [
+    {n:'Requirements',c:'#4f5bd5',B2:47.0,B3:16.0},
+    {n:'Database',c:'#0ea5a4',B2:38.2,B3:56.0},
+    {n:'Design',c:'#d6409f',B2:158.1,B3:136.2},
+    {n:'Planning',c:'#f59e0b',B2:19.3,B3:18.0},
+    {n:'Quality',c:'#64748b',B2:47.8,B3:33.2},
+    {n:'Support',c:'#10b981',B2:26.6,B3:21.1}
+  ];
+  var seg = document.getElementById('seg'), legend = document.getElementById('segLegend'), whereKey = 'B2';
+  agents.forEach(function(a){
+    var i = document.createElement('i'); i.style.background = a.c; i.title = a.n; seg.appendChild(i);
+    var s = document.createElement('span'); s.style.setProperty('--k', a.c); s.dataset.n = a.n; legend.appendChild(s);
+  });
+  function setWhere(k, force){
+    whereKey = k;
+    var tot = agents.reduce(function(s,a){ return s + a[k]; }, 0), max = 337.3 + 0.0;
+    seg.querySelectorAll('i').forEach(function(i,idx){ i.style.width = (agents[idx][k] / max * 100) + '%'; });
+    legend.querySelectorAll('span').forEach(function(s,idx){ s.textContent = agents[idx].n + ' ' + agents[idx][k].toFixed(1) + ' s'; });
+    document.getElementById('whereNote').textContent = k === 'B2'
+      ? 'Design is 46.9% of federated time. Bar width is scaled to the federated total so the saving is visible.'
+      : 'Design is 48.6% of unified time. Requirements drops 66%, but the Database agent gets 47% slower.';
+    document.querySelectorAll('#whereTabs button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.k === k); });
+  }
+  document.querySelectorAll('#whereTabs button').forEach(function(b){ b.onclick = function(){ setWhere(b.dataset.k); }; });
+  setWhere('B2');
+  // start bars at zero until visible
+  seg.querySelectorAll('i').forEach(function(i){ i.style.width = '0'; });
+  seg.dataset.ready = '1';
+})();
+</script>
+</body>
+</html>

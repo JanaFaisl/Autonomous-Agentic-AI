@@ -21,10 +21,6 @@ def _slug(text: str, fallback: str = "item") -> str:
     return text or fallback
 
 
-def _snake(text: str, fallback: str = "item") -> str:
-    return _slug(text, fallback).replace("-", "_")
-
-
 def _pascal(text: str, fallback: str = "Item") -> str:
     parts = re.split(r"[^a-zA-Z0-9]+", str(text or ""))
     name = "".join(p[:1].upper() + p[1:] for p in parts if p)
@@ -217,15 +213,16 @@ const cors = require("cors");
 {requires_js}
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+// Only allow browser calls from local dev servers (e.g. the Vite frontend).
+app.use(cors({{ origin: [/^http:\\/\\/localhost:\\d+$/, /^http:\\/\\/127\\.0\\.0\\.1:\\d+$/] }}));
+app.use(express.json({{ limit: "1mb" }}));
 
 app.get("/api/health", (req, res) => res.json({{ status: "ok", project: {json.dumps(project_name)} }}));
 
 {mounts_js}
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`{project_name} backend listening on http://localhost:${{PORT}}`));
+app.listen(PORT, "127.0.0.1", () => console.log({json.dumps(project_name)} + " backend listening on http://localhost:" + PORT));
 """
 
 

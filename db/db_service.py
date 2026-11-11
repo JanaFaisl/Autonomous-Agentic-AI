@@ -41,12 +41,11 @@ except ImportError:
 
 try:
     from sqlalchemy import (
-        create_engine, Column, String, DateTime, Text, Integer,
+        create_engine, Column, String, DateTime, Text, Integer, JSON,
         ForeignKey, Index
     )
     from sqlalchemy.dialects.postgresql import JSONB
     from sqlalchemy.orm import declarative_base, sessionmaker, relationship
-    from sqlalchemy.exc import SQLAlchemyError
     SQLALCHEMY_AVAILABLE = True
 except ImportError:
     SQLALCHEMY_AVAILABLE = False
@@ -134,7 +133,7 @@ if SQLALCHEMY_AVAILABLE:
         version = Column(Integer, nullable=False, default=1)
 
         # Use JSONB when on Postgres; SQLAlchemy will handle it. SQLite will store as TEXT via fallback.
-        payload_json = Column(JSONB().with_variant(Text, "sqlite"), nullable=False)
+        payload_json = Column(JSON().with_variant(JSONB, "postgresql"), nullable=False)
 
         created_at = Column(DateTime, default=_now, nullable=False)
 
@@ -396,64 +395,6 @@ def get_latest_artifact(session_id: str, kind: str) -> Optional[Dict[str, Any]]:
         logger.error("get_latest_artifact error (session=%s, kind=%s): %s", session_id, kind, e, exc_info=True)
         return None
 
-def get_all_session_state(session_id: str) -> Dict[str, Any]:
-    """Get all events for a session."""
-    try:
-        if not SQLALCHEMY_AVAILABLE:
-            # SQLite fallback
-            if _sqlite_conn is None:
-                _init_sqlite_fallback()
-            cursor = _sqlite_conn.cursor()
-            cursor.execute("""
-                SELECT * FROM events
-                WHERE session_id = ?
-                ORDER BY created_at ASC
-            """, (session_id,))
-            rows = cursor.fetchall()
-            return {
-                "session_id": session_id,
-                "events": [
-                    {
-                        "type": row["type"],
-                        "screen": row["screen"],
-                        "field": row["field"],
-                        "value": row["value"],
-                        "button": row["button"],
-                        "from": row["nav_from"],
-                        "to": row["nav_to"],
-                        "created_at": row["created_at"]
-                    }
-                    for row in rows
-                ]
-            }
-        
-        with db_session() as s:
-            events = (
-                s.query(Event)
-                .filter(Event.session_id == session_id)
-                .order_by(Event.created_at.asc())
-                .all()
-            )
-            return {
-                "session_id": session_id,
-                "events": [
-                    {
-                        "type": e.type,
-                        "screen": e.screen,
-                        "field": e.field,
-                        "value": e.value,
-                        "button": e.button,
-                        "from": e.nav_from,
-                        "to": e.nav_to,
-                        "created_at": e.created_at.isoformat()
-                    }
-                    for e in events
-                ]
-            }
-    except Exception as e:
-        logger.error("get_all_session_state error (session=%s): %s", session_id, e, exc_info=True)
-        return {"session_id": session_id, "events": []}
-
 def get_screen_state(session_id: str) -> Dict[str, Dict[str, str]]:
     """
     Reconstruct latest inputs per screen/field from event log.
@@ -518,20 +459,6 @@ def clear_session(session_id: str) -> None:
 # ============================================================================
 # Domain Data Layer: Dynamic table creation and CRUD operations
 # ============================================================================
-
-def _get_sqlite_conn():
-    """Get SQLite connection (works with both SQLAlchemy and fallback)."""
-    if not SQLALCHEMY_AVAILABLE:
-        # Fallback: use direct SQLite
-        if _sqlite_conn is None:
-            _init_sqlite_fallback()
-        return _sqlite_conn
-    else:
-        # SQLAlchemy: get connection from engine
-        if _ENGINE is None:
-            init_db()
-        return _ENGINE.raw_connection()
-
 
 def create_table_from_schema(table_name: str, columns: List[Dict[str, Any]]) -> Tuple[bool, str]:
     """
@@ -617,6 +544,13 @@ def create_table_from_schema(table_name: str, columns: List[Dict[str, Any]]) -> 
                     col_def += f" DEFAULT {1 if default_val else 0}"
                 elif isinstance(default_val, (int, float)):
                     col_def += f" DEFAULT {default_val}"
+                elif isinstance(default_val, str) and default_val.strip().upper() in (
+                        "CURRENT_TIMESTAMP", "CURRENT_DATE", "CURRENT_TIME"):
+                    col_def += f" DEFAULT {default_val.strip().upper()}"  # keyword, not a string literal
+                elif isinstance(default_val, str) and default_val.strip().lower() in ("now()", "current_timestamp()"):
+                    col_def += " DEFAULT CURRENT_TIMESTAMP"  # PostgreSQL spelling the schema agent often emits
+                elif isinstance(default_val, str) and default_val.strip().lower() in ("gen_random_uuid()", "uuid_generate_v4()"):
+                    col_def += " DEFAULT (lower(hex(randomblob(16))))"  # SQLite has no uuid function
                 elif isinstance(default_val, str):
                     default_val_escaped = default_val.replace("'", "''")
                     col_def += f" DEFAULT '{default_val_escaped}'"
@@ -682,7 +616,7 @@ def table_exists(table_name: str) -> bool:
             cur = _sqlite_conn.cursor()
             cur.execute("""
                 SELECT name FROM sqlite_master 
-                WHERE type='table' AND name=?
+                WHERE type='table' AND name=? COLLATE NOCASE
             """, (table_name,))
             exists = cur.fetchone() is not None
             return exists
@@ -695,7 +629,7 @@ def table_exists(table_name: str) -> bool:
                 cur = conn.cursor()
                 cur.execute("""
                     SELECT name FROM sqlite_master 
-                    WHERE type='table' AND name=?
+                    WHERE type='table' AND name=? COLLATE NOCASE
                 """, (table_name,))
                 exists = cur.fetchone() is not None
                 cur.close()

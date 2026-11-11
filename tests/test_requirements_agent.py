@@ -168,3 +168,10 @@ class TestRequirementsAnalystAgent:
         agent = RequirementsAnalystAgent()
         result = agent.analyze_requirements("flower app")
         assert "error" in result
+
+
+def test_prompt_asks_for_non_functional_requirements():
+    from core.prompts import REQUIREMENTS_SYSTEM_PROMPT
+    from agents.requirements_agent import RequirementsAnalystAgent
+    assert "non_functional_requirements" in REQUIREMENTS_SYSTEM_PROMPT
+    assert "non_functional_requirements" in RequirementsAnalystAgent().system_prompt

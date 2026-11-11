@@ -48,10 +48,15 @@ if PYDANTIC_AVAILABLE:
         technologies: List[str] = []
         database: Optional[str] = None
 
+    class NonFunctionalRequirementModel(BaseModel):
+        category: str
+        requirement: str
+
     class RequirementsOutputModel(BaseModel):
         project_name: str
         features: List[FeatureModel] = []
         technical_requirements: TechnicalRequirementsModel
+        non_functional_requirements: List[NonFunctionalRequirementModel] = []
         user_roles: List[str] = []
         database_schema: Optional[DatabaseSchemaModel] = None
 
@@ -121,6 +126,9 @@ if PYDANTIC_AVAILABLE:
         title: str
         assigned_agent: Optional[str] = None
         priority: Optional[str] = None
+        feature_ids: List[str] = []
+        estimate: Optional[int] = None
+        depends_on: List[str] = []
 
     class CyclePlanOutputModel(BaseModel):
         plan_name: str
@@ -133,7 +141,6 @@ if PYDANTIC_AVAILABLE:
         message: Optional[str] = None
 
     class QualityReportOutputModel(BaseModel):
-        gate_decision: str
         artifact_reviewed: List[str] = []
         checklist: Optional[Dict[str, bool]] = None
         issues: List[QualityIssueModel] = []

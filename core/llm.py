@@ -45,8 +45,8 @@ except Exception:
     Agent = LLM = Task = Crew = Process = None
 
 
-def get_llm():
-    """Return a CrewAI LLM instance backed by Anthropic, or None if unavailable."""
+def get_llm(agent: str = ""):
+    """Return a CrewAI LLM instance backed by Anthropic, or None if unavailable. `agent` picks MODEL_<AGENT> if set."""
     if not CREWAI_AVAILABLE or LLM is None:
         return None
 
@@ -54,19 +54,24 @@ def get_llm():
     if not api_key:
         return None
 
-    from core.constants import DEFAULT_MODEL, DEFAULT_TEMPERATURE, DEFAULT_MAX_TOKENS
+    from core.constants import DEFAULT_MODEL, DEFAULT_TEMPERATURE, DEFAULT_MAX_TOKENS, DESIGN_MAX_TOKENS, model_for
+    chosen = model_for(agent) if agent else DEFAULT_MODEL
 
-    model_str = DEFAULT_MODEL if DEFAULT_MODEL.startswith("anthropic/") else f"anthropic/{DEFAULT_MODEL}"
+    model_str = chosen if chosen.startswith("anthropic/") else f"anthropic/{chosen}"
+    kwargs = dict(
+        model=model_str,
+        api_key=api_key,
+        # Design generation alone commonly takes ~400s at 8192 output tokens (see README);
+        # DEFAULT_MAX_TOKENS is now ~2x that, so a shorter timeout here would abort the call
+        # mid-generation and look like a network error.
+        timeout=600,
+        max_tokens=DESIGN_MAX_TOKENS if agent == "design" else DEFAULT_MAX_TOKENS,
+    )
+    # Claude 5 models reject `temperature` (400 "deprecated for this model"), which made every
+    # CrewAI call fail and silently fall back to the direct API.
+    if "-5-" not in chosen:
+        kwargs["temperature"] = DEFAULT_TEMPERATURE
     try:
-        return LLM(
-            model=model_str,
-            temperature=DEFAULT_TEMPERATURE,
-            api_key=api_key,
-            # Design generation alone commonly takes ~400s at 8192 output tokens (see README);
-            # DEFAULT_MAX_TOKENS is now ~2x that, so a shorter timeout here would abort the call
-            # mid-generation and look like a network error.
-            timeout=600,
-            max_tokens=DEFAULT_MAX_TOKENS,
-        )
+        return LLM(**kwargs)
     except Exception:
         return None

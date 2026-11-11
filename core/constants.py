@@ -1,7 +1,12 @@
 import os
 
 # Model configuration
-DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "claude-sonnet-4-5")
+DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "claude-sonnet-5-5")
+
+
+def model_for(agent: str) -> str:
+    """Model for one agent: MODEL_<AGENT> (e.g. MODEL_DESIGN) if set, else DEFAULT_MODEL."""
+    return os.getenv(f"MODEL_{agent.upper()}") or DEFAULT_MODEL
 DEFAULT_TEMPERATURE = 0.2
 # CrewAI's native Anthropic provider defaults max_tokens to 4096 if unset, which truncates
 # verbose agents (e.g. Design: 4-6 screens x 8-12 components) mid-JSON and fails Pydantic validation.
@@ -9,6 +14,8 @@ DEFAULT_TEMPERATURE = 0.2
 # so it must comfortably exceed the largest schema (Design). The configured model supports far
 # more than this (check via GET /v1/models/{model} -> max_tokens), so headroom here is cheap.
 DEFAULT_MAX_TOKENS = 16000
+# Design output is by far the longest; a 16000-token cap cut the JSON mid-list ("EOF while parsing a list").
+DESIGN_MAX_TOKENS = 32000
 MAX_RETRIES = 2
 MAX_EXECUTION_TIME = 180
 # Design routinely runs ~400s at 8192 output tokens (see README); DEFAULT_MAX_TOKENS above is
@@ -17,29 +24,19 @@ DESIGN_MAX_EXECUTION_TIME = 650
 MAX_ITERATIONS = 1
 
 # Retry configuration
-RETRY_DELAY = 0.5
 EXPONENTIAL_BACKOFF_BASE = 1.5
 
 # Error messages
 ERROR_NO_API_KEY = "Anthropic API key not found"
-ERROR_CREWAI_NOT_INSTALLED = "CrewAI not installed"
-ERROR_AGENT_NOT_INITIALIZED = "CrewAI agent not initialized"
-ERROR_EMPTY_RESPONSE = "Empty response from CrewAI agent"
 ERROR_PARSE_JSON = "Could not parse JSON"
 
 # Solutions
 SOLUTION_ADD_API_KEY = "Add ANTHROPIC_API_KEY to your .env file"
-SOLUTION_INSTALL_CREWAI = "Run: pip install crewai"
-SOLUTION_CHECK_CONFIG = "Check your ANTHROPIC_API_KEY configuration"
 SOLUTION_RETRY = "Please try again or check the agent configuration."
 
 # UI messages
-MSG_ANALYZING = "Analyzing requirements…"
-MSG_GENERATING_DESIGN = "🎨 Generating UI/UX design…"
 MSG_RETRYING = "Retrying…"
 MSG_CONNECTION_ISSUE = "⚠️ Connection issue detected. Retrying in {wait_time}s…"
-MSG_AGENT_EMPTY = "⚠️ Agent returned empty/thought-only response. Retrying with more explicit instructions…"
-MSG_PARSE_ERROR = "⚠️ Could not parse JSON from agent response. Retrying…"
 
 # CrewAI thought patterns to strip from output
 THOUGHT_PATTERNS = [

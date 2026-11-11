@@ -12,7 +12,7 @@ code does not implement, which is exactly the failure this avoids.
 Every element below is traceable to the code:
   * six pipeline agents            agents/project_manager_agent.py DEFAULT_STEPS
   * no delegation, no feedback     allow_delegation=False on all eight agents
-  * advisory quality gate          ui/main_ui.py reads gate_decision for display
+  * traceability + validation      core/traceability.py, utils/self_heal.py
   * deterministic renderer         utils/code_scaffold.py ("no LLM calls")
   * fallback path                  _direct_api_call in five agent modules
 """
@@ -230,8 +230,25 @@ def figure_interaction(dpi: int) -> Path:
         x_mid = xs[i] + BW / 2
         arrow(ax, (x_mid, ROW_Y), (x_mid, fb_y + fb_h), ls="dashed", color=MUTED, lw=1.0)
 
+    # Deterministic traceability / gate / validation layer (core/traceability.py,
+    # utils/self_heal.py): reads every artifact, no LLM.
+    tx, tw, ty, th = 4.0, 66.0, 14, 20
+    box(ax, tx, ty, tw, th, C_REND, ls="dotted", lw=1.4)
+    label(ax, tx + tw / 2, ty + th - 4.0, "Traceability, coverage & validation",
+          size=8.5, weight="bold")
+    label(ax, tx + tw / 2, ty + th - 8.6, "rule-based, no LLM: coverage matrix, change impact,",
+          size=7, style="italic", color="#555555")
+    label(ax, tx + tw / 2, ty + th - 11.8, "test cases, DDL / syntax checks",
+          size=7, style="italic", color="#555555")
+    label(ax, tx + tw / 2, ty + 2.6, "reads requirements, schema, design and plan",
+          size=6.8, color="#555555")
+    arrow(ax, (xs[2] + BW / 2, ROW_Y), (xs[2] + BW / 2, ty + th), color=MUTED, lw=1.2)
+    # The one feedback edge: bounded repair of the database schema.
+    arrow(ax, (tx + tw, ty + th - 5), (xs[3] + 3.5, ROW_Y), color=EDGE, lw=1.3, rad=-0.25)
+    label(ax, xs[3] - 1.5, 27, "schema repair\n(\u2264 2 rounds)", size=6.8, color="#444444")
+
     label(ax, 111, 89,
-          "Solid edges carry schema-validated JSON in fixed order; the pipeline is strictly linear, with no feedback edges.",
+          "Solid edges carry schema-validated JSON in fixed order; the only feedback edge is the bounded database-schema repair.",
           size=9, style="italic", color="#444444")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
